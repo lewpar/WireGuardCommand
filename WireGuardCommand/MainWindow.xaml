@@ -5,8 +5,84 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WireGuardCommand"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="WireGuard Command" 
+        Height="450" Width="800" MinHeight="450" MinWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-    </Grid>
+            <GroupBox Grid.Row="0" Header="Commands">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0">Prefix</Label>
+                    <TextBox Grid.Row="1"></TextBox>
+
+                    <Label Grid.Row="2">Command</Label>
+                    <TextBox Grid.Row="3"></TextBox>
+
+                    <Label Grid.Row="4">Postfix</Label>
+                    <TextBox Grid.Row="5"></TextBox>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Grid.Row="1" Header="Config">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0">Listen Port</Label>
+                    <TextBox Grid.Column="0" Grid.Row="1"></TextBox>
+
+                    <Label Grid.Column="1" Grid.Row="0" Margin="5 0">No. Clients</Label>
+                    <TextBox Grid.Column="1"  Grid.Row="1" Margin="5 0"></TextBox>
+
+                    <Label Grid.Column="2" Grid.Row="0">CIDR</Label>
+                    <TextBox Grid.Column="2" Grid.Row="1"></TextBox>
+
+                    <Label Grid.Column="0" Grid.Row="2">Allowed IPs (Client)</Label>
+                    <TextBox Grid.Column="0" Grid.Row="3"></TextBox>
+
+                    <Label Grid.Column="1" Grid.Row="2" Margin="5 0">Endpoint (Optional)</Label>
+                    <TextBox Grid.Column="1"  Grid.Row="3" Margin="5 0"></TextBox>
+
+                    <Label Grid.Column="2" Grid.Row="2">DNS (Optional)</Label>
+                    <TextBox Grid.Column="2" Grid.Row="3"></TextBox>
+
+                    <Label Grid.Column="0" Grid.Row="4">Interface Name (Optional)</Label>
+                    <TextBox Grid.Column="0" Grid.Row="5"></TextBox>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="6">
+                        <CheckBox VerticalAlignment="Center"></CheckBox>
+                        <Label>Use Pre-Shared Keys</Label>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+
+            <Button Grid.Row="2" Margin="0 5 0 0" Padding="5">Generate</Button>
+        </Grid>
+    </ScrollViewer>
 </Window>
