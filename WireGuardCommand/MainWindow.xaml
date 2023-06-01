@@ -67,7 +67,24 @@
                     <Label Grid.Column="1" Grid.Row="0" Margin="5 0">No. Clients</Label>
                     <TextBox Grid.Column="1"  Grid.Row="1" Margin="5 0"></TextBox>
 
-                    <Label Grid.Column="2" Grid.Row="0">Transit Subnet</Label>
+                    <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal">
+                        <Label>Transit Subnet</Label>
+                        <Image Source="./Resources/Icons/icon-information.png" 
+                               Width="16" Height="16"
+                               RenderOptions.BitmapScalingMode="HighQuality">
+                            <Image.ToolTip>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+
+                                    <Label Grid.Row="0" FontWeight="DemiBold">Subnet Example</Label>
+                                    <Label Grid.Row="1">10.0.0.0/24</Label>
+                                </Grid>
+                            </Image.ToolTip>
+                        </Image>
+                    </StackPanel>
                     <TextBox Grid.Column="2" Grid.Row="1"></TextBox>
 
                     <Label Grid.Column="0" Grid.Row="2">Allowed IPs (Client)</Label>
