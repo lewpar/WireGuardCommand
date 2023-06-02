@@ -37,23 +37,7 @@
                     <Label Grid.Row="4">Postfix (Optional)</Label>
                     <TextBox Grid.Row="5"></TextBox>
 
-                    <GroupBox Grid.Row="6" Header="Macros">
-                        <Expander>
-                            <ScrollViewer VerticalScrollBarVisibility="auto">
-                                <ItemsControl>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <TextBox Grid.Column="0" Text="{}{clientid}" IsReadOnly="True"></TextBox>
-                                        <Label Grid.Column="1">The client id for each generated client.</Label>
-                                    </Grid>
-                                </ItemsControl>
-                            </ScrollViewer>
-                        </Expander>
-                    </GroupBox>
+                    <Button Grid.Row="6" Margin="0 5" Padding="5">Macros</Button>
                 </Grid>
             </GroupBox>
 
