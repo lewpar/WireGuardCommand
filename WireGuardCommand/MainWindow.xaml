@@ -29,13 +29,13 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0">Prefix (Optional)</Label>
-                    <TextBox Grid.Row="1"></TextBox>
+                    <TextBox x:Name="InputPrefix" Grid.Row="1"></TextBox>
 
                     <Label Grid.Row="2">Command (Optional)</Label>
-                    <TextBox Grid.Row="3"></TextBox>
+                    <TextBox x:Name="InputCommand" Grid.Row="3"></TextBox>
 
                     <Label Grid.Row="4">Postfix (Optional)</Label>
-                    <TextBox Grid.Row="5"></TextBox>
+                    <TextBox x:Name="InputPostfix" Grid.Row="5"></TextBox>
 
                     <Button Grid.Row="6" Margin="0 5" Padding="5">Macros</Button>
                 </Grid>
@@ -59,37 +59,45 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Column="0" Grid.Row="0">Server Listen Port</Label>
-                    <TextBox Grid.Column="0" Grid.Row="1"></TextBox>
+                    <TextBox x:Name="InputListenPort" Grid.Column="0" Grid.Row="1"></TextBox>
 
                     <Label Grid.Column="1" Grid.Row="0" Margin="5 0">No. Clients</Label>
-                    <TextBox Grid.Column="1"  Grid.Row="1" Margin="5 0"></TextBox>
+                    <TextBox x:Name="InputNoClients" Grid.Column="1"  Grid.Row="1" Margin="5 0"></TextBox>
 
                     <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal">
                         <Label>Transit Subnet</Label>
                         <uc:InfoToolTip Header="Subnet Example" Information="10.0.0.0/24"></uc:InfoToolTip>
                     </StackPanel>
-                    <TextBox Grid.Column="2" Grid.Row="1"></TextBox>
+                    <TextBox x:Name="InputSubnet" Grid.Column="2" Grid.Row="1"></TextBox>
 
                     <Label Grid.Column="0" Grid.Row="2">Allowed IPs (Client)</Label>
-                    <TextBox Grid.Column="0" Grid.Row="3"></TextBox>
+                    <TextBox x:Name="InputIPs" Grid.Column="0" Grid.Row="3"></TextBox>
 
                     <Label Grid.Column="1" Grid.Row="2" Margin="5 0">Endpoint Including Port (Optional)</Label>
-                    <TextBox Grid.Column="1"  Grid.Row="3" Margin="5 0"></TextBox>
+                    <TextBox x:Name="InputEndpoint" Grid.Column="1"  Grid.Row="3" Margin="5 0"></TextBox>
 
                     <Label Grid.Column="2" Grid.Row="2">Remote DNS (Optional)</Label>
-                    <TextBox Grid.Column="2" Grid.Row="3"></TextBox>
+                    <TextBox x:Name="InputDNS" Grid.Column="2" Grid.Row="3"></TextBox>
 
                     <Label Grid.Column="0" Grid.Row="4">Interface Name (Optional)</Label>
-                    <TextBox Grid.Column="0" Grid.Row="5"></TextBox>
+                    <TextBox x:Name="InputInterface" Grid.Column="0" Grid.Row="5"></TextBox>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="6">
-                        <CheckBox VerticalAlignment="Center"></CheckBox>
+                        <CheckBox x:Name="CheckBoxPresharedKeys" VerticalAlignment="Center"></CheckBox>
                         <Label>Use Pre-Shared Keys</Label>
                     </StackPanel>
                 </Grid>
             </GroupBox>
 
-            <Button Grid.Row="2" Margin="0 5 0 0" Padding="5">Generate</Button>
+            <Grid Grid.Row="2" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="ButtonSaveDefaults" Grid.Column="0" Padding="5" Click="ButtonSaveDefaults_Click">Save Defaults</Button>
+                <Button Grid.Column="1" Padding="5">Generate</Button>
+            </Grid>
         </Grid>
     </ScrollViewer>
 </Window>

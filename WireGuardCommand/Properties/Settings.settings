@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="WireGuardCommand.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DefaultCommand" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DefaultDNS" Type="System.String" Scope="User">
+      <Value Profile="(Default)">10.0.100.254</Value>
+    </Setting>
+    <Setting Name="DefaultEndpoint" Type="System.String" Scope="User">
+      <Value Profile="(Default)">remote.domain.com:13232</Value>
+    </Setting>
+    <Setting Name="DefaultInterface" Type="System.String" Scope="User">
+      <Value Profile="(Default)">WireguardInterface1</Value>
+    </Setting>
+    <Setting Name="DefaultIPs" Type="System.String" Scope="User">
+      <Value Profile="(Default)">10.0.100.0/24</Value>
+    </Setting>
+    <Setting Name="DefaultListenPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1234</Value>
+    </Setting>
+    <Setting Name="DefaultNoClients" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="DefaultPostfix" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DefaultPrefix" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DefaultPresharedKeys" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DefaultSubnet" Type="System.String" Scope="User">
+      <Value Profile="(Default)">10.0.0.0/24</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
