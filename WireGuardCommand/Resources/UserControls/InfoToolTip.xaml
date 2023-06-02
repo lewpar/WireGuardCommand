@@ -7,11 +7,10 @@
              xmlns:local="clr-namespace:WireGuardCommand.Resources.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             Width="16" Height="16">
     <Grid>
-        <Image Source="../Icons/icon-information.png" 
-                               Width="16" Height="16"
-                               RenderOptions.BitmapScalingMode="HighQuality">
+        <Image Source="../Icons/icon-information.png" RenderOptions.BitmapScalingMode="HighQuality">
             <Image.ToolTip>
                 <Grid>
                     <Grid.RowDefinitions>
