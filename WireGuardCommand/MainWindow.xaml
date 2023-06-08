@@ -93,10 +93,12 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="ButtonSaveDefaults" Grid.Column="0" Padding="5" Click="ButtonSaveDefaults_Click">Save Defaults</Button>
-                <Button Grid.Column="1" Padding="5">Generate</Button>
+                <Button x:Name="ButtonClearDefaults" Grid.Column="0" Padding="5" Click="ButtonClearDefaults_Click">Clear Defaults</Button>
+                <Button x:Name="ButtonSaveDefaults" Grid.Column="1" Padding="5" Click="ButtonSaveDefaults_Click">Save Defaults</Button>
+                <Button x:Name="ButtonGenerate" Grid.Column="2" Padding="5" Click="ButtonGenerate_Click">Generate</Button>
             </Grid>
         </Grid>
     </ScrollViewer>

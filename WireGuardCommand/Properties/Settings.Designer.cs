@@ -25,7 +25,8 @@ namespace WireGuardCommand.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("add allowed-address={client-address} comment=\"peer {client-id}\" interface=\"{inter" +
+            "face}\" preshared-key=\"{client-preshared}\" public-key=\"{client-public}\"")]
         public string DefaultCommand {
             get {
                 return ((string)(this["DefaultCommand"]));
@@ -121,7 +122,7 @@ namespace WireGuardCommand.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("/interface wireguard peers")]
         public string DefaultPrefix {
             get {
                 return ((string)(this["DefaultPrefix"]));

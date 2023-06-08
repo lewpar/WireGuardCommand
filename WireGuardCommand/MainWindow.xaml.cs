@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +66,16 @@ namespace WireGuardCommand
             Properties.Settings.Default.DefaultPresharedKeys = CheckBoxPresharedKeys.IsChecked.HasValue ? CheckBoxPresharedKeys.IsChecked.Value : false;
 
             Properties.Settings.Default.Save();
+        }
+
+        private void ButtonGenerate_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void ButtonClearDefaults_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+            LoadDefaults();
         }
     }
 }

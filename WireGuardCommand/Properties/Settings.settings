@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="DefaultCommand" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">add allowed-address={client-address} comment="peer {client-id}" interface="{interface}" preshared-key="{client-preshared}" public-key="{client-public}"</Value>
     </Setting>
     <Setting Name="DefaultDNS" Type="System.String" Scope="User">
       <Value Profile="(Default)">10.0.100.254</Value>
@@ -27,7 +27,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DefaultPrefix" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">/interface wireguard peers</Value>
     </Setting>
     <Setting Name="DefaultPresharedKeys" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
