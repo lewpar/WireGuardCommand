@@ -14,6 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Curve25519" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Icons\icon-information.png" />
   </ItemGroup>
 
