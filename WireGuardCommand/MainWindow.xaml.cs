@@ -219,7 +219,7 @@ namespace WireGuardCommand
                 else
                 {
                     var wgPeer = new WireGuardPeer();
-                    wgPeer.Id = (int)i;
+                    wgPeer.Id = (int)i - 1; // Server takes up first id, but peers should start at 1.
                     wgPeer.AllowedIPS = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/32";
 
                     // Generate client private / public keys.
@@ -306,6 +306,10 @@ namespace WireGuardCommand
                 // CLIENT
                 sbClient.AppendLine($"# Client {i}");
                 sbClient.AppendLine("[Interface]");
+                if(peer.Config == null)
+                {
+                    continue;
+                }
                 sbClient.AppendLine($"Address = {peer.Config.Address}");
                 sbClient.AppendLine($"ListenPort = {peer.Config.Port}");
                 sbClient.AppendLine($"PrivateKey = {peer.Config.PrivateKey}");
