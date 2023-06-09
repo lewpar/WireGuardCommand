@@ -18,8 +18,8 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" FontWeight="DemiBold" Content="{Binding Header}"></Label>
-                    <Label Grid.Row="1" Content="{Binding Information}"></Label>
+                    <Label Grid.Row="0" FontWeight="DemiBold" xml:space="preserve" Content="{Binding Header}"></Label>
+                    <Label Grid.Row="1" xml:space="preserve" Content="{Binding Information}"></Label>
                 </Grid>
             </Image.ToolTip>
         </Image>
