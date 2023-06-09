@@ -181,6 +181,12 @@ namespace WireGuardCommand
                 return null;
             }
 
+            if(clientCount > subnetSize)
+            {
+                MessageBox.Show("You cannot have more clients than the subnet can handle.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+
             // Generate private / public keys.
             byte[] buffer = new byte[32];
             RandomNumberGenerator.Create().GetBytes(buffer);
