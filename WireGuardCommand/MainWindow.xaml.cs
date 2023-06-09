@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -358,6 +359,19 @@ namespace WireGuardCommand
             }
 
             File.WriteAllText(Path.Combine(path, "commands.wg"), sbCommands.ToString());
+        }
+
+        private void InputSubnet_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            var address = ParseAddress();
+            if(address == null)
+            {
+                LabelNoClients.Content = $"No. Clients (No CIDR Detected)";
+                return;
+            }
+
+            int subnetSize = Math.Clamp((int)Math.Pow(2, (32 - address.CIDR)) - 2, 0, int.MaxValue);
+            LabelNoClients.Content = $"No. Clients (Max: {subnetSize})";
         }
     }
 }
