@@ -159,7 +159,7 @@ namespace WireGuardCommand
             int subnetSize = (int)Math.Pow(2, (32 - wgAddress.CIDR)) - 2; // Subtract network and broadcast address.
             if (subnetSize == 0)
             {
-                MessageBox.Show("Subnet size is 0, you must specify a large CIDR.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Subnet size is 0, you must specify a larger CIDR.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
 
