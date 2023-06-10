@@ -7,7 +7,7 @@
         xmlns:uc="clr-namespace:WireGuardCommand.Resources.UserControls"
         mc:Ignorable="d"
         Title="WireGuard Command" 
-        Height="500" Width="800" MinHeight="500" MinWidth="800">
+        MinHeight="480" MinWidth="800">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="5">
             <Grid.RowDefinitions>
@@ -25,19 +25,16 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
-                        <RowDefinition/>
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0">Prefix (Optional)</Label>
-                    <TextBox x:Name="InputPrefix" Grid.Row="1" AcceptsReturn="True"></TextBox>
+                    <TextBox x:Name="InputPrefix" Grid.Row="1" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" MaxHeight="100"></TextBox>
 
                     <Label Grid.Row="2">Command (Optional)</Label>
-                    <TextBox x:Name="InputCommand" Grid.Row="3" AcceptsReturn="True"></TextBox>
+                    <TextBox x:Name="InputCommand" Grid.Row="3" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" MaxHeight="100"></TextBox>
 
                     <Label Grid.Row="4">Postfix (Optional)</Label>
-                    <TextBox x:Name="InputPostfix" Grid.Row="5" AcceptsReturn="True"></TextBox>
-
-                    <Button Grid.Row="6" Margin="0 5" Padding="5">Macros</Button>
+                    <TextBox x:Name="InputPostfix" Grid.Row="5" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" MaxHeight="100"></TextBox>
                 </Grid>
             </GroupBox>
 
