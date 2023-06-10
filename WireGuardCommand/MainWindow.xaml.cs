@@ -1,7 +1,9 @@
 ﻿using Elliptic;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime;
 using System.Security.Cryptography;
 using System.Text;
@@ -314,15 +316,7 @@ namespace WireGuardCommand
 
             foreach (var peer in wgServer.Peers)
             {
-                string command = InputCommand.Text;
-
-                command = command.Replace("{interface}", wgServer.Interface);
-                command = command.Replace("{client-address}", peer.AllowedIPS);
-                command = command.Replace("{client-id}", peer.Id.ToString());
-                command = command.Replace("{client-preshared}", peer.PresharedKey);
-                command = command.Replace("{client-public}", peer.PublicKey);
-
-                wgServer.Commands.Add(command);
+                wgServer.Commands.Add(ReplaceMacros(wgServer, InputCommand.Text, peer.Id));
             }
 
             return wgServer;
@@ -394,23 +388,17 @@ namespace WireGuardCommand
 
             if (!string.IsNullOrEmpty(InputPrefix.Text))
             {
-                string prefixCmd = InputPrefix.Text;
-                prefixCmd = prefixCmd.Replace("{interface}", wgServer.Interface);
-                prefixCmd = prefixCmd.Replace("{server-address}", wgServer.Address);
-                prefixCmd = prefixCmd.Replace("{server-private}", wgServer.PrivateKey);
-                prefixCmd = prefixCmd.Replace("{listenport}", wgServer.Port.ToString());
-
-                sbCommands.AppendLine(prefixCmd);
+                sbCommands.AppendLine(ReplaceMacros(wgServer, InputPrefix.Text));
             }
 
             foreach (var command in wgServer.Commands)
             {
-                sbCommands.AppendLine(command);
+                sbCommands.AppendLine(ReplaceMacros(wgServer, command));
             }
 
             if (!string.IsNullOrEmpty(InputPostfix.Text))
             {
-                sbCommands.AppendLine(InputPostfix.Text);
+                sbCommands.AppendLine(ReplaceMacros(wgServer, InputPostfix.Text));
             }
 
             File.WriteAllText(Path.Combine(path, "commands.wg"), sbCommands.ToString());
@@ -427,6 +415,30 @@ namespace WireGuardCommand
 
             int subnetSize = Math.Clamp((int)Math.Pow(2, (32 - address.CIDR)) - 2, 0, int.MaxValue);
             LabelNoClients.Content = $"No. Clients (Max: {subnetSize})";
+        }
+
+        private string ReplaceMacros(WireGuardServer wgServer, string content, int? clientId = null)
+        {
+            content = content.Replace("{interface}", wgServer.Interface);
+
+            content = content.Replace("{server-address}", wgServer.Address);
+            content = content.Replace("{server-private}", wgServer.PrivateKey);
+            content = content.Replace("{server-port}", wgServer.Port.ToString());
+
+            if(clientId != null && clientId.HasValue) 
+            {
+                var peer = wgServer.Peers.FirstOrDefault(peer => peer.Id == clientId.Value);
+
+                if (peer != null)
+                {
+                    content = content.Replace("{client-address}", peer.AllowedIPS);
+                    content = content.Replace("{client-id}", peer.Id.ToString());
+                    content = content.Replace("{client-preshared}", peer.PresharedKey);
+                    content = content.Replace("{client-public}", peer.PublicKey);
+                }
+            }
+
+            return content;
         }
     }
 }

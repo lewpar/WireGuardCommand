@@ -35,7 +35,7 @@ namespace WireGuardCommand.Models
 
         public void Reset()
         {
-            DefaultPrefix = "/interface wireguard\r\nadd listen-port={listenport} name={interface} private-key\"{server-private}\"\r\n\r\n/ip address\r\nadd address={server-address} interface={interface}\r\n\r\n/interface wireguard peers";
+            DefaultPrefix = "/interface wireguard\r\nadd listen-port={server-port} name={interface} private-key=\"{server-private}\"\r\n\r\n/ip address\r\nadd address={server-address} interface={interface}\r\n\r\n/interface wireguard peers";
             DefaultCommand = "add allowed-address={client-address} comment=\"peer {client-id}\" interface=\"{interface}\" preshared-key=\"{client-preshared}\" public-key=\"{client-public}\"";
             DefaultPostfix = string.Empty;
 
