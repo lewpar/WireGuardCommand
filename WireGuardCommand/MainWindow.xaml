@@ -105,6 +105,14 @@
                             <uc:InfoToolTip Header="Pre-Shared Keys" Information="Adds another layer of security where the peers have to not only match their keypairs, but also have to pass a pre-shared key check."></uc:InfoToolTip>
                         </StackPanel>
                     </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="6">
+                        <CheckBox x:Name="CheckBoxSaveToZip" VerticalAlignment="Center"></CheckBox>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Save to Zip File</Label>
+                            <uc:InfoToolTip Header="Save to Zip File" Information="Saves the server, client and command configuration to a zip file."></uc:InfoToolTip>
+                        </StackPanel>
+                    </StackPanel>
                 </Grid>
             </GroupBox>
 

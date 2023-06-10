@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Runtime;
 using System.Security.Cryptography;
@@ -48,6 +49,7 @@ namespace WireGuardCommand
             InputInterface.Text = _settings.DefaultInterface;
 
             CheckBoxPresharedKeys.IsChecked = _settings.DefaultPresharedKeys;
+            CheckBoxSaveToZip.IsChecked = _settings.DefaultSaveToZip;
         }
 
         private void ButtonSaveDefaults_Click(object sender, RoutedEventArgs e)
@@ -107,6 +109,11 @@ namespace WireGuardCommand
                 _settings.DefaultPresharedKeys = CheckBoxPresharedKeys.IsChecked.Value;
             }
 
+            if (CheckBoxSaveToZip.IsChecked.HasValue)
+            {
+                _settings.DefaultSaveToZip = CheckBoxSaveToZip.IsChecked.Value;
+            }
+
             _settings.Save();
         }
 
@@ -141,7 +148,7 @@ namespace WireGuardCommand
                             return;
                         }
 
-                        WriteWireGuardConfig(config, saveFileDialog.SelectedPath);
+                        WriteWireGuardConfig(config, saveFileDialog.SelectedPath, CheckBoxSaveToZip.IsChecked.HasValue ? CheckBoxSaveToZip.IsChecked.Value : false);
                     }
                     catch(Exception ex)
                     {
@@ -322,10 +329,12 @@ namespace WireGuardCommand
             return wgServer;
         }
 
-        private void WriteWireGuardConfig(WireGuardServer wgServer, string path)
+        private void WriteWireGuardConfig(WireGuardServer wgServer, string path, bool zip = false)
         {
             var sbServer = new StringBuilder();
             var sbClient = new StringBuilder();
+
+            var zipItems = new List<string>();
 
             sbServer.AppendLine("[Interface]");
             sbServer.AppendLine($"Address = {wgServer.Address}");
@@ -376,12 +385,20 @@ namespace WireGuardCommand
                 if (!string.IsNullOrEmpty(peer.Config.Endpoint))
                     sbClient.AppendLine($"Endpoint = {peer.Config.Endpoint}");
 
+                if (zip)
+                {
+                    zipItems.Add(Path.Combine(path, $"client{i}.wg"));
+                }
                 File.WriteAllText(Path.Combine(path, $"client{i}.wg"), sbClient.ToString());
                 sbClient.Clear();
 
                 i = i + 1;
             }
 
+            if(zip)
+            {
+                zipItems.Add(Path.Combine(path, "server.wg"));
+            }
             File.WriteAllText(Path.Combine(path, "server.wg"), sbServer.ToString());
 
             var sbCommands = new StringBuilder();
@@ -401,7 +418,29 @@ namespace WireGuardCommand
                 sbCommands.AppendLine(ReplaceMacros(wgServer, InputPostfix.Text));
             }
 
+            if (zip)
+            {
+                zipItems.Add(Path.Combine(path, "commands.wg"));
+            }
             File.WriteAllText(Path.Combine(path, "commands.wg"), sbCommands.ToString());
+
+            if(zip)
+            {
+                // Generate a temporary path to place the configs into, using Base64 with special character stripped.
+                string name = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16)).Replace("/", "").Replace("=", "").Replace("+", "");
+                string tempPath = Path.Combine(path, name);
+                Directory.CreateDirectory(tempPath);
+
+                // Move all the files into the temporary path.
+                foreach(var zipItem in zipItems)
+                {
+                    File.Move(zipItem, Path.Combine(tempPath, Path.GetFileName(zipItem)));
+                }
+
+                // Zip the path and delete the temporary path.
+                ZipFile.CreateFromDirectory(tempPath, Path.Combine(path, $"wgc-zipped-{name}.zip"));
+                Directory.Delete(tempPath, true);
+            }
         }
 
         private void InputSubnet_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
