@@ -43,7 +43,7 @@ namespace WireGuardCommand.Models
             DefaultNoClients = 3;
             DefaultSubnet = "10.0.0.0/24";
 
-            DefaultIPs = "0.0.0.0/0";
+            DefaultIPs = "0.0.0.0/0, ::/0";
             DefaultEndpoint = "remote.domain.com:1234";
             DefaultDNS = "10.0.100.254";
 
