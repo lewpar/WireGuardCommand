@@ -1,8 +1,8 @@
 ﻿using Elliptic;
-
+using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
-using System.Net;
+using System.Runtime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -17,60 +17,104 @@ namespace WireGuardCommand
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private AppSettings _settings;
+
+        public MainWindow(AppSettings settings)
         {
+            _settings = settings;
+
             InitializeComponent();
 
-            LoadDefaults();
+            if(_settings != null)
+                LoadDefaults();
         }
 
         private void LoadDefaults()
         {
-            InputPrefix.Text = Properties.Settings.Default.DefaultPrefix;
-            InputCommand.Text = Properties.Settings.Default.DefaultCommand;
-            InputPostfix.Text = Properties.Settings.Default.DefaultPostfix;
+            InputPrefix.Text = _settings.DefaultPrefix;
+            InputCommand.Text = _settings.DefaultCommand;
+            InputPostfix.Text = _settings.DefaultPostfix;
 
-            InputListenPort.Text = Properties.Settings.Default.DefaultListenPort;
-            InputNoClients.Text = Properties.Settings.Default.DefaultNoClients;
-            InputSubnet.Text = Properties.Settings.Default.DefaultSubnet;
+            InputListenPort.Text = _settings.DefaultListenPort.ToString();
+            InputNoClients.Text = _settings.DefaultNoClients.ToString();
+            InputSubnet.Text = _settings.DefaultSubnet;
 
-            InputIPs.Text = Properties.Settings.Default.DefaultIPs;
-            InputEndpoint.Text = Properties.Settings.Default.DefaultEndpoint;
-            InputDNS.Text = Properties.Settings.Default.DefaultDNS;
+            InputIPs.Text = _settings.DefaultIPs;
+            InputEndpoint.Text = _settings.DefaultEndpoint;
+            InputDNS.Text = _settings.DefaultDNS;
 
-            InputInterface.Text = Properties.Settings.Default.DefaultInterface;
+            InputInterface.Text = _settings.DefaultInterface;
 
-            CheckBoxPresharedKeys.IsChecked = Properties.Settings.Default.DefaultPresharedKeys;
+            CheckBoxPresharedKeys.IsChecked = _settings.DefaultPresharedKeys;
         }
 
         private void ButtonSaveDefaults_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.DefaultPrefix = InputPrefix.Text;
-            Properties.Settings.Default.DefaultCommand = InputCommand.Text;
-            Properties.Settings.Default.DefaultPostfix = InputPostfix.Text;
+            if (!string.IsNullOrEmpty(InputPrefix.Text))
+            {
+                _settings.DefaultPrefix = InputPrefix.Text;
+            }
 
-            Properties.Settings.Default.DefaultListenPort = InputListenPort.Text;
-            Properties.Settings.Default.DefaultNoClients = InputNoClients.Text;
-            Properties.Settings.Default.DefaultSubnet = InputSubnet.Text;
+            if (!string.IsNullOrEmpty(InputCommand.Text))
+            {
+                _settings.DefaultCommand = InputCommand.Text;
+            }
 
-            Properties.Settings.Default.DefaultIPs = InputIPs.Text;
-            Properties.Settings.Default.DefaultEndpoint = InputEndpoint.Text;
-            Properties.Settings.Default.DefaultDNS = InputDNS.Text;
+            if (!string.IsNullOrEmpty(InputPostfix.Text))
+            {
+                _settings.DefaultPostfix = InputPostfix.Text;
+            }
 
-            Properties.Settings.Default.DefaultInterface = InputInterface.Text;
+            if (int.TryParse(InputListenPort.Text, out int port))
+            {
+                _settings.DefaultListenPort = port;
+            }
 
-            Properties.Settings.Default.DefaultPresharedKeys = CheckBoxPresharedKeys.IsChecked.HasValue ? CheckBoxPresharedKeys.IsChecked.Value : false;
+            if (int.TryParse(InputNoClients.Text, out int num))
+            {
+                _settings.DefaultNoClients = num;
+            }
 
-            Properties.Settings.Default.Save();
+            if (!string.IsNullOrEmpty(InputSubnet.Text))
+            {
+                _settings.DefaultSubnet = InputSubnet.Text;
+            }
+
+            if (!string.IsNullOrEmpty(InputIPs.Text))
+            {
+                _settings.DefaultIPs = InputIPs.Text;
+            }
+
+            if (!string.IsNullOrEmpty(InputEndpoint.Text))
+            {
+                _settings.DefaultEndpoint = InputEndpoint.Text;
+            }
+
+            if (!string.IsNullOrEmpty(InputDNS.Text))
+            {
+                _settings.DefaultDNS = InputDNS.Text;
+            }
+
+            if (!string.IsNullOrEmpty(InputInterface.Text))
+            {
+                _settings.DefaultInterface = InputInterface.Text;
+            }
+
+            if (CheckBoxPresharedKeys.IsChecked.HasValue)
+            {
+                _settings.DefaultPresharedKeys = CheckBoxPresharedKeys.IsChecked.Value;
+            }
+
+            _settings.Save();
         }
 
         private void ButtonGenerate_Click(object sender, RoutedEventArgs e)
         {
             string saveLocation = string.Empty;
 
-            if(!string.IsNullOrEmpty(Properties.Settings.Default.SaveLocation))
+            if(!string.IsNullOrEmpty(_settings.SaveLocation))
             {
-                saveLocation = Properties.Settings.Default.SaveLocation;
+                saveLocation = _settings.SaveLocation;
             }
 
             using (var saveFileDialog = new System.Windows.Forms.FolderBrowserDialog())
@@ -78,8 +122,8 @@ namespace WireGuardCommand
                 var saveResult = saveFileDialog.ShowDialog();
                 if (saveResult == System.Windows.Forms.DialogResult.OK)
                 {
-                    Properties.Settings.Default.SaveLocation = saveFileDialog.InitialDirectory;
-                    Properties.Settings.Default.Save();
+                    _settings.SaveLocation = saveFileDialog.InitialDirectory;
+                    _settings.Save();
 
                     if(string.IsNullOrEmpty(saveFileDialog.SelectedPath))
                     {
@@ -108,9 +152,10 @@ namespace WireGuardCommand
             }
         }
 
-        private void ButtonClearDefaults_Click(object sender, RoutedEventArgs e)
+        private void ButtonResetDefaults_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.Reset();
+            _settings.Reset();
+            _settings.Save();
             LoadDefaults();
         }
 
@@ -349,7 +394,13 @@ namespace WireGuardCommand
 
             if (!string.IsNullOrEmpty(InputPrefix.Text))
             {
-                sbCommands.AppendLine(InputPrefix.Text);
+                string prefixCmd = InputPrefix.Text;
+                prefixCmd = prefixCmd.Replace("{interface}", wgServer.Interface);
+                prefixCmd = prefixCmd.Replace("{server-address}", wgServer.Address);
+                prefixCmd = prefixCmd.Replace("{server-private}", wgServer.PrivateKey);
+                prefixCmd = prefixCmd.Replace("{listenport}", wgServer.Port.ToString());
+
+                sbCommands.AppendLine(prefixCmd);
                 sbCommands.AppendLine();
             }
 

@@ -29,13 +29,13 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0">Prefix (Optional)</Label>
-                    <TextBox x:Name="InputPrefix" Grid.Row="1"></TextBox>
+                    <TextBox x:Name="InputPrefix" Grid.Row="1" AcceptsReturn="True"></TextBox>
 
                     <Label Grid.Row="2">Command (Optional)</Label>
-                    <TextBox x:Name="InputCommand" Grid.Row="3"></TextBox>
+                    <TextBox x:Name="InputCommand" Grid.Row="3" AcceptsReturn="True"></TextBox>
 
                     <Label Grid.Row="4">Postfix (Optional)</Label>
-                    <TextBox x:Name="InputPostfix" Grid.Row="5"></TextBox>
+                    <TextBox x:Name="InputPostfix" Grid.Row="5" AcceptsReturn="True"></TextBox>
 
                     <Button Grid.Row="6" Margin="0 5" Padding="5">Macros</Button>
                 </Grid>
@@ -118,7 +118,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="ButtonClearDefaults" Grid.Column="0" Padding="5" Click="ButtonClearDefaults_Click">Clear Defaults</Button>
+                <Button x:Name="ButtonResetDefaults" Grid.Column="0" Padding="5" Click="ButtonResetDefaults_Click">Reset Defaults</Button>
                 <Button x:Name="ButtonSaveDefaults" Grid.Column="1" Padding="5" Click="ButtonSaveDefaults_Click">Save Defaults</Button>
                 <Button x:Name="ButtonGenerate" Grid.Column="2" Padding="5" Click="ButtonGenerate_Click">Generate</Button>
             </Grid>
