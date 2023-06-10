@@ -401,7 +401,6 @@ namespace WireGuardCommand
                 prefixCmd = prefixCmd.Replace("{listenport}", wgServer.Port.ToString());
 
                 sbCommands.AppendLine(prefixCmd);
-                sbCommands.AppendLine();
             }
 
             foreach (var command in wgServer.Commands)
@@ -412,7 +411,6 @@ namespace WireGuardCommand
             if (!string.IsNullOrEmpty(InputPostfix.Text))
             {
                 sbCommands.AppendLine(InputPostfix.Text);
-                sbCommands.AppendLine();
             }
 
             File.WriteAllText(Path.Combine(path, "commands.wg"), sbCommands.ToString());
