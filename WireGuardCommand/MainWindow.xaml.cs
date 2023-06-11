@@ -387,9 +387,9 @@ namespace WireGuardCommand
 
                 if (zip)
                 {
-                    zipItems.Add(Path.Combine(path, $"client{i}.wg"));
+                    zipItems.Add(Path.Combine(path, $"client{i}.conf"));
                 }
-                File.WriteAllText(Path.Combine(path, $"client{i}.wg"), sbClient.ToString());
+                File.WriteAllText(Path.Combine(path, $"client{i}.conf"), sbClient.ToString());
                 sbClient.Clear();
 
                 i = i + 1;
@@ -397,9 +397,9 @@ namespace WireGuardCommand
 
             if(zip)
             {
-                zipItems.Add(Path.Combine(path, "server.wg"));
+                zipItems.Add(Path.Combine(path, "server.conf"));
             }
-            File.WriteAllText(Path.Combine(path, "server.wg"), sbServer.ToString());
+            File.WriteAllText(Path.Combine(path, "server.conf"), sbServer.ToString());
 
             var sbCommands = new StringBuilder();
 
@@ -420,9 +420,9 @@ namespace WireGuardCommand
 
             if (zip)
             {
-                zipItems.Add(Path.Combine(path, "commands.wg"));
+                zipItems.Add(Path.Combine(path, "commands.rsc"));
             }
-            File.WriteAllText(Path.Combine(path, "commands.wg"), sbCommands.ToString());
+            File.WriteAllText(Path.Combine(path, "commands.rsc"), sbCommands.ToString());
 
             if(zip)
             {
