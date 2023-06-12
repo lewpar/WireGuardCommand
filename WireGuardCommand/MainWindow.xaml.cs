@@ -242,14 +242,19 @@ namespace WireGuardCommand
             }
 
             // Generate private / public keys.
-            byte[] buffer = new byte[32];
-            RandomNumberGenerator.Create().GetBytes(buffer);
+            var serverKeyPair = CurveKeyPair.GeneratePair();
+            if (serverKeyPair == null ||
+                serverKeyPair.PrivateKey == null ||
+                serverKeyPair.PublicKey == null)
+            {
+                MessageBox.Show($"Failed to generate server key pair.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+            string privKey = serverKeyPair.PrivateKey.ToString();
+            string pubKey = serverKeyPair.PublicKey.ToString();
 
-            byte[] privKey = Curve25519.ClampPrivateKey(buffer);
-            byte[] pubKey = Curve25519.GetPublicKey(privKey);
-
-            wgServer.PrivateKey = Convert.ToBase64String(privKey);
-            wgServer.PublicKey = Convert.ToBase64String(pubKey);
+            wgServer.PrivateKey = privKey;
+            wgServer.PublicKey = pubKey;
 
             wgServer.Interface = InputInterface.Text;
 
@@ -284,23 +289,26 @@ namespace WireGuardCommand
                     wgPeer.AllowedIPS = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/32";
 
                     // Generate client private / public keys.
-                    byte[] clientBuffer = new byte[32];
-                    RandomNumberGenerator.Create().GetBytes(clientBuffer);
+                    var clientKeyPair = CurveKeyPair.GeneratePair();
+                    if(clientKeyPair == null ||
+                        clientKeyPair.PrivateKey == null ||
+                        clientKeyPair.PublicKey == null)
+                    {
+                        MessageBox.Show($"Failed to generate client key pair for client {i}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return null;
+                    }
 
-                    byte[] clientPrivKey = Curve25519.ClampPrivateKey(clientBuffer);
-                    byte[] clientPubKey = Curve25519.GetPublicKey(clientPrivKey);
+                    wgPeer.PublicKey = clientKeyPair.PublicKey.ToString();
 
-                    wgPeer.PublicKey = Convert.ToBase64String(clientPubKey);
-
-                    wgServer.PrivateKey = Convert.ToBase64String(privKey);
-                    wgServer.PublicKey = Convert.ToBase64String(pubKey);
+                    wgServer.PrivateKey = privKey;
+                    wgServer.PublicKey = pubKey;
 
                     var wgClient = new WireGuardClient();
                     wgClient.Address = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/{wgAddress.CIDR}";
                     wgClient.Port = wgServer.Port;
                     wgClient.AllowedIPS = InputIPs.Text;
                     wgClient.PublicKey = wgServer.PublicKey;
-                    wgClient.PrivateKey = Convert.ToBase64String(clientPrivKey);
+                    wgClient.PrivateKey = clientKeyPair.PrivateKey.ToString();
                     wgClient.DNS = InputDNS.Text;
 
                     // Generate pre-shared key.
