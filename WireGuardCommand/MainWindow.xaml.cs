@@ -422,7 +422,9 @@ namespace WireGuardCommand
             {
                 zipItems.Add(Path.Combine(path, "commands.rsc"));
             }
-            File.WriteAllText(Path.Combine(path, "commands.rsc"), sbCommands.ToString());
+
+            // Write all commands to file and trim any leading and trailing whitespace (ROS doesn't like trailing blank lines).
+            File.WriteAllText(Path.Combine(path, "commands.rsc"), sbCommands.ToString().Trim());
 
             if(zip)
             {
