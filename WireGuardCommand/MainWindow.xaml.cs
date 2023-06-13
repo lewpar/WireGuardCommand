@@ -238,7 +238,14 @@ namespace WireGuardCommand
                 return null;
             }
 
-            if(clientCount > subnetSize)
+            int tempSubnetSize = subnetSize;
+            if (CheckBoxAssignLastIP.IsChecked.HasValue &&
+                CheckBoxAssignLastIP.IsChecked.Value)
+            {
+                tempSubnetSize -= 1;
+            }
+
+                if (clientCount > tempSubnetSize)
             {
                 MessageBox.Show("You cannot have more clients than the subnet can handle.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
@@ -268,7 +275,27 @@ namespace WireGuardCommand
             }
 
             uint address = (uint)(wgAddress.Octets[0] << 24) + (uint)(wgAddress.Octets[1] << 16) + (uint)(wgAddress.Octets[2] << 8) + (uint)(wgAddress.Octets[3]);
-            subnetSize = Math.Clamp(subnetSize, 0, clientCount + 2);
+
+            if(CheckBoxAssignLastIP.IsChecked.HasValue &&
+                CheckBoxAssignLastIP.IsChecked.Value) 
+            {
+                uint newAddress = address + (uint)subnetSize;
+
+                var newOctets = new uint[]
+                {
+                    (newAddress >> 24) & 255,
+                    (newAddress >> 16) & 255,
+                    (newAddress >> 8) & 255,
+                    (newAddress) & 255,
+                };
+                wgServer.Address = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/{wgAddress.CIDR}";
+
+                subnetSize = Math.Clamp(subnetSize, 0, clientCount + 1);
+            }
+            else
+            {
+                subnetSize = Math.Clamp(subnetSize, 0, clientCount + 2);
+            }
 
             for (uint i = 1; i < subnetSize; i++)
             {
@@ -284,10 +311,7 @@ namespace WireGuardCommand
 
                 if ((CheckBoxAssignLastIP.IsChecked.HasValue && 
                     !CheckBoxAssignLastIP.IsChecked.Value && 
-                    i == 1) ||
-                    (CheckBoxAssignLastIP.IsChecked.HasValue &&
-                    CheckBoxAssignLastIP.IsChecked.Value &&
-                    i == subnetSize - 1))
+                    i == 1))
                 {
                     wgServer.Address = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/{wgAddress.CIDR}";
                     continue;
@@ -463,17 +487,27 @@ namespace WireGuardCommand
             }
         }
 
-        private void InputSubnet_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void UpdateMaxClients()
         {
             var address = ParseAddress();
-            if(address == null)
+            if (address == null)
             {
                 LabelNoClients.Content = $"No. Clients (No CIDR Detected)";
                 return;
             }
 
             int subnetSize = Math.Clamp((int)Math.Pow(2, (32 - address.CIDR)) - 2, 0, int.MaxValue);
+            if(CheckBoxAssignLastIP.IsChecked.HasValue &&
+                CheckBoxAssignLastIP.IsChecked.Value) 
+            {
+                subnetSize -= 1;
+            }
             LabelNoClients.Content = $"No. Clients (Max: {subnetSize})";
+        }
+
+        private void InputSubnet_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            UpdateMaxClients();
         }
 
         private string ReplaceMacros(WireGuardServer wgServer, string content, int? clientId = null)
@@ -498,6 +532,16 @@ namespace WireGuardCommand
             }
 
             return content;
+        }
+
+        private void CheckBoxAssignLastIP_Checked(object sender, RoutedEventArgs e)
+        {
+            UpdateMaxClients();
+        }
+
+        private void CheckBoxAssignLastIP_Unchecked(object sender, RoutedEventArgs e)
+        {
+            UpdateMaxClients();
         }
     }
 }

@@ -115,7 +115,7 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="6">
-                        <CheckBox x:Name="CheckBoxAssignLastIP" VerticalAlignment="Center"></CheckBox>
+                        <CheckBox x:Name="CheckBoxAssignLastIP" VerticalAlignment="Center" Checked="CheckBoxAssignLastIP_Checked" Unchecked="CheckBoxAssignLastIP_Unchecked"></CheckBox>
                         <StackPanel Orientation="Horizontal">
                             <Label>Assign Last IP (Server)</Label>
                             <uc:InfoToolTip Header="Assign Last IP (Server)" Information="Assigns the last IP in the subnet to the server.&#x0a;This is useful where you want to match the client IP to their id."></uc:InfoToolTip>
