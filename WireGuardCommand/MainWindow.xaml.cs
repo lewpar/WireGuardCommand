@@ -47,6 +47,7 @@ namespace WireGuardCommand
 
             CheckBoxPresharedKeys.IsChecked = _settings.DefaultPresharedKeys;
             CheckBoxSaveToZip.IsChecked = _settings.DefaultSaveToZip;
+            CheckBoxAssignLastIP.IsChecked = _settings.DefaultAssignLastIP;
         }
 
         private void ButtonSaveDefaults_Click(object sender, RoutedEventArgs e)
@@ -109,6 +110,11 @@ namespace WireGuardCommand
             if (CheckBoxSaveToZip.IsChecked.HasValue)
             {
                 _settings.DefaultSaveToZip = CheckBoxSaveToZip.IsChecked.Value;
+            }
+
+            if (CheckBoxAssignLastIP.IsChecked.HasValue)
+            {
+                _settings.DefaultAssignLastIP = CheckBoxAssignLastIP.IsChecked.Value;
             }
 
             _settings.Save();
@@ -262,7 +268,9 @@ namespace WireGuardCommand
             }
 
             uint address = (uint)(wgAddress.Octets[0] << 24) + (uint)(wgAddress.Octets[1] << 16) + (uint)(wgAddress.Octets[2] << 8) + (uint)(wgAddress.Octets[3]);
-            for (uint i = 1; i < Math.Clamp(subnetSize, 0, clientCount + 2); i++)
+            subnetSize = Math.Clamp(subnetSize, 0, clientCount + 2);
+
+            for (uint i = 1; i < subnetSize; i++)
             {
                 uint newAddress = address + i;
 
@@ -274,10 +282,15 @@ namespace WireGuardCommand
                     (newAddress) & 255,
                 };
 
-                // First address for server.
-                if (i == 1)
+                if ((CheckBoxAssignLastIP.IsChecked.HasValue && 
+                    !CheckBoxAssignLastIP.IsChecked.Value && 
+                    i == 1) ||
+                    (CheckBoxAssignLastIP.IsChecked.HasValue &&
+                    CheckBoxAssignLastIP.IsChecked.Value &&
+                    i == subnetSize - 1))
                 {
                     wgServer.Address = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/{wgAddress.CIDR}";
+                    continue;
                 }
                 else
                 {

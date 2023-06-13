@@ -113,6 +113,14 @@
                             <uc:InfoToolTip Header="Save to Zip File" Information="Saves the server, client and command configuration to a zip file."></uc:InfoToolTip>
                         </StackPanel>
                     </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="6">
+                        <CheckBox x:Name="CheckBoxAssignLastIP" VerticalAlignment="Center"></CheckBox>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Assign Last IP (Server)</Label>
+                            <uc:InfoToolTip Header="Assign Last IP (Server)" Information="Assigns the last IP in the subnet to the server.&#x0a;This is useful where you want to match the client IP to their id."></uc:InfoToolTip>
+                        </StackPanel>
+                    </StackPanel>
                 </Grid>
             </GroupBox>
 

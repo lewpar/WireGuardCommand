@@ -20,6 +20,7 @@ namespace WireGuardCommand.Models
         public string? DefaultInterface { get; set; }
         public bool? DefaultPresharedKeys { get; set; }
         public bool? DefaultSaveToZip { get; set; }
+        public bool? DefaultAssignLastIP { get; set; }
 
         public string? SaveLocation { get; set; }
 
@@ -46,6 +47,7 @@ namespace WireGuardCommand.Models
             DefaultInterface = "WireGuardInterface1";
             DefaultPresharedKeys = true;
             DefaultSaveToZip = true;
+            DefaultAssignLastIP = true;
 
             SaveLocation = string.Empty;
         }
