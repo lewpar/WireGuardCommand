@@ -300,6 +300,7 @@ namespace WireGuardCommand
                 wgServer.Peers.Add(wgPeer);
 
                 i++;
+                peerId += 1;
             }
             foreach (var peer in wgServer.Peers)
             {
