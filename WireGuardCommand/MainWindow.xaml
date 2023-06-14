@@ -129,11 +129,13 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="ButtonResetDefaults" Grid.Column="0" Padding="5" Click="ButtonResetDefaults_Click">Reset Defaults</Button>
-                <Button x:Name="ButtonSaveDefaults" Grid.Column="1" Padding="5" Click="ButtonSaveDefaults_Click">Save Defaults</Button>
-                <Button x:Name="ButtonGenerate" Grid.Column="2" Padding="5" Click="ButtonGenerate_Click">Generate</Button>
+                <Button x:Name="ButtonTools" Grid.Column="0" Padding="5" Click="ButtonTools_Click" Margin="0 0 5 0">Tools</Button>
+                <Button x:Name="ButtonResetDefaults" Grid.Column="1" Padding="5" Click="ButtonResetDefaults_Click" Margin="0 0 5 0">Reset Defaults</Button>
+                <Button x:Name="ButtonSaveDefaults" Grid.Column="2" Padding="5" Click="ButtonSaveDefaults_Click" Margin="0 0 5 0">Save Defaults</Button>
+                <Button x:Name="ButtonGenerate" Grid.Column="3" Padding="5" Click="ButtonGenerate_Click">Generate</Button>
             </Grid>
         </Grid>
     </ScrollViewer>
