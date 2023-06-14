@@ -129,38 +129,38 @@ namespace WireGuardCommand
                 saveLocation = _settings.SaveLocation;
             }
 
-            using (var saveFileDialog = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                var saveResult = saveFileDialog.ShowDialog();
-                if (saveResult == System.Windows.Forms.DialogResult.OK)
+            try 
+            { 
+                var config = CreateServerConfig();
+                if (config == null)
                 {
-                    _settings.SaveLocation = saveFileDialog.InitialDirectory;
-                    _settings.Save();
+                    return;
+                }
 
-                    if(string.IsNullOrEmpty(saveFileDialog.SelectedPath))
+                using (var saveFileDialog = new System.Windows.Forms.FolderBrowserDialog())
+                {
+                    var saveResult = saveFileDialog.ShowDialog();
+                    if (saveResult == System.Windows.Forms.DialogResult.OK)
                     {
-                        MessageBox.Show("Save path is empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
+                        _settings.SaveLocation = saveFileDialog.InitialDirectory;
+                        _settings.Save();
 
-                    try
-                    {
-                        var config = CreateServerConfig();
-                        if(config == null)
+                        if(string.IsNullOrEmpty(saveFileDialog.SelectedPath))
                         {
+                            MessageBox.Show("Save path is empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
 
                         WriteWireGuardConfig(config, saveFileDialog.SelectedPath, CheckBoxSaveToZip.IsChecked.HasValue ? CheckBoxSaveToZip.IsChecked.Value : false);
-                    }
-                    catch(Exception ex)
-                    {
-                        MessageBox.Show($"Failed to save files with exception: {ex.GetType()}\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
 
-                    MessageBox.Show("Successfully generated configs.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("Successfully generated configs.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save files with exception: {ex.GetType()}\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
         }
 
