@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -171,38 +172,9 @@ namespace WireGuardCommand
             LoadDefaults();
         }
 
-        private WireGuardAddress? ParseAddress()
+        private IPNetwork? ParseAddress()
         {
-            var address = new WireGuardAddress();
-
-            var addressCIDR = InputSubnet.Text;
-            var match = Regex.Match(addressCIDR, @"([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\/([0-9]{1,2})");
-
-            address.Address = InputSubnet.Text.Split("/")[0];
-
-            if (match.Groups.Count < 6)
-            {
-                return null;
-            }
-
-            try
-            {
-                address.Octets = new int[]
-                {
-                    int.Parse(match.Groups[1].Value),
-                    int.Parse(match.Groups[2].Value),
-                    int.Parse(match.Groups[3].Value),
-                    int.Parse(match.Groups[4].Value)
-                };
-
-                address.CIDR = int.Parse(match.Groups[5].Value);
-            }
-            catch (Exception)
-            { 
-                return null;
-            }
-
-            return address;
+            return IPNetwork.Parse(InputSubnet.Text);
         }
 
         private WireGuardServer? CreateServerConfig()
@@ -262,104 +234,73 @@ namespace WireGuardCommand
 
             wgServer.Interface = InputInterface.Text;
 
-            if(wgAddress.Octets == null)
+            var gatewayAddress = IsGatewayLastIP() ? wgAddress.LastUsable : wgAddress.FirstUsable;
+            wgServer.Address = $"{gatewayAddress}/{wgAddress.Cidr}";
+
+            int peerId = 1;
+            int i = 0;
+            foreach (var address in wgAddress.ListIPAddress(FilterEnum.Usable))
             {
-                MessageBox.Show("Failed to get octets from address.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
-
-            uint address = (uint)(wgAddress.Octets[0] << 24) + (uint)(wgAddress.Octets[1] << 16) + (uint)(wgAddress.Octets[2] << 8) + (uint)(wgAddress.Octets[3]);
-
-            if (IsGatewayLastIP())
-            {
-                // Increment the subnet size by 1 since it is subtracted earlier to make space for the gateway.
-                uint newAddress = address + (uint)subnetSize + 1;
-
-                var newOctets = new uint[]
+                // Skip this address if it's being used by the gateway.
+                if(address.ToString() == gatewayAddress.ToString())
                 {
-                    (newAddress >> 24) & 255,
-                    (newAddress >> 16) & 255,
-                    (newAddress >> 8) & 255,
-                    (newAddress) & 255,
-                };
-
-                wgServer.Address = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/{wgAddress.CIDR}";
-            }
-
-            subnetSize = Math.Clamp(subnetSize, 0, clientCount);
-
-            if (!IsGatewayLastIP())
-            {
-                // If the gateway is the first address, we need to expand the available addresses.
-                subnetSize += 1;
-            }
-
-            // Expand the subnet size by 1 since we are starting at 1.
-            for (uint i = 1; i < subnetSize + 1; i++)
-            {
-                uint newAddress = address + i;
-
-                var newOctets = new uint[]
-                {
-                    (newAddress >> 24) & 255,
-                    (newAddress >> 16) & 255,
-                    (newAddress >> 8) & 255,
-                    (newAddress) & 255,
-                };
-
-                if (!IsGatewayLastIP() && i == 1)
-                {
-                    wgServer.Address = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/{wgAddress.CIDR}";
                     continue;
                 }
-                else
+
+                // Only generate x amount of clients instead of the whole available subnet.
+                if(i >= clientCount)
                 {
-                    var wgPeer = new WireGuardPeer();
-
-                    wgPeer.Id = (int)i;
-                    wgPeer.AllowedIPS = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/32";
-
-                    // Generate client private / public keys.
-                    var clientKeyPair = CurveKeyPair.GeneratePair();
-                    if(clientKeyPair == null ||
-                        clientKeyPair.PrivateKey == null ||
-                        clientKeyPair.PublicKey == null)
-                    {
-                        MessageBox.Show($"Failed to generate client key pair for client {i}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return null;
-                    }
-
-                    wgPeer.PublicKey = clientKeyPair.PublicKey.ToString();
-
-                    wgServer.PrivateKey = privKey;
-                    wgServer.PublicKey = pubKey;
-
-                    var wgClient = new WireGuardClient();
-                    wgClient.Address = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/{wgAddress.CIDR}";
-                    wgClient.Port = wgServer.Port;
-                    wgClient.AllowedIPS = InputIPs.Text;
-                    wgClient.PublicKey = wgServer.PublicKey;
-                    wgClient.PrivateKey = clientKeyPair.PrivateKey.ToString();
-                    wgClient.DNS = InputDNS.Text;
-
-                    // Generate pre-shared key.
-                    if (CheckBoxPresharedKeys.IsChecked.HasValue && CheckBoxPresharedKeys.IsChecked.Value)
-                    {
-                        byte[] sharedKeyBuffer = new byte[32];
-                        RandomNumberGenerator.Create().GetBytes(sharedKeyBuffer);
-
-                        wgPeer.PresharedKey = Convert.ToBase64String(sharedKeyBuffer);
-                        wgClient.PresharedKey = Convert.ToBase64String(sharedKeyBuffer);
-                    }
-
-                    wgClient.Endpoint = InputEndpoint.Text;
-
-                    wgPeer.Config = wgClient;
-
-                    wgServer.Peers.Add(wgPeer);
+                    break;
                 }
-            }
 
+                var wgPeer = new WireGuardPeer();
+
+                var peerAddress = address.ToString();
+
+                wgPeer.Id = peerId;
+                wgPeer.AllowedIPS = $"{peerAddress}/32";
+
+                // Generate client private / public keys.
+                var clientKeyPair = CurveKeyPair.GeneratePair();
+                if (clientKeyPair == null ||
+                    clientKeyPair.PrivateKey == null ||
+                    clientKeyPair.PublicKey == null)
+                {
+                    MessageBox.Show($"Failed to generate client key pair for client {peerId}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return null;
+                }
+
+                wgPeer.PublicKey = clientKeyPair.PublicKey.ToString();
+
+                wgServer.PrivateKey = privKey;
+                wgServer.PublicKey = pubKey;
+
+                var wgClient = new WireGuardClient();
+                wgClient.Address = peerAddress;
+                wgClient.Port = wgServer.Port;
+                wgClient.AllowedIPS = InputIPs.Text;
+                wgClient.PublicKey = wgServer.PublicKey;
+                wgClient.PrivateKey = clientKeyPair.PrivateKey.ToString();
+                wgClient.DNS = InputDNS.Text;
+
+                // Generate pre-shared key.
+                if (CheckBoxPresharedKeys.IsChecked.HasValue && CheckBoxPresharedKeys.IsChecked.Value)
+                {
+                    byte[] sharedKeyBuffer = new byte[32];
+                    RandomNumberGenerator.Create().GetBytes(sharedKeyBuffer);
+
+                    wgPeer.PresharedKey = Convert.ToBase64String(sharedKeyBuffer);
+                    wgClient.PresharedKey = Convert.ToBase64String(sharedKeyBuffer);
+                }
+
+                wgClient.Endpoint = InputEndpoint.Text;
+
+                wgPeer.Config = wgClient;
+
+                wgServer.Peers.Add(wgPeer);
+
+                i++;
+            }
             foreach (var peer in wgServer.Peers)
             {
                 wgServer.Commands.Add(ReplaceMacros(wgServer, InputCommand.Text, peer.Id));
@@ -531,21 +472,14 @@ namespace WireGuardCommand
             return (CheckBoxAssignLastIP.IsChecked.HasValue && CheckBoxAssignLastIP.IsChecked.Value);
         }
 
-        private int GetUsableSubnetSize(WireGuardAddress? wgAddress)
+        private int GetUsableSubnetSize(IPNetwork? wgAddress)
         {
             if (wgAddress == null)
             {
                 return 0;
             }
 
-            int subnetSize = (int)Math.Pow(2, (32 - wgAddress.CIDR));
-            if (subnetSize == 0)
-            {
-                return 0;
-            }
-
-            // Subtract network and broadcast address.
-            subnetSize -= 2;
+            int subnetSize = (int)wgAddress.Usable;
 
             if (IsGatewayLastIP())
             {

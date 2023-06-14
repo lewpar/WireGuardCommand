@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Curve25519" Version="1.0.1" />
+    <PackageReference Include="IPNetwork2" Version="2.6.589" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
