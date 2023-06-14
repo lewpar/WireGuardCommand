@@ -213,7 +213,7 @@ namespace WireGuardCommand
                 return null;
             }
 
-            int subnetSize = (int)Math.Pow(2, (32 - wgAddress.CIDR)) - 2; // Subtract network and broadcast address.
+            int subnetSize = GetUsableSubnetSize(wgAddress);
             if (subnetSize == 0)
             {
                 MessageBox.Show("Subnet size is 0, you must specify a larger CIDR.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -238,16 +238,9 @@ namespace WireGuardCommand
                 return null;
             }
 
-            int tempSubnetSize = subnetSize;
-            if (CheckBoxAssignLastIP.IsChecked.HasValue &&
-                CheckBoxAssignLastIP.IsChecked.Value)
+            if (clientCount > subnetSize)
             {
-                tempSubnetSize -= 1;
-            }
-
-                if (clientCount > tempSubnetSize)
-            {
-                MessageBox.Show("You cannot have more clients than the subnet can handle.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("You cannot have more clients than the subnet addresses available.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
 
@@ -276,10 +269,10 @@ namespace WireGuardCommand
 
             uint address = (uint)(wgAddress.Octets[0] << 24) + (uint)(wgAddress.Octets[1] << 16) + (uint)(wgAddress.Octets[2] << 8) + (uint)(wgAddress.Octets[3]);
 
-            if(CheckBoxAssignLastIP.IsChecked.HasValue &&
-                CheckBoxAssignLastIP.IsChecked.Value) 
+            if (IsGatewayLastIP())
             {
-                uint newAddress = address + (uint)subnetSize;
+                // Increment the subnet size by 1 since it is subtracted earlier to make space for the gateway.
+                uint newAddress = address + (uint)subnetSize + 1;
 
                 var newOctets = new uint[]
                 {
@@ -288,16 +281,20 @@ namespace WireGuardCommand
                     (newAddress >> 8) & 255,
                     (newAddress) & 255,
                 };
+
                 wgServer.Address = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/{wgAddress.CIDR}";
-
-                subnetSize = Math.Clamp(subnetSize, 0, clientCount + 1);
             }
-            else
+
+            subnetSize = Math.Clamp(subnetSize, 0, clientCount);
+
+            if (!IsGatewayLastIP())
             {
-                subnetSize = Math.Clamp(subnetSize, 0, clientCount + 2);
+                // If the gateway is the first address, we need to expand the available addresses.
+                subnetSize += 1;
             }
 
-            for (uint i = 1; i < subnetSize; i++)
+            // Expand the subnet size by 1 since we are starting at 1.
+            for (uint i = 1; i < subnetSize + 1; i++)
             {
                 uint newAddress = address + i;
 
@@ -309,9 +306,7 @@ namespace WireGuardCommand
                     (newAddress) & 255,
                 };
 
-                if ((CheckBoxAssignLastIP.IsChecked.HasValue && 
-                    !CheckBoxAssignLastIP.IsChecked.Value && 
-                    i == 1))
+                if (!IsGatewayLastIP() && i == 1)
                 {
                     wgServer.Address = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/{wgAddress.CIDR}";
                     continue;
@@ -319,15 +314,8 @@ namespace WireGuardCommand
                 else
                 {
                     var wgPeer = new WireGuardPeer();
-                    if (CheckBoxAssignLastIP.IsChecked.HasValue &&
-                        !CheckBoxAssignLastIP.IsChecked.Value)
-                    {
-                        wgPeer.Id = (int)i - 1; // Server takes up first id, but peers should start at 1.
-                    }
-                    else
-                    {
-                        wgPeer.Id = (int)i;
-                    }
+
+                    wgPeer.Id = (int)i;
                     wgPeer.AllowedIPS = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/32";
 
                     // Generate client private / public keys.
@@ -497,19 +485,14 @@ namespace WireGuardCommand
 
         private void UpdateMaxClients()
         {
-            var address = ParseAddress();
-            if (address == null)
+            var wgAddress = ParseAddress();
+            if (wgAddress == null)
             {
                 LabelNoClients.Content = $"No. Clients (No CIDR Detected)";
                 return;
             }
 
-            int subnetSize = Math.Clamp((int)Math.Pow(2, (32 - address.CIDR)) - 2, 0, int.MaxValue);
-            if(CheckBoxAssignLastIP.IsChecked.HasValue &&
-                CheckBoxAssignLastIP.IsChecked.Value) 
-            {
-                subnetSize -= 1;
-            }
+            int subnetSize = GetUsableSubnetSize(wgAddress);
             LabelNoClients.Content = $"No. Clients (Max: {subnetSize})";
         }
 
@@ -540,6 +523,36 @@ namespace WireGuardCommand
             }
 
             return content;
+        }
+
+        private bool IsGatewayLastIP()
+        {
+            return (CheckBoxAssignLastIP.IsChecked.HasValue && CheckBoxAssignLastIP.IsChecked.Value);
+        }
+
+        private int GetUsableSubnetSize(WireGuardAddress? wgAddress)
+        {
+            if (wgAddress == null)
+            {
+                return 0;
+            }
+
+            int subnetSize = (int)Math.Pow(2, (32 - wgAddress.CIDR));
+            if (subnetSize == 0)
+            {
+                return 0;
+            }
+
+            // Subtract network and broadcast address.
+            subnetSize -= 2;
+
+            if (IsGatewayLastIP())
+            {
+                // Subtract the gateway address if assigning as last available.
+                subnetSize -= 1;
+            }
+
+            return subnetSize;
         }
 
         private void CheckBoxAssignLastIP_Checked(object sender, RoutedEventArgs e)
