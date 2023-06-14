@@ -425,7 +425,7 @@ namespace WireGuardCommand
                 sbClient.AppendLine("");
 
                 sbClient.AppendLine("[Peer]");
-                sbClient.AppendLine($"PublicKey = {peer.Config.PublicKey}");
+                sbClient.AppendLine($"PublicKey = {wgServer.PublicKey}");
 
                 if (!string.IsNullOrEmpty(peer.Config.PresharedKey))
                     sbClient.AppendLine($"PresharedKey = {peer.Config.PresharedKey}");
