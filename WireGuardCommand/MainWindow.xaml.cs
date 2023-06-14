@@ -319,7 +319,15 @@ namespace WireGuardCommand
                 else
                 {
                     var wgPeer = new WireGuardPeer();
-                    wgPeer.Id = (int)i - 1; // Server takes up first id, but peers should start at 1.
+                    if (CheckBoxAssignLastIP.IsChecked.HasValue &&
+                        !CheckBoxAssignLastIP.IsChecked.Value)
+                    {
+                        wgPeer.Id = (int)i - 1; // Server takes up first id, but peers should start at 1.
+                    }
+                    else
+                    {
+                        wgPeer.Id = (int)i;
+                    }
                     wgPeer.AllowedIPS = $"{newOctets[0]}.{newOctets[1]}.{newOctets[2]}.{newOctets[3]}/32";
 
                     // Generate client private / public keys.
