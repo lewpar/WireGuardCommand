@@ -210,6 +210,7 @@ namespace WireGuardCommand
             var wgAddress = ParseAddress();
             if (wgAddress == null)
             {
+                MessageBox.Show("Failed to parse address.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
 
