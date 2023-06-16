@@ -88,7 +88,7 @@
 
                     <StackPanel Grid.Column="2" Grid.Row="2" Orientation="Horizontal">
                         <Label>Remote DNS (Optional)</Label>
-                        <uc:InfoToolTip Header="Remote DNS (Optional)" Information="Allows client side remote subnet name resolution when you have a DNS server on the hosting subnet.&#x0a;Often used when on-premise DNS exists."></uc:InfoToolTip>
+                        <uc:InfoToolTip Header="Remote DNS (Optional)" Information="Allows client side remote subnet name resolution when you have a DNS server on the hosting subnet, often used when on-premise DNS exists.&#x0a;A DNS suffix can also be added here allowing client name resolution without FQDN usage in a domain environment.&#x0a;&#x0a;Example:&#x0a;10.0.0.10, domain.local "></uc:InfoToolTip>
                     </StackPanel>
                     <TextBox x:Name="InputDNS" Grid.Column="2" Grid.Row="3"></TextBox>
 
