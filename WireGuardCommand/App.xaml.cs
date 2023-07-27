@@ -25,6 +25,14 @@ namespace WireGuardCommand
                 string json = File.ReadAllText(@"./appsettings.json");
                 Settings = JsonSerializer.Deserialize<AppSettings>(json)!;
             }
+            else
+            {
+                var settings = new AppSettings();
+                settings.Reset();
+                settings.Save();
+
+                Settings = settings;
+            }
             
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
