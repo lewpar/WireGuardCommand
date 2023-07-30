@@ -174,12 +174,14 @@ namespace WireGuardCommand
 
         private IPNetwork? ParseAddress()
         {
-            if(string.IsNullOrEmpty(InputSubnet.Text))
+            try
             {
-                return null;
+                var result = IPNetwork.Parse(InputSubnet.Text);
+                return result;
             }
+            catch (Exception) { }
 
-            return IPNetwork.Parse(InputSubnet.Text);
+            return null;
         }
 
         private WireGuardServer? CreateServerConfig()
