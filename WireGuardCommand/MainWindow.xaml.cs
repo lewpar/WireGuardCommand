@@ -174,6 +174,11 @@ namespace WireGuardCommand
 
         private IPNetwork? ParseAddress()
         {
+            if(string.IsNullOrEmpty(InputSubnet.Text))
+            {
+                return null;
+            }
+
             return IPNetwork.Parse(InputSubnet.Text);
         }
 
