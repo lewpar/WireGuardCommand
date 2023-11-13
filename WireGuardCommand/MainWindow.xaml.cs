@@ -451,6 +451,37 @@ namespace WireGuardCommand
             UpdateMaxClients();
         }
 
+        private IPEndpoint? GetEndpoint()
+        {
+            var endpoint = InputEndpoint.Text;
+            if(string.IsNullOrEmpty(endpoint))
+            {
+                return null;
+            }
+
+            var result = new IPEndpoint();
+
+            var endpointPair = endpoint.Split(":");
+            if(endpointPair.Length == 1)
+            {
+                result.Endpoint = endpointPair[0];
+            }
+            else if (endpointPair.Length == 2)
+            {
+                result.Endpoint = endpointPair[0];
+                if (int.TryParse(endpointPair[1], out int port))
+                {
+                    result.Port = port;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+            return result;
+        }
+
         private string ReplaceMacros(WireGuardServer wgServer, string content, int? clientId = null)
         {
             content = content.Replace("{interface}", wgServer.Interface);
@@ -458,6 +489,13 @@ namespace WireGuardCommand
             content = content.Replace("{server-address}", wgServer.Address);
             content = content.Replace("{server-private}", wgServer.PrivateKey);
             content = content.Replace("{server-port}", wgServer.Port.ToString());
+
+            var endpoint = GetEndpoint();
+            if(endpoint is not null)
+            {
+                content = content.Replace("{endpoint-ip}", endpoint.Endpoint);
+                content = content.Replace("{endpoint-port}", endpoint.Port.ToString());
+            }
 
             if(clientId != null && clientId.HasValue) 
             {

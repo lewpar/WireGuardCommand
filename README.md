@@ -16,5 +16,7 @@ The macros are case-sensitive.
 | \{client-id} | Prints client id (the client number). | Command |
 | \{client-preshared} | Prints client preshared key (base64). | Command |
 | \{client-public} | Prints client public key (base64). | Command |
+| \{endpoint-ip} | Prints the endpoint address/domain. | Command |
+| \{endpoint-port | Prints the endpoint port. | Command |
 
 This is a still growing list, if you would like a macro to be added you can open a PR or issue.
