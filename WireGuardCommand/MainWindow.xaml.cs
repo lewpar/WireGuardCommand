@@ -201,6 +201,7 @@ namespace WireGuardCommand
             }
 
             var wgServer = new WireGuardServer();
+            wgServer.Subnet = wgAddress;
 
             int listenPort;
             if (!int.TryParse(InputListenPort.Text, out listenPort))
@@ -353,7 +354,7 @@ namespace WireGuardCommand
                 {
                     continue;
                 }
-                sbClient.AppendLine($"Address = {peer.Config.Address}");
+                sbClient.AppendLine($"Address = {peer.Config.Address}/{wgServer.Subnet.Cidr}");
                 sbClient.AppendLine($"ListenPort = {peer.Config.Port}");
                 sbClient.AppendLine($"PrivateKey = {peer.Config.PrivateKey}");
 

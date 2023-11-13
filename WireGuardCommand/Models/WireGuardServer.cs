@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 
 namespace WireGuardCommand.Models
 {
     public class WireGuardServer
     {
         public string? Address { get; set; }
+        public IPNetwork? Subnet { get; set; }
         public int Port { get; set; }
         public string? PrivateKey { get; set; }
         public string? PublicKey { get; set; }
