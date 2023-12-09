@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace WireGuardCommand
     /// </summary>
     public partial class MainWindow : Window
     {
-        private AppSettings _settings;
+        private AppSettings? _settings;
 
         public MainWindow(AppSettings settings)
         {
@@ -32,6 +33,8 @@ namespace WireGuardCommand
 
         private void LoadDefaults()
         {
+            Debug.Assert(_settings is not null);
+
             InputPrefix.Text = _settings.DefaultPrefix;
             InputCommand.Text = _settings.DefaultCommand;
             InputPostfix.Text = _settings.DefaultPostfix;
@@ -53,6 +56,8 @@ namespace WireGuardCommand
 
         private void ButtonSaveDefaults_Click(object sender, RoutedEventArgs e)
         {
+            Debug.Assert(_settings is not null);
+
             if (!string.IsNullOrEmpty(InputPrefix.Text))
             {
                 _settings.DefaultPrefix = InputPrefix.Text;
@@ -123,6 +128,10 @@ namespace WireGuardCommand
 
         private void ButtonGenerate_Click(object sender, RoutedEventArgs e)
         {
+            Debug.Assert(_settings is not null);
+
+            WireGuardServer.Reset();
+
             string saveLocation = string.Empty;
 
             if(!string.IsNullOrEmpty(_settings.SaveLocation))
@@ -132,11 +141,7 @@ namespace WireGuardCommand
 
             try 
             { 
-                var config = CreateServerConfig();
-                if (config == null)
-                {
-                    return;
-                }
+                CreateServerConfig();
 
                 using (var saveFileDialog = new System.Windows.Forms.FolderBrowserDialog())
                 {
@@ -152,7 +157,7 @@ namespace WireGuardCommand
                             return;
                         }
 
-                        WriteWireGuardConfig(config, saveFileDialog.SelectedPath, CheckBoxSaveToZip.IsChecked.HasValue ? CheckBoxSaveToZip.IsChecked.Value : false);
+                        WriteWireGuardConfig(saveFileDialog.SelectedPath, CheckBoxSaveToZip.IsChecked.HasValue ? CheckBoxSaveToZip.IsChecked.Value : false);
 
                         MessageBox.Show("Successfully generated configs.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
@@ -167,6 +172,8 @@ namespace WireGuardCommand
 
         private void ButtonResetDefaults_Click(object sender, RoutedEventArgs e)
         {
+            Debug.Assert(_settings is not null);
+
             _settings.Reset();
             _settings.Save();
             LoadDefaults();
@@ -184,45 +191,44 @@ namespace WireGuardCommand
             return null;
         }
 
-        private WireGuardServer? CreateServerConfig()
+        private void CreateServerConfig()
         {
             var wgAddress = ParseAddress();
             if (wgAddress == null)
             {
                 MessageBox.Show("Failed to parse address.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                return;
             }
 
             int subnetSize = GetUsableSubnetSize(wgAddress);
             if (subnetSize == 0)
             {
                 MessageBox.Show("Subnet size is 0, you must specify a larger CIDR.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                return;
             }
 
-            var wgServer = new WireGuardServer();
-            wgServer.Subnet = wgAddress;
+            WireGuardServer.Subnet = wgAddress;
 
             int listenPort;
             if (!int.TryParse(InputListenPort.Text, out listenPort))
             {
                 MessageBox.Show("Failed to get listen port.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                return;
             }
 
-            wgServer.Port = listenPort;
+            WireGuardServer.Port = listenPort;
 
             int clientCount;
             if (!int.TryParse(InputNoClients.Text, out clientCount))
             {
                 MessageBox.Show("Failed to get number of clients.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                return;
             }
 
             if (clientCount > subnetSize)
             {
                 MessageBox.Show("You cannot have more clients than the subnet addresses available.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                return;
             }
 
             // Generate private / public keys.
@@ -232,18 +238,19 @@ namespace WireGuardCommand
                 serverKeyPair.PublicKey == null)
             {
                 MessageBox.Show($"Failed to generate server key pair.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                return;
             }
+
             string privKey = serverKeyPair.PrivateKey.ToString();
             string pubKey = serverKeyPair.PublicKey.ToString();
 
-            wgServer.PrivateKey = privKey;
-            wgServer.PublicKey = pubKey;
+            WireGuardServer.PrivateKey = privKey;
+            WireGuardServer.PublicKey = pubKey;
 
-            wgServer.Interface = InputInterface.Text;
+            WireGuardServer.Interface = InputInterface.Text;
 
             var gatewayAddress = IsGatewayLastIP() ? wgAddress.LastUsable : wgAddress.FirstUsable;
-            wgServer.Address = $"{gatewayAddress}/{wgAddress.Cidr}";
+            WireGuardServer.Address = $"{gatewayAddress}/{wgAddress.Cidr}";
 
             int peerId = 1;
             int i = 0;
@@ -275,19 +282,19 @@ namespace WireGuardCommand
                     clientKeyPair.PublicKey == null)
                 {
                     MessageBox.Show($"Failed to generate client key pair for client {peerId}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return null;
+                    return;
                 }
 
                 wgPeer.PublicKey = clientKeyPair.PublicKey.ToString();
 
-                wgServer.PrivateKey = privKey;
-                wgServer.PublicKey = pubKey;
+                WireGuardServer.PrivateKey = privKey;
+                WireGuardServer.PublicKey = pubKey;
 
                 var wgClient = new WireGuardClient();
                 wgClient.Address = peerAddress;
-                wgClient.Port = wgServer.Port;
+                wgClient.Port = WireGuardServer.Port;
                 wgClient.AllowedIPS = InputIPs.Text;
-                wgClient.PublicKey = wgServer.PublicKey;
+                wgClient.PublicKey = WireGuardServer.PublicKey;
                 wgClient.PrivateKey = clientKeyPair.PrivateKey.ToString();
                 wgClient.DNS = InputDNS.Text;
 
@@ -305,20 +312,18 @@ namespace WireGuardCommand
 
                 wgPeer.Config = wgClient;
 
-                wgServer.Peers.Add(wgPeer);
+                WireGuardServer.Peers.Add(wgPeer);
 
                 i++;
                 peerId += 1;
             }
-            foreach (var peer in wgServer.Peers)
+            foreach (var peer in WireGuardServer.Peers)
             {
-                wgServer.Commands.Add(ReplaceMacros(wgServer, InputCommand.Text, peer.Id));
+                WireGuardServer.Commands.Add(ReplaceMacros(InputCommand.Text, peer.Id));
             }
-
-            return wgServer;
         }
 
-        private void WriteWireGuardConfig(WireGuardServer wgServer, string path, bool zip = false)
+        private void WriteWireGuardConfig(string path, bool zip = false)
         {
             var sbServer = new StringBuilder();
             var sbClient = new StringBuilder();
@@ -326,14 +331,14 @@ namespace WireGuardCommand
             var zipItems = new List<string>();
 
             sbServer.AppendLine("[Interface]");
-            sbServer.AppendLine($"Address = {wgServer.Address}");
-            sbServer.AppendLine($"ListenPort = {wgServer.Port}");
-            sbServer.AppendLine($"PrivateKey = {wgServer.PrivateKey}");
+            sbServer.AppendLine($"Address = {WireGuardServer.Address}");
+            sbServer.AppendLine($"ListenPort = {WireGuardServer.Port}");
+            sbServer.AppendLine($"PrivateKey = {WireGuardServer.PrivateKey}");
 
             sbServer.AppendLine("");
 
             int i = 1;
-            foreach (var peer in wgServer.Peers)
+            foreach (var peer in WireGuardServer.Peers)
             {
                 // SERVER
                 sbServer.AppendLine($"# Client {i}");
@@ -354,7 +359,7 @@ namespace WireGuardCommand
                 {
                     continue;
                 }
-                sbClient.AppendLine($"Address = {peer.Config.Address}/{wgServer.Subnet.Cidr}");
+                sbClient.AppendLine($"Address = {peer.Config.Address}/{WireGuardServer.Subnet?.Cidr}");
                 sbClient.AppendLine($"ListenPort = {peer.Config.Port}");
                 sbClient.AppendLine($"PrivateKey = {peer.Config.PrivateKey}");
 
@@ -364,7 +369,7 @@ namespace WireGuardCommand
                 sbClient.AppendLine("");
 
                 sbClient.AppendLine("[Peer]");
-                sbClient.AppendLine($"PublicKey = {wgServer.PublicKey}");
+                sbClient.AppendLine($"PublicKey = {WireGuardServer.PublicKey}");
 
                 if (!string.IsNullOrEmpty(peer.Config.PresharedKey))
                     sbClient.AppendLine($"PresharedKey = {peer.Config.PresharedKey}");
@@ -394,17 +399,17 @@ namespace WireGuardCommand
 
             if (!string.IsNullOrEmpty(InputPrefix.Text))
             {
-                sbCommands.AppendLine(ReplaceMacros(wgServer, InputPrefix.Text));
+                sbCommands.AppendLine(ReplaceMacros(InputPrefix.Text));
             }
 
-            foreach (var command in wgServer.Commands)
+            foreach (var command in WireGuardServer.Commands)
             {
-                sbCommands.AppendLine(ReplaceMacros(wgServer, command));
+                sbCommands.AppendLine(ReplaceMacros(command));
             }
 
             if (!string.IsNullOrEmpty(InputPostfix.Text))
             {
-                sbCommands.AppendLine(ReplaceMacros(wgServer, InputPostfix.Text));
+                sbCommands.AppendLine(ReplaceMacros(InputPostfix.Text));
             }
 
             if (zip)
@@ -483,13 +488,13 @@ namespace WireGuardCommand
             return result;
         }
 
-        private string ReplaceMacros(WireGuardServer wgServer, string content, int? clientId = null)
+        private string ReplaceMacros(string content, int? clientId = null)
         {
-            content = content.Replace("{interface}", wgServer.Interface);
+            content = content.Replace("{interface}", WireGuardServer.Interface);
 
-            content = content.Replace("{server-address}", wgServer.Address);
-            content = content.Replace("{server-private}", wgServer.PrivateKey);
-            content = content.Replace("{server-port}", wgServer.Port.ToString());
+            content = content.Replace("{server-address}", WireGuardServer.Address);
+            content = content.Replace("{server-private}", WireGuardServer.PrivateKey);
+            content = content.Replace("{server-port}", WireGuardServer.Port.ToString());
 
             var endpoint = GetEndpoint();
             if(endpoint is not null)
@@ -500,7 +505,7 @@ namespace WireGuardCommand
 
             if(clientId != null && clientId.HasValue) 
             {
-                var peer = wgServer.Peers.FirstOrDefault(peer => peer.Id == clientId.Value);
+                var peer = WireGuardServer.Peers.FirstOrDefault(peer => peer.Id == clientId.Value);
 
                 if (peer != null)
                 {

@@ -3,22 +3,29 @@ using System.Net;
 
 namespace WireGuardCommand.Models
 {
-    public class WireGuardServer
+    public static class WireGuardServer
     {
-        public string? Address { get; set; }
-        public IPNetwork? Subnet { get; set; }
-        public int Port { get; set; }
-        public string? PrivateKey { get; set; }
-        public string? PublicKey { get; set; }
-        public string? Interface { get; set; }
+        public static string? Address { get; set; }
+        public static IPNetwork? Subnet { get; set; }
+        public static int Port { get; set; }
+        public static string? PrivateKey { get; set; }
+        public static string? PublicKey { get; set; }
+        public static string? Interface { get; set; }
 
-        public List<WireGuardPeer> Peers { get; set; }
-        public List<string> Commands { get; set; }
+        public static List<WireGuardPeer> Peers { get; set; } = new List<WireGuardPeer>();
+        public static List<string> Commands { get; set; } = new List<string>();
 
-        public WireGuardServer()
+        public static void Reset()
         {
-            Peers = new List<WireGuardPeer>();
-            Commands = new List<string>();
+            Address = default;
+            Subnet = default;
+            Port = default;
+            PrivateKey = default;
+            PublicKey = default;
+            Interface = default;
+
+            Peers.Clear();
+            Commands.Clear();
         }
     }
 }
