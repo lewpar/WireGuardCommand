@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
@@ -14,8 +15,8 @@ namespace WireGuardCommand
     /// </summary>
     public partial class App : Application
     {
-        public IServiceProvider ServiceProvider { get; private set; }
-        private AppSettings Settings;
+        public IServiceProvider? ServiceProvider { get; private set; }
+        private AppSettings? Settings;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -45,6 +46,8 @@ namespace WireGuardCommand
 
         private void ConfigureServices(IServiceCollection services)
         {
+            Debug.Assert(Settings is not null);
+
             services.AddSingleton<AppSettings>(Settings);
             services.AddTransient(typeof(MainWindow));
         }
