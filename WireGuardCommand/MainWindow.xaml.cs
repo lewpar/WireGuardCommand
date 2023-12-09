@@ -550,10 +550,5 @@ namespace WireGuardCommand
         {
             UpdateMaxClients();
         }
-
-        private void ButtonTools_Click(object sender, RoutedEventArgs e)
-        {
-            new ToolsWindow().Show();
-        }
     }
 }
