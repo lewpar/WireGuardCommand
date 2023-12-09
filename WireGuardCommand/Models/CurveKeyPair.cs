@@ -1,4 +1,5 @@
-﻿using Elliptic;
+﻿using WireGuardCommand.Security;
+
 using System.Security.Cryptography;
 
 namespace WireGuardCommand.Models

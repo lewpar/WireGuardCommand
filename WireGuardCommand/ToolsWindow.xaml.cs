@@ -1,4 +1,5 @@
-﻿using Elliptic;
+﻿using WireGuardCommand.Security;
+
 using System;
 using System.Linq;
 using System.Windows;
