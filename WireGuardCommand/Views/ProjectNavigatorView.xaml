@@ -10,44 +10,70 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
     <Grid>
+        <!-- Project Loading Screen -->
+        <Grid>
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ProjectsLoading}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <TextBlock>Loading Projects..</TextBlock>
+        </Grid>
         
-        <!-- Hide/Show Project List -->
-        <!-- The project list should be hidden if there are
-             no projects found. -->
-        <Grid.Style>
-            <Style TargetType="{x:Type Grid}">
-                <Setter Property="Visibility" Value="Collapsed"/>
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding FoundProjects}" Value="True">
-                        <Setter Property="Visibility" Value="Visible"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Style>
+        <Grid>
+            <!-- Hide/Show Project List -->
+            <!-- The project list should be hidden if there are
+         no projects found. -->
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ProjectsLoading}" Value="False">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
 
-        <DockPanel Margin="5">
-            <TextBlock DockPanel.Dock="Top" Margin="0, 5, 0, 5" FontSize="24" FontWeight="SemiBold" FontFamily="Arial">Projects</TextBlock>
-            <Grid DockPanel.Dock="Bottom" Margin="0, 5, 0, 5">
-                <Button MinHeight="30">Load Project</Button>
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70*"/>
-                    <ColumnDefinition Width="30*"/>
-                </Grid.ColumnDefinitions>
-                <ListView ItemsSource="{Binding Projects}" Grid.Column="0">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="5">
-                                <TextBlock Text="{Binding Name}"></TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1">
-                    
-                </Border>
-            </Grid>
-        </DockPanel>
+            <DockPanel Margin="5">
+                <TextBlock DockPanel.Dock="Top" Margin="0, 5, 0, 5" FontSize="24" FontWeight="SemiBold" FontFamily="Arial">Projects</TextBlock>
+                <Grid DockPanel.Dock="Bottom" Margin="0, 5, 0, 5">
+                    <Button MinHeight="30">Load Project</Button>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70*"/>
+                        <ColumnDefinition Width="30*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView ItemsSource="{Binding Projects}" Grid.Column="0">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0" MaxHeight="50" MaxWidth="50">
+                                        <Image Source="pack://application:,,,./Resources/Icons/project.png"/>
+                                    </Grid>
+                                    <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold"></TextBlock>
+                                        <TextBlock Text="{Binding Description}"></TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+
+                    </Border>
+                </Grid>
+            </DockPanel>
+        </Grid>
     </Grid>
 </UserControl>

@@ -9,8 +9,5 @@ namespace WireGuardCommand.Models.Project
 
         [JsonPropertyName("Description")]
         public string? Description { get; set; }
-
-        [JsonPropertyName("WireGuardConfig")]
-        public WGCConfig? Configuration { get; set; }
     }
 }

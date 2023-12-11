@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -12,10 +13,12 @@ namespace WireGuardCommand.ViewModels
 {
     public partial class ProjectNavigatorViewModel : ViewModel
     {
+        const string PATH_PROJECTS = @"./Projects";
+
         public ObservableCollection<WGCProject> Projects { get; set; }
 
         [ObservableProperty]
-        private bool projectsLoaded; // ProjectsLoaded
+        private bool projectsLoading; // ProjectsLoaded
 
         [ObservableProperty]
         private bool foundProjects; // FoundProjects
@@ -23,51 +26,56 @@ namespace WireGuardCommand.ViewModels
         public ProjectNavigatorViewModel()
         {
             Projects = new ObservableCollection<WGCProject>();
+
             _ = LoadProjectsAsync();
         }
 
         public async Task LoadProjectsAsync()
         {
-            ProjectsLoaded = false;
+            ProjectsLoading = true;
 
-            if(!Directory.Exists(@"./Projects"))
+            // Load Project Meta
             {
-                Directory.CreateDirectory(@"./Projects");
-            }
-
-            var files = Directory.GetFiles(@"./Projects", "*.wgcp");
-            if(files.Length > 0)
-            {
-                foreach(var file in files)
+                foreach (var dir in Directory.GetDirectories(PATH_PROJECTS))
                 {
+                    var projectName = Path.GetFileName(dir);
+                    var pathMeta = Path.Combine(dir, $"{projectName}.meta");
+
+                    if (!File.Exists(pathMeta))
+                    {
+                        Debug.WriteLine($"No project meta found for project '{projectName}', skipping..");
+                        continue;
+                    }
+
                     try
                     {
-                        using FileStream fs = File.OpenRead(file);
-                        var project = await JsonSerializer.DeserializeAsync<WGCProject>(fs);
+                        using FileStream fs = File.OpenRead(pathMeta);
+                        var projectMeta = await JsonSerializer.DeserializeAsync<WGCProject>(fs);
 
-                        if(project is null)
+                        if(projectMeta is null)
                         {
-                            continue;
+                            throw new Exception($"Failed to deserialize meta information for project '{projectName}'.");
                         }
 
-                        if(string.IsNullOrEmpty(project.Name))
+                        // This should never happen, but just incase?
+                        if(string.IsNullOrEmpty(projectMeta.Name))
                         {
-                            project.Name = "Untitled Project";
+                            projectMeta.Name = projectName;
                         }
 
-                        Projects.Add(project);
-
-                        FoundProjects = true;
+                        Projects.Add(projectMeta);
                     }
                     catch(Exception ex)
                     {
-                        Debug.WriteLine($"Failed to load WireGuard Command project with exception: {ex.Message}");
-                        continue;
+                        Debug.WriteLine($"Failed to load meta for project '{projectName}': {ex.Message}");
                     }
                 }
-            }
 
-            ProjectsLoaded = true;
+                // Fake delay for testing loading bar.
+                await Task.Delay(1500);
+
+                ProjectsLoading = false;
+            }
         }
     }
 }
