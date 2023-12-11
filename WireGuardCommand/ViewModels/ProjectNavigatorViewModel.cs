@@ -18,10 +18,10 @@ namespace WireGuardCommand.ViewModels
         public ObservableCollection<WGCProject> Projects { get; set; }
 
         [ObservableProperty]
-        private bool projectsLoading; // ProjectsLoaded
+        private bool projectsLoading;
 
         [ObservableProperty]
-        private bool foundProjects; // FoundProjects
+        private bool projectsFound;
 
         public ProjectNavigatorViewModel()
         {
@@ -64,6 +64,8 @@ namespace WireGuardCommand.ViewModels
                         }
 
                         Projects.Add(projectMeta);
+
+                        ProjectsFound = true;
                     }
                     catch(Exception ex)
                     {

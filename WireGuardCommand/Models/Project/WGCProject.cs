@@ -9,5 +9,8 @@ namespace WireGuardCommand.Models.Project
 
         [JsonPropertyName("Description")]
         public string? Description { get; set; }
+
+        [JsonPropertyName("Encrypted")]
+        public bool Encrypted { get; set; }
     }
 }
