@@ -17,6 +17,20 @@ namespace WireGuardCommand.ViewModels
 
         public ObservableCollection<WGCProject> Projects { get; set; }
 
+        private WGCProject? selectedProject;
+        public WGCProject? SelectedProject
+        {
+            get { return selectedProject; } 
+            set 
+            {
+                IsProjectSelected = (value is not null);
+                SetProperty(ref selectedProject, value);
+            }
+        }
+
+        [ObservableProperty]
+        private bool isProjectSelected;
+
         [ObservableProperty]
         private bool projectsLoading;
 
