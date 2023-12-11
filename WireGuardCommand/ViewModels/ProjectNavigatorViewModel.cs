@@ -107,5 +107,11 @@ namespace WireGuardCommand.ViewModels
             rootViewModel.ProjectViewModel.Project = SelectedProject;
             rootViewModel.ChangeViewModel(rootViewModel.ProjectViewModel);
         }
+
+        [RelayCommand]
+        private void NewProject()
+        {
+            rootViewModel.ChangeViewModel(rootViewModel.ProjectNewViewModel);
+        }
     }
 }

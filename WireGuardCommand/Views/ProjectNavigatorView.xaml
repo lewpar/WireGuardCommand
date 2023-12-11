@@ -42,7 +42,12 @@
             </Grid.Style>
 
             <DockPanel Margin="5">
-                <TextBlock DockPanel.Dock="Top" Margin="0, 5, 0, 5" FontSize="24" FontWeight="SemiBold" FontFamily="Arial">Projects</TextBlock>
+
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,5,0,5">
+                    <TextBlock DockPanel.Dock="Top" FontSize="24" FontWeight="SemiBold" FontFamily="Arial" Margin="0,0,5,0">Projects</TextBlock>
+                    <Button Command="{Binding NewProjectCommand}">New +</Button>
+                </StackPanel>
+
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="70*"/>

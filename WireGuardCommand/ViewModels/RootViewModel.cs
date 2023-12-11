@@ -9,11 +9,13 @@ namespace WireGuardCommand.ViewModels
 
         public ProjectNavigatorViewModel ProjectNavigatorViewModel { get; set; }
         public ProjectWindowViewModel ProjectViewModel { get; set; }
+        public ProjectNewViewModel ProjectNewViewModel { get; set; }
 
         public RootViewModel() 
         {
             ProjectNavigatorViewModel = new ProjectNavigatorViewModel(this);
             ProjectViewModel = new ProjectWindowViewModel(this);
+            ProjectNewViewModel = new ProjectNewViewModel(this);
 
             CurrentViewModel = ProjectNavigatorViewModel;
         }
