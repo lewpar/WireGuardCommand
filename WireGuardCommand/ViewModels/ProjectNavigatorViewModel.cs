@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -94,6 +94,12 @@ namespace WireGuardCommand.ViewModels
 
                 ProjectsLoading = false;
             }
+        }
+
+        [RelayCommand]
+        private void OpenProject()
+        {
+            Debug.WriteLine($"Open Project: {SelectedProject?.Name}");
         }
     }
 }
