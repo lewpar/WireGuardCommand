@@ -51,7 +51,7 @@
                         <ColumnDefinition Width="70*"/>
                         <ColumnDefinition Width="30*"/>
                     </Grid.ColumnDefinitions>
-                    <ListView ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject, Mode=TwoWay}" Grid.Column="0">
+                    <ListView ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}" Grid.Column="0">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="5">
@@ -113,14 +113,10 @@
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        
-                        <StackPanel>
-                            <Grid Margin="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid Grid.Column="0" MaxHeight="50" MaxWidth="50">
+
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                            <StackPanel Orientation="Horizontal">
+                                <Grid MaxHeight="50" MaxWidth="50">
                                     <Image>
                                         <Image.Style>
                                             <Style TargetType="Image">
@@ -134,11 +130,16 @@
                                         </Image.Style>
                                     </Image>
                                 </Grid>
-                                <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding SelectedProject.Name}" FontWeight="SemiBold"></TextBlock>
                                     <TextBlock Text="{Binding SelectedProject.Description}"></TextBlock>
                                 </StackPanel>
-                            </Grid>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical" Margin="5">
+                                <TextBlock FontWeight="SemiBold">Path</TextBlock>
+                                <TextBox Text="{Binding SelectedProject.Path}" IsReadOnly="True"></TextBox>
+                            </StackPanel>
                         </StackPanel>
                     </Border>
                 </Grid>

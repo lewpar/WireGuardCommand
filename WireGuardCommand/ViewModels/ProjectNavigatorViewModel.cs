@@ -77,6 +77,8 @@ namespace WireGuardCommand.ViewModels
                             projectMeta.Name = projectName;
                         }
 
+                        projectMeta.Path = Path.GetFullPath(dir);
+
                         Projects.Add(projectMeta);
 
                         ProjectsFound = true;
