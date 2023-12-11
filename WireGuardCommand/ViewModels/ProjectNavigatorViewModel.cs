@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ namespace WireGuardCommand.ViewModels
     public partial class ProjectNavigatorViewModel : ViewModel
     {
         const string PATH_PROJECTS = @"./Projects";
+        private readonly RootViewModel rootViewModel;
 
         public ObservableCollection<WGCProject> Projects { get; set; }
 
@@ -37,11 +39,12 @@ namespace WireGuardCommand.ViewModels
         [ObservableProperty]
         private bool projectsFound;
 
-        public ProjectNavigatorViewModel()
+        public ProjectNavigatorViewModel(RootViewModel rootViewModel)
         {
             Projects = new ObservableCollection<WGCProject>();
 
             _ = LoadProjectsAsync();
+            this.rootViewModel = rootViewModel;
         }
 
         public async Task LoadProjectsAsync()
@@ -100,6 +103,9 @@ namespace WireGuardCommand.ViewModels
         private void OpenProject()
         {
             Debug.WriteLine($"Open Project: {SelectedProject?.Name}");
+
+            rootViewModel.ProjectViewModel.Project = SelectedProject;
+            rootViewModel.ChangeViewModel(rootViewModel.ProjectViewModel);
         }
     }
 }

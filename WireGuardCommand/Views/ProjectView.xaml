@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Label>Project</Label>
+        <TextBlock Text="{Binding Project.Name}"></TextBlock>
+        <Button Command="{Binding CloseProjectCommand}">Close Project</Button>
     </Grid>
 </UserControl>

@@ -17,11 +17,11 @@
     <!-- Bind Views to ViewModels -->
     <Window.Resources>
         <DataTemplate DataType="{x:Type vms:ProjectNavigatorViewModel}">
-            <v:ProjectNavigatorView DataContext="{Binding}"/>
+            <v:ProjectNavigatorView/>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vms:ProjectWindowViewModel}">
-            <v:ProjectView DataContext="{Binding}"/>
+            <v:ProjectView/>
         </DataTemplate>
     </Window.Resources>
 
