@@ -26,7 +26,7 @@
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontWeight="SemiBold">Loading Projects..</TextBlock>
         </Grid>
         
-        <Grid Margin="20">
+        <Grid Margin="20, 10, 20, 20">
             <!-- Hide/Show Project List -->
             <!-- The project list should be hidden if there are
          no projects found. -->
@@ -41,7 +41,7 @@
                 </Style>
             </Grid.Style>
 
-            <DockPanel Margin="5">
+            <DockPanel>
 
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,5,0,5">
                     <TextBlock DockPanel.Dock="Top" FontSize="24" FontWeight="SemiBold" FontFamily="Arial" Margin="0,0,5,0">Projects</TextBlock>
