@@ -60,15 +60,19 @@ namespace WireGuardCommand.ViewModels
                 return;
             }
 
-            CreateProject(new WGCProject()
+            var newProject = new WGCProject()
             {
                 Name = ProjectName,
                 Description = ProjectDescription,
                 Encrypted = IsEncrypted
-            });
+            };
+            CreateProject(newProject);
 
             _ = rootViewModel.ProjectNavigatorViewModel.LoadProjectsAsync();
-            rootViewModel.ChangeViewModel(rootViewModel.ProjectNavigatorViewModel);
+
+            rootViewModel.ProjectViewModel.Project = newProject;
+            rootViewModel.ChangeViewModel(rootViewModel.ProjectViewModel);
+
             ResetFields();
         }
 
