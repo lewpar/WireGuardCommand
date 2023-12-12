@@ -15,5 +15,8 @@ namespace WireGuardCommand.Models.Project
 
         [JsonIgnore]
         public string? Path { get; set; }
+
+        [JsonIgnore]
+        public const string PATH_PROJECTS = @"./Projects";
     }
 }

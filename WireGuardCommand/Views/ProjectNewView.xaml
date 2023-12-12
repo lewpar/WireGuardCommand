@@ -6,8 +6,38 @@
              xmlns:local="clr-namespace:WireGuardCommand.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock>New Project</TextBlock>
-        <Button Command="{Binding GoBackCommand}">Go Back</Button>
+    <Grid Margin="20">
+        <StackPanel Orientation="Vertical">
+            <TextBlock FontWeight="SemiBold" FontSize="24">New Project</TextBlock>
+            <TextBlock>Name</TextBlock>
+            <TextBox Text="{Binding ProjectName}"></TextBox>
+            
+            <TextBlock>Description</TextBlock>
+            <TextBox Text="{Binding ProjectDescription}"></TextBox>
+            
+            <CheckBox IsChecked="{Binding IsEncrypted}">Encrypted</CheckBox>
+
+            <StackPanel Orientation="Vertical">
+                <StackPanel.Style>
+                    <Style TargetType="{x:Type StackPanel}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEncrypted}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <TextBlock>Encryption Passphrase</TextBlock>
+                <TextBox Text="{Binding EncryptionPhrase}"></TextBox>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding GoBackCommand}">Go Back</Button>
+                <Button Command="{Binding CreateProjectCommand}">Create Project</Button>
+            </StackPanel>
+
+            <TextBlock Text="{Binding ErrorMessage}" FontWeight="SemiBold" Foreground="Red"></TextBlock>
+        </StackPanel>
     </Grid>
 </UserControl>

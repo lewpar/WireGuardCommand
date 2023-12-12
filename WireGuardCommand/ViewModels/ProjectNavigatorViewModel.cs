@@ -14,7 +14,6 @@ namespace WireGuardCommand.ViewModels
 {
     public partial class ProjectNavigatorViewModel : ViewModel
     {
-        const string PATH_PROJECTS = @"./Projects";
         private readonly RootViewModel rootViewModel;
 
         public ObservableCollection<WGCProject> Projects { get; set; }
@@ -50,10 +49,11 @@ namespace WireGuardCommand.ViewModels
         public async Task LoadProjectsAsync()
         {
             ProjectsLoading = true;
+            Projects.Clear();
 
             // Load Project Meta
             {
-                foreach (var dir in Directory.GetDirectories(PATH_PROJECTS))
+                foreach (var dir in Directory.GetDirectories(WGCProject.PATH_PROJECTS))
                 {
                     var projectName = Path.GetFileName(dir);
                     var pathMeta = Path.Combine(dir, $"{projectName}.meta");
@@ -93,7 +93,7 @@ namespace WireGuardCommand.ViewModels
                 }
 
                 // Fake delay for testing loading bar.
-                await Task.Delay(1500);
+                await Task.Delay(500);
 
                 ProjectsLoading = false;
             }
@@ -112,6 +112,23 @@ namespace WireGuardCommand.ViewModels
         private void NewProject()
         {
             rootViewModel.ChangeViewModel(rootViewModel.ProjectNewViewModel);
+        }
+
+        [RelayCommand]
+        private void DeleteProject()
+        {
+            if(SelectedProject is null || string.IsNullOrEmpty(SelectedProject.Name))
+            {
+                return;
+            }
+
+            if(!Directory.Exists(Path.Combine(WGCProject.PATH_PROJECTS, SelectedProject.Name)))
+            {
+                return;
+            }
+
+            Directory.Delete(Path.Combine(WGCProject.PATH_PROJECTS, SelectedProject.Name), true);
+            Projects.Remove(SelectedProject);
         }
     }
 }
