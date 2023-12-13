@@ -55,7 +55,7 @@ namespace WireGuardCommand.ViewModels
                 return;
             }
 
-            if(ProjectExists(ProjectName))
+            if(CheckProjectExists(ProjectName))
             {
                 ErrorMessage = "A project with that name already exists!";
                 return;
@@ -90,7 +90,7 @@ namespace WireGuardCommand.ViewModels
             ResetFields();
         }
 
-        private bool ProjectExists(string projectName)
+        private bool CheckProjectExists(string projectName)
         {
             return Directory.Exists(Path.Combine(WGCProject.PATH_PROJECTS, projectName));
         }
