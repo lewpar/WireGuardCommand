@@ -1,15 +1,20 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
+using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text.Json;
+
 using WireGuardCommand.Models.Project;
+using WireGuardCommand.Services;
 
 namespace WireGuardCommand.ViewModels
 {
     public partial class ProjectNewViewModel : ViewModel
     {
-        private readonly RootViewModel rootViewModel;
+        private readonly NavigationService navService;
 
         [ObservableProperty]
         private string? projectName;
@@ -26,15 +31,15 @@ namespace WireGuardCommand.ViewModels
         [ObservableProperty]
         private string? errorMessage;
 
-        public ProjectNewViewModel(RootViewModel rootViewModel) 
+        public ProjectNewViewModel(NavigationService navService) 
         {
-            this.rootViewModel = rootViewModel;
+            this.navService = navService;
         }
 
         [RelayCommand]
         private void GoBack()
         {
-            rootViewModel.ChangeViewModel(rootViewModel.ProjectNavigatorViewModel);
+            navService.OpenNavigationView();
         }
 
         [RelayCommand]
@@ -68,10 +73,7 @@ namespace WireGuardCommand.ViewModels
             };
             CreateProject(newProject);
 
-            _ = rootViewModel.ProjectNavigatorViewModel.LoadProjectsAsync();
-
-            rootViewModel.ProjectViewModel.Project = newProject;
-            rootViewModel.ChangeViewModel(rootViewModel.ProjectViewModel);
+            navService.OpenProjectView(newProject);
 
             ResetFields();
         }
@@ -93,6 +95,72 @@ namespace WireGuardCommand.ViewModels
 
             using var fs = File.OpenWrite(Path.Combine(WGCProject.PATH_PROJECTS, project.Name, $"{project.Name}.meta"));
             JsonSerializer.Serialize(fs, project);
+
+            CreateWireGuardConfig();
+
+            if(project.Encrypted)
+            {
+                if(string.IsNullOrEmpty(EncryptionPhrase))
+                {
+                    Debug.WriteLine("An error occured while trying to encrypt WireGuard Command Config: Encryption Phrase was null or empty.");
+                    return;
+                }
+
+                EncryptWireGuardConfig(EncryptionPhrase);
+            }
+        }
+
+        private void CreateWireGuardConfig()
+        {
+            if(string.IsNullOrEmpty(ProjectName))
+            {
+                return;
+            }
+
+            File.WriteAllText(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, "WGC.json"), JsonSerializer.Serialize<WGCConfig>(new WGCConfig())); ;
+        }
+
+        private void EncryptWireGuardConfig(string phrase)
+        {
+            if (string.IsNullOrEmpty(ProjectName))
+            {
+                return;
+            }
+
+            using var aes = Aes.Create();
+            aes.GenerateKey();
+            aes.GenerateIV();
+
+            var key = aes.Key;
+            var iv = aes.IV;
+
+            var message = File.ReadAllText(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, "WGC.json"));
+
+            string encrypted = Encrypt(message, key, iv);
+            File.WriteAllText(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, "WGC.json"), encrypted);
+        }
+
+        private string Encrypt(string plainText, byte[] key, byte[] iv)
+        {
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = key;
+                aesAlg.IV = iv;
+
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+                using (MemoryStream msEncrypt = new MemoryStream())
+                {
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                        {
+                            swEncrypt.Write(plainText);
+                        }
+                    }
+                    return Convert.ToBase64String(msEncrypt.ToArray());
+                }
+            }
         }
 
         private void ResetFields()

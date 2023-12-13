@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
-using System.Windows;
-
-using WireGuardCommand.Models;
+﻿using System.Windows;
+using WireGuardCommand.ViewModels;
 
 namespace WireGuardCommand
 {
@@ -18,8 +8,10 @@ namespace WireGuardCommand
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(RootViewModel rootViewModel)
         {
+            this.DataContext = rootViewModel;
+
             InitializeComponent();
         }
     }

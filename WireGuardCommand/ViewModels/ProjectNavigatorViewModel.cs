@@ -9,12 +9,13 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 using WireGuardCommand.Models.Project;
+using WireGuardCommand.Services;
 
 namespace WireGuardCommand.ViewModels
 {
     public partial class ProjectNavigatorViewModel : ViewModel
     {
-        private readonly RootViewModel rootViewModel;
+        private readonly NavigationService navService;
 
         public ObservableCollection<WGCProject> Projects { get; set; }
 
@@ -38,12 +39,13 @@ namespace WireGuardCommand.ViewModels
         [ObservableProperty]
         private bool projectsFound;
 
-        public ProjectNavigatorViewModel(RootViewModel rootViewModel)
+        public ProjectNavigatorViewModel(NavigationService navService)
         {
             Projects = new ObservableCollection<WGCProject>();
 
             _ = LoadProjectsAsync();
-            this.rootViewModel = rootViewModel;
+
+            this.navService = navService;
         }
 
         public async Task LoadProjectsAsync()
@@ -102,16 +104,20 @@ namespace WireGuardCommand.ViewModels
         [RelayCommand]
         private void OpenProject()
         {
-            Debug.WriteLine($"Open Project: {SelectedProject?.Name}");
+            if(SelectedProject is null)
+            {
+                return;
+            }
 
-            rootViewModel.ProjectViewModel.Project = SelectedProject;
-            rootViewModel.ChangeViewModel(rootViewModel.ProjectViewModel);
+            Debug.WriteLine($"Open Project: {SelectedProject.Name}");
+
+            navService.OpenProjectView(SelectedProject);
         }
 
         [RelayCommand]
         private void NewProject()
         {
-            rootViewModel.ChangeViewModel(rootViewModel.ProjectNewViewModel);
+            navService.OpenNewProjectView();
         }
 
         [RelayCommand]

@@ -1,28 +1,19 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
+using WireGuardCommand.Services;
+
 namespace WireGuardCommand.ViewModels
 {
     public partial class RootViewModel : ViewModel
     {
         [ObservableProperty]
-        private ViewModel currentViewModel;
+        private NavigationService navService;
 
-        public ProjectNavigatorViewModel ProjectNavigatorViewModel { get; set; }
-        public ProjectWindowViewModel ProjectViewModel { get; set; }
-        public ProjectNewViewModel ProjectNewViewModel { get; set; }
-
-        public RootViewModel() 
+        public RootViewModel(NavigationService navService) 
         {
-            ProjectNavigatorViewModel = new ProjectNavigatorViewModel(this);
-            ProjectViewModel = new ProjectWindowViewModel(this);
-            ProjectNewViewModel = new ProjectNewViewModel(this);
+            this.navService = navService;
 
-            CurrentViewModel = ProjectNavigatorViewModel;
-        }
-
-        public void ChangeViewModel(ViewModel viewModel)
-        {
-            CurrentViewModel = viewModel;
+            navService.OpenNavigationView();
         }
     }
 }

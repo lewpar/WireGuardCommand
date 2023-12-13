@@ -1,12 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
+
 using WireGuardCommand.Models;
+using WireGuardCommand.Security;
+using WireGuardCommand.Services;
+using WireGuardCommand.ViewModels;
 
 namespace WireGuardCommand
 {
@@ -49,6 +52,10 @@ namespace WireGuardCommand
             Debug.Assert(Settings is not null);
 
             services.AddSingleton<AppSettings>(Settings);
+
+            services.AddSingleton<NavigationService>();
+
+            services.AddTransient<RootViewModel>();
             services.AddTransient(typeof(MainWindow));
         }
     }

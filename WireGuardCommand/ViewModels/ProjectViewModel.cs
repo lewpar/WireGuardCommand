@@ -2,25 +2,26 @@
 using CommunityToolkit.Mvvm.Input;
 
 using WireGuardCommand.Models.Project;
+using WireGuardCommand.Services;
 
 namespace WireGuardCommand.ViewModels
 {
-    public partial class ProjectWindowViewModel : ViewModel
+    public partial class ProjectViewModel : ViewModel
     {
+        private readonly NavigationService navService;
+
         [ObservableProperty]
         private WGCProject? project;
 
-        private readonly RootViewModel rootViewModel;
-
-        public ProjectWindowViewModel(RootViewModel rootViewModel) 
+        public ProjectViewModel(NavigationService navService) 
         {
-            this.rootViewModel = rootViewModel;
+            this.navService = navService;
         }
 
         [RelayCommand]
         private void CloseProject()
         {
-            rootViewModel.ChangeViewModel(rootViewModel.ProjectNavigatorViewModel);
+            navService.OpenNavigationView();
         }
     }
 }

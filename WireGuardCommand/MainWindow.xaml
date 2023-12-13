@@ -10,17 +10,14 @@
         mc:Ignorable="d"
         Title="WireGuard Command" 
         MinHeight="480" MinWidth="800">
-    <Window.DataContext>
-        <vms:RootViewModel/>
-    </Window.DataContext>
-    
+
     <!-- Bind Views to ViewModels -->
     <Window.Resources>
         <DataTemplate DataType="{x:Type vms:ProjectNavigatorViewModel}">
             <v:ProjectNavigatorView/>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vms:ProjectWindowViewModel}">
+        <DataTemplate DataType="{x:Type vms:ProjectViewModel}">
             <v:ProjectView/>
         </DataTemplate>
 
@@ -30,6 +27,6 @@
     </Window.Resources>
 
     <Grid>
-        <ContentPresenter Content="{Binding CurrentViewModel}"/>
+        <ContentPresenter Content="{Binding NavService.CurrentView}"/>
     </Grid>
 </Window>
