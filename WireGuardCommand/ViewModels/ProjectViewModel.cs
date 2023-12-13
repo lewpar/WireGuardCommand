@@ -16,6 +16,11 @@ namespace WireGuardCommand.ViewModels
         [ObservableProperty]
         private WGCConfig? config;
 
+        [ObservableProperty]
+        private bool isClosingWithUnsavedChanges;
+
+        private bool hasUnsavedChanges;
+
         public ProjectViewModel(NavigationService navService) 
         {
             this.navService = navService;
@@ -25,6 +30,24 @@ namespace WireGuardCommand.ViewModels
         private void CloseProject()
         {
             navService.OpenNavigationView();
+        }
+
+        [RelayCommand]
+        private void TryCloseProject()
+        {
+            if(!hasUnsavedChanges)
+            {
+                CloseProject();
+                return;
+            }
+
+            IsClosingWithUnsavedChanges = true;
+        }
+
+        [RelayCommand]
+        private void ReturnToProject()
+        {
+            IsClosingWithUnsavedChanges = false;
         }
     }
 }
