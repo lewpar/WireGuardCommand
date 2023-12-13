@@ -13,6 +13,9 @@ namespace WireGuardCommand.Models.Project
         [JsonPropertyName("Encrypted")]
         public bool Encrypted { get; set; }
 
+        [JsonPropertyName("Encryption")]
+        public WGCEncryption? Encryption { get; set; }
+
         [JsonIgnore]
         public string? Path { get; set; }
 

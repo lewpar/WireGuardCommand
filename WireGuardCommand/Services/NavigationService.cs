@@ -18,10 +18,15 @@ namespace WireGuardCommand.Services
 
         public void OpenProjectView(WGCProject project)
         {
-            var projView = new ProjectViewModel(this);
-            projView.Project = project;
-
-            CurrentView = projView;
+            CurrentView = (project.Encrypted) ?
+                new ProjectDecryptViewModel(this)
+                {
+                    Project = project,
+                } :
+                new ProjectViewModel(this)
+                {
+                    Project = project
+                };
         }
 
         public void OpenNewProjectView()

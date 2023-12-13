@@ -24,6 +24,10 @@
         <DataTemplate DataType="{x:Type vms:ProjectNewViewModel}">
             <v:ProjectNewView/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vms:ProjectDecryptViewModel}">
+            <v:ProjectDecryptView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>

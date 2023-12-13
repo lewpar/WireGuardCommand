@@ -5,9 +5,11 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 
 using WireGuardCommand.Models.Project;
+using WireGuardCommand.Security;
 using WireGuardCommand.Services;
 
 namespace WireGuardCommand.ViewModels
@@ -71,6 +73,15 @@ namespace WireGuardCommand.ViewModels
                 Description = ProjectDescription,
                 Encrypted = IsEncrypted
             };
+
+            if(IsEncrypted)
+            {
+                newProject.Encryption = new WGCEncryption()
+                {
+                    IV = Convert.ToBase64String(AESEncryption.GenerateIV())
+                };
+            }
+
             CreateProject(newProject);
 
             navService.OpenProjectView(newProject);
@@ -93,74 +104,53 @@ namespace WireGuardCommand.ViewModels
 
             Directory.CreateDirectory(Path.Combine(WGCProject.PATH_PROJECTS, project.Name));
 
+            if (IsEncrypted)
+            {
+                CreateEncryptedWireGuardConfig(project, EncryptionPhrase!);
+            }
+            else
+            {
+                CreateWireGuardConfig(project);
+            }
+
             using var fs = File.OpenWrite(Path.Combine(WGCProject.PATH_PROJECTS, project.Name, $"{project.Name}.meta"));
             JsonSerializer.Serialize(fs, project);
-
-            CreateWireGuardConfig();
-
-            if(project.Encrypted)
-            {
-                if(string.IsNullOrEmpty(EncryptionPhrase))
-                {
-                    Debug.WriteLine("An error occured while trying to encrypt WireGuard Command Config: Encryption Phrase was null or empty.");
-                    return;
-                }
-
-                EncryptWireGuardConfig(EncryptionPhrase);
-            }
         }
 
-        private void CreateWireGuardConfig()
+        private void CreateWireGuardConfig(WGCProject project)
         {
             if(string.IsNullOrEmpty(ProjectName))
             {
                 return;
             }
 
-            File.WriteAllText(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, "WGC.json"), JsonSerializer.Serialize<WGCConfig>(new WGCConfig())); ;
+            File.WriteAllText(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, "WGC.json"), JsonSerializer.Serialize<WGCConfig>(new WGCConfig()));
         }
 
-        private void EncryptWireGuardConfig(string phrase)
+        private void CreateEncryptedWireGuardConfig(WGCProject project, string phrase)
         {
             if (string.IsNullOrEmpty(ProjectName))
             {
                 return;
             }
 
-            using var aes = Aes.Create();
-            aes.GenerateKey();
-            aes.GenerateIV();
-
-            var key = aes.Key;
-            var iv = aes.IV;
-
-            var message = File.ReadAllText(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, "WGC.json"));
-
-            string encrypted = Encrypt(message, key, iv);
-            File.WriteAllText(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, "WGC.json"), encrypted);
-        }
-
-        private string Encrypt(string plainText, byte[] key, byte[] iv)
-        {
-            using (Aes aesAlg = Aes.Create())
+            if(project is null || 
+                project.Encryption is null ||
+                string.IsNullOrEmpty(project.Encryption.IV))
             {
-                aesAlg.Key = key;
-                aesAlg.IV = iv;
-
-                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-
-                using (MemoryStream msEncrypt = new MemoryStream())
-                {
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                        {
-                            swEncrypt.Write(plainText);
-                        }
-                    }
-                    return Convert.ToBase64String(msEncrypt.ToArray());
-                }
+                return;
             }
+
+            var iv = Convert.FromBase64String(project.Encryption.IV);
+            var (key, salt) = AESEncryption.GenerateKey(EncryptionPhrase!);
+
+            project.Encryption.Salt = Convert.ToBase64String(salt);
+
+            var json = JsonSerializer.Serialize(new WGCConfig());
+            var data = Encoding.UTF8.GetBytes(json);
+            var encryptedData = AESEncryption.Encrypt(data, key, iv);
+
+            File.WriteAllBytes(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, "WGC.bin"), encryptedData);
         }
 
         private void ResetFields()
