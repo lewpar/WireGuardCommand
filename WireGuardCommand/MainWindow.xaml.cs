@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+
 using WireGuardCommand.ViewModels;
 
 namespace WireGuardCommand
