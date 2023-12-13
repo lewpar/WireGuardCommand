@@ -13,6 +13,9 @@ namespace WireGuardCommand.ViewModels
         [ObservableProperty]
         private WGCProject? project;
 
+        [ObservableProperty]
+        private WGCConfig? config;
+
         public ProjectViewModel(NavigationService navService) 
         {
             this.navService = navService;

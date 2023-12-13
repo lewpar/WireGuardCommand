@@ -70,6 +70,7 @@ namespace WireGuardCommand.ViewModels
             var newProject = new WGCProject()
             {
                 Name = ProjectName,
+                Path = Path.Combine(WGCProject.PATH_PROJECTS, ProjectName),
                 Description = ProjectDescription,
                 Encrypted = IsEncrypted
             };
