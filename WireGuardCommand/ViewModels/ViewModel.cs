@@ -2,7 +2,8 @@
 
 namespace WireGuardCommand.ViewModels
 {
-    public class ViewModel : ObservableObject
+    public abstract class ViewModel : ObservableObject
     {
+        public virtual void Load() { }
     }
 }

@@ -8,7 +8,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid>
-            <TextBlock Text="{Binding Project.Name}"></TextBlock>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="{Binding Project.Name}"></TextBlock>
+                <TextBlock Text="{Binding Config.Test}"></TextBlock>
+                <Button Command="{Binding MakeChangesCommand}">Make Changes</Button>
+            </StackPanel>
             <Button Command="{Binding TryCloseProjectCommand}">Close Project</Button>
         </Grid>
 

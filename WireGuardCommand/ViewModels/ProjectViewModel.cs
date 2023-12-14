@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using System.Diagnostics;
+using System.Text.Json;
+
 using WireGuardCommand.Models.Project;
 using WireGuardCommand.Services;
 
@@ -16,14 +19,19 @@ namespace WireGuardCommand.ViewModels
         [ObservableProperty]
         private WGCConfig? config;
 
+        private string? oldJson;
+
         [ObservableProperty]
         private bool isClosingWithUnsavedChanges;
-
-        private bool hasUnsavedChanges;
 
         public ProjectViewModel(NavigationService navService) 
         {
             this.navService = navService;
+        }
+
+        public override void Load()
+        {
+            oldJson = JsonSerializer.Serialize(Config);
         }
 
         [RelayCommand]
@@ -35,7 +43,7 @@ namespace WireGuardCommand.ViewModels
         [RelayCommand]
         private void TryCloseProject()
         {
-            if(!hasUnsavedChanges)
+            if(!HasUnsavedChanged())
             {
                 CloseProject();
                 return;
@@ -48,6 +56,28 @@ namespace WireGuardCommand.ViewModels
         private void ReturnToProject()
         {
             IsClosingWithUnsavedChanges = false;
+        }
+
+        private void SaveProject()
+        {
+
+        }
+
+        private bool HasUnsavedChanged()
+        {
+            var json = JsonSerializer.Serialize(Config);
+
+            return !string.Equals(json, oldJson);
+        }
+
+        [RelayCommand]
+        private void MakeChanges()
+        {
+            Debug.WriteLine($"Changed: {HasUnsavedChanged()}");
+            Config.Test = "Test123";
+
+            Debug.WriteLine("Made changes.");
+            Debug.WriteLine($"Changed: {HasUnsavedChanged()}");
         }
     }
 }

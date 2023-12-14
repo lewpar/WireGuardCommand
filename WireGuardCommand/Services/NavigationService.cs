@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-
+using System.IO;
+using System.Text.Json;
 using WireGuardCommand.Models.Project;
 using WireGuardCommand.ViewModels;
 
@@ -28,6 +29,8 @@ namespace WireGuardCommand.Services
                     Config = config
                 };
 
+                CurrentView.Load();
+
                 return;
             }
 
@@ -41,11 +44,16 @@ namespace WireGuardCommand.Services
                     Project = project,
                     Config = LoadConfig(project)
                 };
+
+            CurrentView.Load();
         }
 
         public WGCConfig? LoadConfig(WGCProject project)
         {
-            return null;
+            var json = File.ReadAllText(Path.Combine(WGCProject.PATH_PROJECTS, project.Name, "WGC.json"));
+            var config = JsonSerializer.Deserialize<WGCConfig>(json);
+
+            return config;
         }
 
         public void OpenNewProjectView()
