@@ -7,15 +7,72 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid>
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="{Binding Project.Name}"></TextBlock>
-                <TextBlock Text="{Binding Config.Test}"></TextBlock>
-                <Button Command="{Binding MakeChangesCommand}">Make Changes</Button>
-            </StackPanel>
-            <Button Command="{Binding TryCloseProjectCommand}">Close Project</Button>
-        </Grid>
+        <TabControl>
+            <TabItem Header="Configure">
+                <ScrollViewer>
+                    <StackPanel Orientation="Vertical" Margin="20">
+                        <TextBlock Text="{Binding Project.Name}" FontSize="24" FontWeight="SemiBold"></TextBlock>
+                        <TextBlock Text="{Binding Project.Description}" FontSize="16" FontWeight="Normal" Margin="0,0,0,20"></TextBlock>
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+                            <TextBlock>Random Seed</TextBlock>
+                            <TextBox></TextBox>
+                        </StackPanel>
 
+                        <UniformGrid Columns="3" Margin="0,0,0,5">
+                            <StackPanel Orientation="Vertical" Margin="0,0,5,0">
+                                <TextBlock>Listen Port</TextBlock>
+                                <TextBox></TextBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical" Margin="0,0,5,0">
+                                <TextBlock>Number of Clients</TextBlock>
+                                <TextBox></TextBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock>CIDR</TextBlock>
+                                <TextBox></TextBox>
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <UniformGrid Columns="3" Margin="0,0,0,5">
+                            <StackPanel Orientation="Vertical" Margin="0,0,5,0">
+                                <TextBlock>Client Allowed IPs</TextBlock>
+                                <TextBox></TextBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical" Margin="0,0,5,0">
+                                <TextBlock>Endpoint (Optional)</TextBlock>
+                                <TextBox></TextBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock>DNS (Optional)</TextBlock>
+                                <TextBox></TextBox>
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+                            <TextBlock>Post-Up Rule</TextBlock>
+                            <TextBox></TextBox>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+                            <TextBlock>Post-Down Rule</TextBlock>
+                            <TextBox></TextBox>
+                        </StackPanel>
+
+                        <UniformGrid Columns="2">
+                            <Button Command="{Binding MakeChangesCommand}">Make Changes</Button>
+                            <Button Command="{Binding TryCloseProjectCommand}">Close Project</Button>
+                        </UniformGrid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Generate">
+                
+            </TabItem>
+        </TabControl>
         <Grid>
             <Grid.Background>
                 <SolidColorBrush Color="Black" Opacity="0.5"/>
