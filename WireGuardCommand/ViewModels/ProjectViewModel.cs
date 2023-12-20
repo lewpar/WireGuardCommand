@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Text.Json;
 
 using WireGuardCommand.Models.Project;
+using WireGuardCommand.Security;
 using WireGuardCommand.Services;
 
 namespace WireGuardCommand.ViewModels
@@ -71,13 +72,9 @@ namespace WireGuardCommand.ViewModels
         }
 
         [RelayCommand]
-        private void MakeChanges()
+        private void NewSeed()
         {
-            Debug.WriteLine($"Changed: {HasUnsavedChanged()}");
-            Config.Test = "Test123";
-
-            Debug.WriteLine("Made changes.");
-            Debug.WriteLine($"Changed: {HasUnsavedChanged()}");
+            Config.Seed = RandomHelper.GetRandomSeed();
         }
     }
 }

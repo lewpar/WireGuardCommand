@@ -7,75 +7,104 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TabControl>
-            <TabItem Header="Configure">
-                <ScrollViewer>
-                    <StackPanel Orientation="Vertical" Margin="20">
-                        <TextBlock Text="{Binding Project.Name}" FontSize="24" FontWeight="SemiBold"></TextBlock>
-                        <TextBlock Text="{Binding Project.Description}" FontSize="16" FontWeight="Normal" Margin="0,0,0,20"></TextBlock>
-                        <StackPanel Orientation="Vertical" Margin="0,0,0,5">
-                            <TextBlock>Random Seed</TextBlock>
-                            <TextBox></TextBox>
+        <DockPanel>
+            <DockPanel.Style>
+                <Style TargetType="{x:Type DockPanel}">
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <BlurEffect Radius="0"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsClosingWithUnsavedChanges}" Value="True">
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <BlurEffect Radius="10"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DockPanel.Style>
+            <Border DockPanel.Dock="Top" BorderThickness="0 0 0 1">
+                <Menu>
+                    <MenuItem Header="File">
+                        <MenuItem Header="Close Project" Command="{Binding TryCloseProjectCommand}"></MenuItem>
+                    </MenuItem>
+                </Menu>
+            </Border>
+            <TabControl TabStripPlacement="Top">
+                <TabItem Header="Configure">
+                    <ScrollViewer>
+                        <StackPanel Orientation="Vertical" Margin="20">
+                            <TextBlock Text="{Binding Project.Name}" FontSize="24" FontWeight="SemiBold"></TextBlock>
+                            <TextBlock Text="{Binding Project.Description}" FontSize="16" FontWeight="Normal" Margin="0,0,0,20"></TextBlock>
+                            <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+                                <TextBlock>Random Seed</TextBlock>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Text="{Binding Config.Seed}" Grid.Column="0" Margin="0 0 5 0"></TextBox>
+                                    <Button Command="{Binding NewSeedCommand}" Grid.Column="1">New Seed</Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <UniformGrid Columns="3" Margin="0,0,0,5">
+                                <StackPanel Orientation="Vertical" Margin="0,0,5,0">
+                                    <TextBlock>Listen Port</TextBlock>
+                                    <TextBox Text="{Binding Config.ListenPort}"></TextBox>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical" Margin="0,0,5,0">
+                                    <TextBlock>Number of Clients</TextBlock>
+                                    <TextBox Text="{Binding Config.NoOfClients}"></TextBox>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock>CIDR</TextBlock>
+                                    <TextBox Text="{Binding Config.Cidr}"></TextBox>
+                                </StackPanel>
+                            </UniformGrid>
+
+                            <UniformGrid Columns="3" Margin="0,0,0,5">
+                                <StackPanel Orientation="Vertical" Margin="0,0,5,0">
+                                    <TextBlock>Client Allowed IPs</TextBlock>
+                                    <TextBox></TextBox>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical" Margin="0,0,5,0">
+                                    <TextBlock>Endpoint (Optional)</TextBlock>
+                                    <TextBox></TextBox>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock>DNS (Optional)</TextBlock>
+                                    <TextBox></TextBox>
+                                </StackPanel>
+                            </UniformGrid>
+
+                            <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+                                <TextBlock>Post-Up Rule</TextBlock>
+                                <TextBox></TextBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+                                <TextBlock>Post-Down Rule</TextBlock>
+                                <TextBox></TextBox>
+                            </StackPanel>
                         </StackPanel>
-
-                        <UniformGrid Columns="3" Margin="0,0,0,5">
-                            <StackPanel Orientation="Vertical" Margin="0,0,5,0">
-                                <TextBlock>Listen Port</TextBlock>
-                                <TextBox></TextBox>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Vertical" Margin="0,0,5,0">
-                                <TextBlock>Number of Clients</TextBlock>
-                                <TextBox></TextBox>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock>CIDR</TextBlock>
-                                <TextBox></TextBox>
-                            </StackPanel>
-                        </UniformGrid>
-
-                        <UniformGrid Columns="3" Margin="0,0,0,5">
-                            <StackPanel Orientation="Vertical" Margin="0,0,5,0">
-                                <TextBlock>Client Allowed IPs</TextBlock>
-                                <TextBox></TextBox>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Vertical" Margin="0,0,5,0">
-                                <TextBlock>Endpoint (Optional)</TextBlock>
-                                <TextBox></TextBox>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock>DNS (Optional)</TextBlock>
-                                <TextBox></TextBox>
-                            </StackPanel>
-                        </UniformGrid>
-
-                        <StackPanel Orientation="Vertical" Margin="0,0,0,5">
-                            <TextBlock>Post-Up Rule</TextBlock>
-                            <TextBox></TextBox>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Vertical" Margin="0,0,0,5">
-                            <TextBlock>Post-Down Rule</TextBlock>
-                            <TextBox></TextBox>
-                        </StackPanel>
-
-                        <UniformGrid Columns="2">
-                            <Button Command="{Binding MakeChangesCommand}">Make Changes</Button>
-                            <Button Command="{Binding TryCloseProjectCommand}">Close Project</Button>
-                        </UniformGrid>
-                    </StackPanel>
-                </ScrollViewer>
-            </TabItem>
-            <TabItem Header="Generate">
-                
-            </TabItem>
-        </TabControl>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Generate">
+                    <TextBlock>Nothing here yet!</TextBlock>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
         <Grid>
             <Grid.Background>
-                <SolidColorBrush Color="Black" Opacity="0.5"/>
+                <SolidColorBrush Color="Black" Opacity="0.8"/>
             </Grid.Background>
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
@@ -87,13 +116,19 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock>You have unsaved changes, are you sure you want to close the project?</TextBlock>
-                <StackPanel Orientation="Horizontal">
-                    <Button Command="{Binding CloseProjectCommand}">Yes</Button>
-                    <Button Command="{Binding ReturnToProjectCommand}">No</Button>
+            <Border HorizontalAlignment="Center" VerticalAlignment="Center" Padding="25" CornerRadius="5" BorderBrush="Orange" BorderThickness="1">
+                <Border.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.25"/>
+                </Border.Background>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Foreground="Orange" Margin="0 0 0 10" FontWeight="SemiBold" FontSize="24">Warning!</TextBlock>
+                    <TextBlock Foreground="White" Margin="0 0 0 20">You have unsaved changes, are you sure you want to close the project?</TextBlock>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Command="{Binding CloseProjectCommand}" Margin="0 0 5 0">Yes, I'm sure.</Button>
+                        <Button Command="{Binding ReturnToProjectCommand}">No, I would like to keep the project open.</Button>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>
