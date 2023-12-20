@@ -76,5 +76,15 @@ namespace WireGuardCommand.ViewModels
         {
             Config.Seed = RandomHelper.GetRandomSeed();
         }
+
+        [RelayCommand]
+        private void GetHelp()
+        {
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = "https://github.com/lewpar/WireGuardCommand",
+                UseShellExecute = true
+            });
+        }
     }
 }

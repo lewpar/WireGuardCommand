@@ -29,7 +29,10 @@
             <Border DockPanel.Dock="Top" BorderThickness="0 0 0 1">
                 <Menu>
                     <MenuItem Header="File">
-                        <MenuItem Header="Close Project" Command="{Binding TryCloseProjectCommand}"></MenuItem>
+                        <MenuItem Header="Close Project" Command="{Binding TryCloseProjectCommand}"/>
+                    </MenuItem>
+                    <MenuItem Header="About">
+                        <MenuItem Header="Help" Command="{Binding GetHelpCommand}"/>
                     </MenuItem>
                 </Menu>
             </Border>
@@ -97,8 +100,11 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
+                <TabItem Header="Preview">
+                    <TextBlock>Nothing to see here yet!</TextBlock>
+                </TabItem>
                 <TabItem Header="Generate">
-                    <TextBlock>Nothing here yet!</TextBlock>
+                    <TextBlock>Nothing to see here yet!</TextBlock>
                 </TabItem>
             </TabControl>
         </DockPanel>
