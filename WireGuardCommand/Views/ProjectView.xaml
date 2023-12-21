@@ -74,28 +74,28 @@
                             <UniformGrid Columns="3" Margin="0,0,0,5">
                                 <StackPanel Orientation="Vertical" Margin="0,0,5,0">
                                     <TextBlock>Client Allowed IPs</TextBlock>
-                                    <TextBox></TextBox>
+                                    <TextBox Text="{Binding Config.AllowedIPs}"></TextBox>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Vertical" Margin="0,0,5,0">
                                     <TextBlock>Endpoint (Optional)</TextBlock>
-                                    <TextBox></TextBox>
+                                    <TextBox Text="{Binding Config.Endpoint}"></TextBox>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock>DNS (Optional)</TextBlock>
-                                    <TextBox></TextBox>
+                                    <TextBox Text="{Binding Config.Dns}"></TextBox>
                                 </StackPanel>
                             </UniformGrid>
 
                             <StackPanel Orientation="Vertical" Margin="0,0,0,5">
                                 <TextBlock>Post-Up Rule</TextBlock>
-                                <TextBox></TextBox>
+                                <TextBox Text="{Binding Config.PostUpRule}"></TextBox>
                             </StackPanel>
 
                             <StackPanel Orientation="Vertical" Margin="0,0,0,5">
                                 <TextBlock>Post-Down Rule</TextBlock>
-                                <TextBox></TextBox>
+                                <TextBox Text="{Binding Config.PostDownRule}"></TextBox>
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
