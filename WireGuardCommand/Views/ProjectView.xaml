@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WireGuardCommand.Views"
+             xmlns:v="clr-namespace:WireGuardCommand.Validation"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <FrameworkElement x:Name="DummyElement" Visibility="Hidden"/>
         <DockPanel>
             <DockPanel.Style>
                 <Style TargetType="{x:Type DockPanel}">
@@ -42,7 +44,7 @@
                         <StackPanel Orientation="Vertical" Margin="20">
                             <TextBlock Text="{Binding Project.Name}" FontSize="24" FontWeight="SemiBold"></TextBlock>
                             <TextBlock Text="{Binding Project.Description}" FontSize="16" FontWeight="Normal" Margin="0,0,0,20"></TextBlock>
-                            <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+                            <StackPanel Orientation="Vertical" Margin="0,0,0,20">
                                 <TextBlock>Random Seed</TextBlock>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -54,7 +56,7 @@
                                 </Grid>
                             </StackPanel>
 
-                            <UniformGrid Columns="3" Margin="0,0,0,5">
+                            <UniformGrid Columns="3" Margin="0,0,0,20">
                                 <StackPanel Orientation="Vertical" Margin="0,0,5,0">
                                     <TextBlock>Listen Port</TextBlock>
                                     <TextBox Text="{Binding Config.ListenPort}"></TextBox>
@@ -62,7 +64,19 @@
 
                                 <StackPanel Orientation="Vertical" Margin="0,0,5,0">
                                     <TextBlock>Number of Clients</TextBlock>
-                                    <TextBox Text="{Binding Config.NoOfClients}"></TextBox>
+                                    <TextBox x:Name="TextBoxNoOfClients">
+                                        <TextBox.Text>
+                                            <Binding Path="Config.NoOfClients" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <v:NoOfClientsRule>
+                                                        <v:NoOfClientsRule.Proxy>
+                                                            <v:NoOfClientsRuleProxy MaxClients="{Binding Source={x:Reference DummyElement}, Path=DataContext.MaxClients}"/>
+                                                        </v:NoOfClientsRule.Proxy>
+                                                    </v:NoOfClientsRule>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Vertical">
@@ -71,7 +85,7 @@
                                 </StackPanel>
                             </UniformGrid>
 
-                            <UniformGrid Columns="3" Margin="0,0,0,5">
+                            <UniformGrid Columns="3" Margin="0,0,0,20">
                                 <StackPanel Orientation="Vertical" Margin="0,0,5,0">
                                     <TextBlock>Client Allowed IPs</TextBlock>
                                     <TextBox Text="{Binding Config.AllowedIPs}"></TextBox>
@@ -88,12 +102,12 @@
                                 </StackPanel>
                             </UniformGrid>
 
-                            <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+                            <StackPanel Orientation="Vertical" Margin="0,0,0,20">
                                 <TextBlock>Post-Up Rule</TextBlock>
                                 <TextBox Text="{Binding Config.PostUpRule}"></TextBox>
                             </StackPanel>
 
-                            <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+                            <StackPanel Orientation="Vertical" Margin="0,0,0,20">
                                 <TextBlock>Post-Down Rule</TextBlock>
                                 <TextBox Text="{Binding Config.PostDownRule}"></TextBox>
                             </StackPanel>

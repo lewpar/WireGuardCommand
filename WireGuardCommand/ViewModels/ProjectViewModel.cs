@@ -16,6 +16,7 @@ namespace WireGuardCommand.ViewModels
         [ObservableProperty]
         private int id;
     }
+
     public partial class ProjectViewModel : ViewModel
     {
         private readonly NavigationService navService;
@@ -34,6 +35,9 @@ namespace WireGuardCommand.ViewModels
         [ObservableProperty]
         private List<TestClient> testClients;
 
+        [ObservableProperty]
+        private int maxClients;
+
         public ProjectViewModel(NavigationService navService) 
         {
             this.navService = navService;
@@ -49,6 +53,8 @@ namespace WireGuardCommand.ViewModels
                     Id = 2
                 }
             };
+
+            MaxClients = 10;
         }
 
         public override void Load()
