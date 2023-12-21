@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-
+using System;
 using WireGuardCommand.Security;
 
 namespace WireGuardCommand.Models.Project
 {
-    public partial class WGCConfig : ObservableObject
+    public partial class WGCConfig : ObservableObject, IEquatable<WGCConfig>
     {
         [ObservableProperty]
         private int listenPort;
@@ -45,6 +45,24 @@ namespace WireGuardCommand.Models.Project
             PostDownRule = "iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE";
 
             Seed = RandomHelper.GetRandomSeed();
+        }
+
+        public bool Equals(WGCConfig? other)
+        {
+            if(other is null)
+            {
+                return false;
+            }
+
+            return this.ListenPort == other.ListenPort &&
+                this.NoOfClients == other.NoOfClients &&
+                this.Cidr == other.Cidr &&
+                this.Seed == other.Seed &&
+                this.AllowedIPs == other.AllowedIPs &&
+                this.Endpoint == other.Endpoint &&
+                this.Dns == other.Dns &&
+                this.PostUpRule == other.PostUpRule &&
+                this.PostDownRule == other.PostDownRule;
         }
     }
 }

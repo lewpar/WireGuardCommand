@@ -27,7 +27,7 @@ namespace WireGuardCommand.ViewModels
         [ObservableProperty]
         private WGCConfig? config;
 
-        private string? oldJson;
+        private WGCConfig? oldConfig;
 
         [ObservableProperty]
         private bool isClosingWithUnsavedChanges;
@@ -59,7 +59,21 @@ namespace WireGuardCommand.ViewModels
 
         public override void Load()
         {
-            oldJson = JsonSerializer.Serialize(Config);
+            if(Config is not null)
+            {
+                oldConfig = new WGCConfig()
+                {
+                    ListenPort = Config.ListenPort,
+                    NoOfClients = Config.NoOfClients,
+                    Cidr = Config.Cidr,
+                    Seed = Config.Seed,
+                    AllowedIPs = Config.AllowedIPs,
+                    Endpoint = Config.Endpoint,
+                    Dns = Config.Dns,
+                    PostUpRule = Config.PostUpRule,
+                    PostDownRule = Config.PostDownRule
+                };
+            }
         }
 
         [RelayCommand]
@@ -93,9 +107,7 @@ namespace WireGuardCommand.ViewModels
 
         private bool HasUnsavedChanged()
         {
-            var json = JsonSerializer.Serialize(Config);
-
-            return !string.Equals(json, oldJson);
+            return !(Config.Equals(oldConfig));
         }
 
         [RelayCommand]
