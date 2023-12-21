@@ -59,6 +59,11 @@ namespace WireGuardCommand.ViewModels
 
         public override void Load()
         {
+            if(Config is null)
+            {
+                Config = new WGCConfig();
+            }
+
             if(Config is not null)
             {
                 oldConfig = new WGCConfig()
@@ -107,13 +112,13 @@ namespace WireGuardCommand.ViewModels
 
         private bool HasUnsavedChanged()
         {
-            return !(Config.Equals(oldConfig));
+            return !(Config!.Equals(oldConfig));
         }
 
         [RelayCommand]
         private void NewSeed()
         {
-            Config.Seed = RandomHelper.GetRandomSeed();
+            Config!.Seed = RandomHelper.GetRandomSeed();
         }
 
         [RelayCommand]
