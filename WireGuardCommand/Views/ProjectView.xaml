@@ -101,7 +101,34 @@
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="Preview">
-                    <TextBlock>Nothing to see here yet!</TextBlock>
+                    <ScrollViewer>
+                        <Grid Margin="20">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontSize="24" FontWeight="SemiBold">Configuration Preview</TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontSize="18" FontWeight="SemiBold">Server</TextBlock>
+                                    <TextBox IsReadOnly="True" Text="Test"/>
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding TestClients}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type ListBoxItem}">
+                                            <Grid>
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock FontSize="18" FontWeight="SemiBold">
+                                                        <Run Text="Client "/>
+                                                        <Run Text="{Binding Id}"/>
+                                                    </TextBlock>
+                                                    <TextBox Text="" IsReadOnly="True"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
                 </TabItem>
                 <TabItem Header="Generate">
                     <TextBlock>Nothing to see here yet!</TextBlock>

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -10,6 +11,11 @@ using WireGuardCommand.Services;
 
 namespace WireGuardCommand.ViewModels
 {
+    public partial class TestClient : ObservableObject
+    {
+        [ObservableProperty]
+        private int id;
+    }
     public partial class ProjectViewModel : ViewModel
     {
         private readonly NavigationService navService;
@@ -25,9 +31,24 @@ namespace WireGuardCommand.ViewModels
         [ObservableProperty]
         private bool isClosingWithUnsavedChanges;
 
+        [ObservableProperty]
+        private List<TestClient> testClients;
+
         public ProjectViewModel(NavigationService navService) 
         {
             this.navService = navService;
+
+            TestClients = new List<TestClient>()
+            {
+                new TestClient()
+                {
+                    Id = 1
+                },
+                new TestClient()
+                {
+                    Id = 2
+                }
+            };
         }
 
         public override void Load()
