@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+
 using System;
+
 using WireGuardCommand.Security;
 
 namespace WireGuardCommand.Models.Project

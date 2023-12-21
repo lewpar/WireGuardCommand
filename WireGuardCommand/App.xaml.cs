@@ -7,7 +7,6 @@ using System.Text.Json;
 using System.Windows;
 
 using WireGuardCommand.Models;
-using WireGuardCommand.Security;
 using WireGuardCommand.Services;
 using WireGuardCommand.ViewModels;
 

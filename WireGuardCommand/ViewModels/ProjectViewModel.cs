@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text.Json;
 
 using WireGuardCommand.Models.Project;
 using WireGuardCommand.Security;
