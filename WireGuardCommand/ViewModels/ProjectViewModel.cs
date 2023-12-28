@@ -3,7 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using System.Threading;
+using System.Threading.Tasks;
 using WireGuardCommand.Models.Project;
 using WireGuardCommand.Security;
 using WireGuardCommand.Services;
@@ -36,6 +37,28 @@ namespace WireGuardCommand.ViewModels
 
         [ObservableProperty]
         private int maxClients;
+
+        private bool previewSelected;
+        public bool PreviewSelected
+        {
+            get => previewSelected;
+            set
+            {
+                if(previewSelected != value)
+                {
+                    previewSelected = value;
+                    SetProperty(ref previewSelected, value);
+
+                    if (previewSelected)
+                    {
+                        _ = LoadPreviewAsync();
+                    }
+                }
+            }
+        }
+
+        [ObservableProperty]
+        private bool finishedLoading;
 
         public ProjectViewModel(NavigationService navService) 
         {
@@ -128,6 +151,13 @@ namespace WireGuardCommand.ViewModels
                 FileName = "https://github.com/lewpar/WireGuardCommand",
                 UseShellExecute = true
             });
+        }
+
+        private async Task LoadPreviewAsync()
+        {
+            FinishedLoading = false;
+            await Task.Delay(1000 * 3);
+            FinishedLoading = true;
         }
     }
 }

@@ -130,33 +130,60 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Preview">
+                <TabItem Header="Preview" IsSelected="{Binding PreviewSelected}">
                     <ScrollViewer>
                         <Grid Margin="20">
-                            <StackPanel Orientation="Vertical">
+                            <Grid>
+                                <Grid.Style>
+                                    <Style TargetType="{x:Type Grid}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding FinishedLoading}" Value="True">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Loading Preview..</TextBlock>
+                            </Grid>
+                        
+                            <Grid>
+                                <Grid.Style>
+                                    <Style TargetType="{x:Type Grid}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding FinishedLoading}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock FontSize="24" FontWeight="SemiBold">Configuration Preview</TextBlock>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock FontSize="24" FontWeight="SemiBold">Configuration Preview</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock FontSize="18" FontWeight="SemiBold">Server</TextBlock>
+                                        <TextBox IsReadOnly="True" Text="Test"/>
+                                    </StackPanel>
+                                    <ItemsControl ItemsSource="{Binding TestClients}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type ListBoxItem}">
+                                                <Grid>
+                                                    <StackPanel Orientation="Vertical">
+                                                        <TextBlock FontSize="18" FontWeight="SemiBold">
+                                                            <Run Text="Client "/>
+                                                            <Run Text="{Binding Id}"/>
+                                                        </TextBlock>
+                                                        <TextBox Text="" IsReadOnly="True"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
                                 </StackPanel>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock FontSize="18" FontWeight="SemiBold">Server</TextBlock>
-                                    <TextBox IsReadOnly="True" Text="Test"/>
-                                </StackPanel>
-                                <ItemsControl ItemsSource="{Binding TestClients}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type ListBoxItem}">
-                                            <Grid>
-                                                <StackPanel Orientation="Vertical">
-                                                    <TextBlock FontSize="18" FontWeight="SemiBold">
-                                                        <Run Text="Client "/>
-                                                        <Run Text="{Binding Id}"/>
-                                                    </TextBlock>
-                                                    <TextBox Text="" IsReadOnly="True"/>
-                                                </StackPanel>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
+                            </Grid>
                         </Grid>
                     </ScrollViewer>
                 </TabItem>
