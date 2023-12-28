@@ -59,7 +59,15 @@
                             <UniformGrid Columns="3" Margin="0,0,0,20">
                                 <StackPanel Orientation="Vertical" Margin="0,0,5,0">
                                     <TextBlock>Listen Port</TextBlock>
-                                    <TextBox Text="{Binding Config.ListenPort}"></TextBox>
+                                    <TextBox x:Name="TextBoxListenPort">
+                                        <TextBox.Text>
+                                            <Binding Path="Config.ListenPort" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <v:NumberRule></v:NumberRule>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Vertical" Margin="0,0,5,0">
@@ -81,7 +89,15 @@
 
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock>CIDR</TextBlock>
-                                    <TextBox Text="{Binding Config.Cidr}"></TextBox>
+                                    <TextBox x:Name="TextBoxCidr">
+                                        <TextBox.Text>
+                                            <Binding Path="Config.Cidr" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <v:CidrRule></v:CidrRule>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
                                 </StackPanel>
                             </UniformGrid>
 
