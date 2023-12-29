@@ -63,7 +63,7 @@
                                         <TextBox.Text>
                                             <Binding Path="Config.ListenPort" UpdateSourceTrigger="PropertyChanged">
                                                 <Binding.ValidationRules>
-                                                    <v:NumberRule></v:NumberRule>
+                                                    <v:PortRule></v:PortRule>
                                                 </Binding.ValidationRules>
                                             </Binding>
                                         </TextBox.Text>
