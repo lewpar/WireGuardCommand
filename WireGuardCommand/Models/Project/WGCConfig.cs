@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 using System;
-
+using System.Security.Cryptography;
+using System.Text;
+using System.Windows.Documents;
 using WireGuardCommand.Security;
 
 namespace WireGuardCommand.Models.Project
@@ -65,6 +67,38 @@ namespace WireGuardCommand.Models.Project
                 this.Dns == other.Dns &&
                 this.PostUpRule == other.PostUpRule &&
                 this.PostDownRule == other.PostDownRule;
+        }
+
+        public string? GenerateServer()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("[Interface]");
+            sb.AppendLine($"Address = {Cidr}"); // TODO: This should not be the cidr but the first / last address in usable addresses.
+            sb.AppendLine($"ListenPort = {ListenPort}");
+            sb.AppendLine($"PrivateKey = {Convert.ToBase64String(RandomNumberGenerator.GetBytes(32))}"); // TODO: This should be a private key and not just random bytes.
+
+            if(!string.IsNullOrEmpty(PostUpRule))
+            {
+                sb.AppendLine($"PostUp = {PostUpRule}");
+            }
+
+            if (!string.IsNullOrEmpty(PostDownRule))
+            {
+                sb.AppendLine($"PostDown = {PostDownRule}");
+            }
+
+            sb.AppendLine();
+
+            // Generate peers section
+            for(int i = 0; i < NoOfClients; i++)
+            {
+                sb.AppendLine("[Peer]");
+                sb.AppendLine($"PublicKey = {Convert.ToBase64String(RandomNumberGenerator.GetBytes(32))}"); // TODO: This should be a public key and not just random bytes.
+                sb.AppendLine($"AllowedIPs = {AllowedIPs}");
+            }
+
+            return sb.ToString();
         }
     }
 }

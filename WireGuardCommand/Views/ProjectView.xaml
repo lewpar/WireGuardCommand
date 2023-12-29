@@ -165,7 +165,7 @@
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock FontSize="18" FontWeight="SemiBold">Server</TextBlock>
-                                        <TextBox IsReadOnly="True" Text="Test"/>
+                                        <TextBox IsReadOnly="True" Text="{Binding ServerPreview}"/>
                                     </StackPanel>
                                     <ItemsControl ItemsSource="{Binding TestClients}">
                                         <ItemsControl.ItemTemplate>

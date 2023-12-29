@@ -38,6 +38,9 @@ namespace WireGuardCommand.ViewModels
         [ObservableProperty]
         private int maxClients;
 
+        [ObservableProperty]
+        private string? serverPreview;
+
         private bool previewSelected;
         public bool PreviewSelected
         {
@@ -156,7 +159,15 @@ namespace WireGuardCommand.ViewModels
         private async Task LoadPreviewAsync()
         {
             FinishedLoading = false;
-            await Task.Delay(1000 * 3);
+
+            if(Config is null)
+            {
+                FinishedLoading = true;
+                return;
+            }
+
+            ServerPreview = Config.GenerateServer();
+
             FinishedLoading = true;
         }
     }
