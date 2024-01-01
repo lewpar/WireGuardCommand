@@ -1,11 +1,13 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 
 namespace WireGuardCommand.Models.Project
 {
-    public class StateManager
+    public partial class StateManager : ObservableObject
     {
         private static StateManager? instance;
         public static StateManager Instance 
@@ -21,8 +23,11 @@ namespace WireGuardCommand.Models.Project
             }
         }
 
-        public WGCProject? CurrentProject { get; set; }
-        public WGCConfig? CurrentConfig { get; set; }
+        [ObservableProperty]
+        private WGCProject? currentProject;
+
+        [ObservableProperty]
+        private WGCConfig? currentConfig;
 
         public void LoadProject(WGCProject project)
         {
