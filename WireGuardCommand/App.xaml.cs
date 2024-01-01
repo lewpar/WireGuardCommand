@@ -25,7 +25,7 @@ namespace WireGuardCommand
             string pathSettings = @"./appsettings.json";
             if(File.Exists(pathSettings))
             {
-                string json = File.ReadAllText(@"./appsettings.json");
+                string json = File.ReadAllText(pathSettings);
                 Settings = JsonSerializer.Deserialize<AppSettings>(json)!;
             }
             else
