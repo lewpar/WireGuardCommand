@@ -2,9 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
+
 using WireGuardCommand.Models.Project;
 using WireGuardCommand.Security;
 using WireGuardCommand.Services;
@@ -15,6 +15,9 @@ namespace WireGuardCommand.ViewModels
     {
         [ObservableProperty]
         private int id;
+
+        [ObservableProperty]
+        private string? config;
     }
 
     public partial class ProjectViewModel : ViewModel
@@ -33,7 +36,7 @@ namespace WireGuardCommand.ViewModels
         private bool isClosingWithUnsavedChanges;
 
         [ObservableProperty]
-        private List<TestClient> testClients;
+        private ObservableCollection<TestClient> testClients;
 
         [ObservableProperty]
         private int maxClients;
@@ -54,7 +57,7 @@ namespace WireGuardCommand.ViewModels
 
                     if (previewSelected)
                     {
-                        _ = LoadPreviewAsync();
+                        LoadPreview();
                     }
                 }
             }
@@ -67,17 +70,7 @@ namespace WireGuardCommand.ViewModels
         {
             this.navService = navService;
 
-            TestClients = new List<TestClient>()
-            {
-                new TestClient()
-                {
-                    Id = 1
-                },
-                new TestClient()
-                {
-                    Id = 2
-                }
-            };
+            TestClients = new ObservableCollection<TestClient>();
 
             MaxClients = 10;
         }
@@ -156,7 +149,7 @@ namespace WireGuardCommand.ViewModels
             });
         }
 
-        private async Task LoadPreviewAsync()
+        private void LoadPreview()
         {
             FinishedLoading = false;
 
@@ -164,6 +157,18 @@ namespace WireGuardCommand.ViewModels
             {
                 FinishedLoading = true;
                 return;
+            }
+
+            Config.GenerateKeyPairs();
+
+            TestClients.Clear();
+            for (int i = 1; i < Config.NoOfClients + 1; i++)
+            {
+                TestClients.Add(new TestClient()
+                {
+                    Id = i,
+                    Config = Config.GenerateClient(i)
+                });
             }
 
             ServerPreview = Config.GenerateServer();

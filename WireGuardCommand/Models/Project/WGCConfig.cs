@@ -3,9 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Windows.Documents;
+
 using WireGuardCommand.Security;
 
 namespace WireGuardCommand.Models.Project
@@ -45,8 +47,10 @@ namespace WireGuardCommand.Models.Project
         public WGCConfig()
         {
             ListenPort = 51820;
-            NoOfClients = 1;
+
             Cidr = "10.0.0.0/24";
+            NoOfClients = 1;
+
             AllowedIPs = "0.0.0.0/0, ::/0";
             Endpoint = string.Empty;
             Dns = string.Empty;
@@ -56,6 +60,7 @@ namespace WireGuardCommand.Models.Project
             Seed = RandomHelper.GetRandomSeed();
 
             clientKeyPairs = new Dictionary<int, CurveKeyPair>();
+            serverKeyPair = new CurveKeyPair();
         }
 
         public bool Equals(WGCConfig? other)
@@ -84,18 +89,9 @@ namespace WireGuardCommand.Models.Project
             sb.AppendLine($"Address = {Cidr}"); // TODO: This should not be the cidr but the first / last address in usable addresses.
             sb.AppendLine($"ListenPort = {ListenPort}");
 
-            serverKeyPair = string.IsNullOrEmpty(Seed) ? CurveKeyPair.GeneratePair() : CurveKeyPair.GeneratePair(Convert.FromBase64String(Seed));
-            
-            if(serverKeyPair.PrivateKey is not null)
-            {
-                sb.AppendLine($"PrivateKey = {serverKeyPair.PrivateKey.ToString()}");
-            }
-            else
-            {
-                Debug.WriteLine("An error occured while trying to generate PrivateKey for server config: PrivateKey was null.");
-            }
+            sb.AppendLine($"PrivateKey = {serverKeyPair?.PrivateKey}");
 
-            if(!string.IsNullOrEmpty(PostUpRule))
+            if (!string.IsNullOrEmpty(PostUpRule))
             {
                 sb.AppendLine($"PostUp = {PostUpRule}");
             }
@@ -108,14 +104,56 @@ namespace WireGuardCommand.Models.Project
             sb.AppendLine();
 
             // Generate peers section
-            for(int i = 0; i < NoOfClients; i++)
+            for(int i = 1; i < NoOfClients + 1; i++)
             {
+                sb.AppendLine($"# Client No {i}");
                 sb.AppendLine("[Peer]");
-                sb.AppendLine($"PublicKey = {Convert.ToBase64String(RandomNumberGenerator.GetBytes(32))}"); // TODO: This should be a public key and not just random bytes.
+                sb.AppendLine($"PublicKey = {clientKeyPairs[i].PublicKey}");
                 sb.AppendLine($"AllowedIPs = {AllowedIPs}");
+                sb.AppendLine();
             }
 
             return sb.ToString();
+        }
+
+        public string? GenerateClient(int clientId)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("[Interface]");
+            sb.AppendLine($"Address = 10.0.0.{clientId}/24"); // TODO: Replace with proper host address.
+            sb.AppendLine($"ListenPort = {ListenPort}");
+            sb.AppendLine($"PrivateKey = {clientKeyPairs[clientId].PrivateKey}");
+
+            sb.AppendLine();
+
+            sb.AppendLine("[Peer]");
+            sb.AppendLine($"PublicKey = {serverKeyPair?.PublicKey}");
+            sb.AppendLine($"AllowedIPs = {AllowedIPs}");
+
+            if(!string.IsNullOrEmpty(Endpoint))
+            {
+                sb.AppendLine($"Endpoint = {Endpoint}");
+            }
+
+            return sb.ToString();
+        }
+
+        public void GenerateKeyPairs()
+        {
+            serverKeyPair = string.IsNullOrEmpty(Seed) ? 
+                CurveKeyPair.GeneratePair() : 
+                CurveKeyPair.GeneratePair(Convert.FromBase64String(Seed));
+
+            clientKeyPairs.Clear();
+            for(int i = 1; i < NoOfClients + 1; i++)
+            {
+                var clientKeyPair = string.IsNullOrEmpty(Seed) ? 
+                    CurveKeyPair.GeneratePair() : 
+                    CurveKeyPair.GeneratePair(Convert.FromBase64String(Seed), i);
+
+                clientKeyPairs.Add(i, clientKeyPair);
+            }
         }
     }
 }

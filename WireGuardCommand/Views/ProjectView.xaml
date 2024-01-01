@@ -176,7 +176,7 @@
                                                             <Run Text="Client "/>
                                                             <Run Text="{Binding Id}"/>
                                                         </TextBlock>
-                                                        <TextBox Text="" IsReadOnly="True"/>
+                                                        <TextBox Text="{Binding Config}" IsReadOnly="True"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </DataTemplate>

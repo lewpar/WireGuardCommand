@@ -1,6 +1,7 @@
 ﻿using WireGuardCommand.Security;
 
 using System.Security.Cryptography;
+using System;
 
 namespace WireGuardCommand.Models
 {
@@ -17,9 +18,22 @@ namespace WireGuardCommand.Models
             return GeneratePair(buffer);
         }
 
-        public static CurveKeyPair GeneratePair(byte[] seed)
+        public static CurveKeyPair GeneratePair(byte[] seed, int peerId = 0)
         {
-            byte[] privKey = Curve25519.ClampPrivateKey(seed);
+            byte[] peerIdBuf = BitConverter.GetBytes(peerId);
+            byte[] buffer = new byte[seed.Length + peerIdBuf.Length];
+
+            // Combine the seed and peer id to create a unique but consistent seed.
+            Array.Copy(seed, buffer, seed.Length);
+            Array.Copy(peerIdBuf, 0, buffer, seed.Length, peerIdBuf.Length);
+
+            // Resize the seed back to 32 bytes.
+            using(SHA256 sha = SHA256.Create())
+            {
+                buffer = sha.ComputeHash(buffer);
+            }
+
+            byte[] privKey = Curve25519.ClampPrivateKey(buffer);
             byte[] pubKey = Curve25519.GetPublicKey(privKey);
 
             return new CurveKeyPair()
