@@ -9,7 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <FrameworkElement x:Name="DummyElement" Visibility="Hidden"/>
         <DockPanel>
             <DockPanel.Style>
                 <Style TargetType="{x:Type DockPanel}">
@@ -79,7 +78,7 @@
                                                 <Binding.ValidationRules>
                                                     <v:NoOfClientsRule>
                                                         <v:NoOfClientsRule.Proxy>
-                                                            <v:NoOfClientsRuleProxy MaxClients="{Binding Source={x:Reference DummyElement}, Path=DataContext.MaxClients}"/>
+                                                            <v:NoOfClientsRuleProxy MaxClients="{Binding Source={x:Static sm:StateManager.Instance}, Path=CurrentConfig.MaxNoOfClients}"/>
                                                         </v:NoOfClientsRule.Proxy>
                                                     </v:NoOfClientsRule>
                                                 </Binding.ValidationRules>

@@ -48,6 +48,11 @@ namespace WireGuardCommand.Validation
                 return new ValidationResult(false, "There was an error while validating input.");
             }
 
+            if(Proxy.MaxClients < 1)
+            {
+                return new ValidationResult(false, "You do not have enough usable hosts, check your cidr.");
+            }
+
             if(noOfClients.Value > Proxy.MaxClients || noOfClients < 1)
             {
                 return new ValidationResult(false, $"You must input a number between 1 - {Proxy.MaxClients}");

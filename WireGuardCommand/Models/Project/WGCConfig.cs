@@ -21,7 +21,26 @@ namespace WireGuardCommand.Models.Project
         private int noOfClients;
 
         [ObservableProperty]
+        private int maxNoOfClients;
+
         private string? cidr;
+        public string? Cidr
+        {
+            get => cidr;
+            set
+            {
+                if(cidr != value)
+                {
+                    cidr = value;
+                    SetProperty(ref cidr, value);
+
+                    MaxNoOfClients = GetUsableHostsCount();
+
+                    // Re-trigger input validation.
+                    OnPropertyChanged(nameof(NoOfClients)); // TODO: The field validation errors are not being triggered, look into.
+                }
+            }
+        }
 
         [ObservableProperty]
         private string? seed;
@@ -50,6 +69,7 @@ namespace WireGuardCommand.Models.Project
 
             Cidr = "10.0.0.0/24";
             NoOfClients = 1;
+            MaxNoOfClients = GetUsableHostsCount();
 
             AllowedIPs = "0.0.0.0/0, ::/0";
             Endpoint = string.Empty;
@@ -154,6 +174,16 @@ namespace WireGuardCommand.Models.Project
 
                 clientKeyPairs.Add(i, clientKeyPair);
             }
+        }
+
+        public int GetUsableHostsCount()
+        {
+            if(IPNetwork.TryParse(Cidr, out IPNetwork ipNetwork))
+            {
+                return (int)ipNetwork.Usable;
+            }
+
+            return 0;
         }
     }
 }
