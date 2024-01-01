@@ -131,7 +131,7 @@ namespace WireGuardCommand.ViewModels
                     return;
                 }
 
-                navService.OpenProjectView(Project, wgcConfig);
+                navService.OpenProjectView(Project);
             }
             catch(Exception ex)
             {

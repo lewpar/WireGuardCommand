@@ -1,4 +1,9 @@
-﻿namespace WireGuardCommand.Models.Project
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
+
+namespace WireGuardCommand.Models.Project
 {
     public class StateManager
     {
@@ -17,10 +22,45 @@
         }
 
         public WGCProject? CurrentProject { get; set; }
+        public WGCConfig? CurrentConfig { get; set; }
 
-        public void SetProject(WGCProject project)
+        public void LoadProject(WGCProject project)
         {
             CurrentProject = project;
+        }
+
+        public void LoadConfig()
+        {
+            if (CurrentProject is null)
+            {
+                Debug.WriteLine("Failed to deserialize config: CurrentProject is null.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(CurrentProject.Path))
+            {
+                Debug.WriteLine("Failed to deserialize config: CurrentProject Path is null or empty.");
+                return;
+            }
+
+            try
+            {
+                var path = Path.Combine(WGCProject.PATH_PROJECTS, CurrentProject.Path, "wgc.json");
+                var json = File.ReadAllText(path);
+                var config = JsonSerializer.Deserialize<WGCConfig>(json);
+
+                if(config is null)
+                {
+                    Debug.WriteLine("Failed to deserialize config: config is null.");
+                    return;
+                }
+
+                CurrentConfig = config;
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"Failed to deserialize config: {ex.Message}");
+            }
         }
     }
 }

@@ -52,7 +52,7 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBox Text="{Binding Config.Seed}" Grid.Column="0" Margin="0 0 5 0"></TextBox>
+                                    <TextBox Text="{Binding Source={x:Static sm:StateManager.Instance}, Path=CurrentConfig.Seed}" Grid.Column="0" Margin="0 0 5 0"></TextBox>
                                     <Button Command="{Binding NewSeedCommand}" Grid.Column="1">New Seed</Button>
                                 </Grid>
                             </StackPanel>
@@ -62,7 +62,7 @@
                                     <TextBlock>Listen Port</TextBlock>
                                     <TextBox x:Name="TextBoxListenPort">
                                         <TextBox.Text>
-                                            <Binding Path="Config.ListenPort" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding Source="{x:Static sm:StateManager.Instance}" Path="CurrentConfig.ListenPort" UpdateSourceTrigger="PropertyChanged">
                                                 <Binding.ValidationRules>
                                                     <v:PortRule></v:PortRule>
                                                 </Binding.ValidationRules>
@@ -75,7 +75,7 @@
                                     <TextBlock>Number of Clients</TextBlock>
                                     <TextBox x:Name="TextBoxNoOfClients">
                                         <TextBox.Text>
-                                            <Binding Path="Config.NoOfClients" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding Source="{x:Static sm:StateManager.Instance}" Path="CurrentConfig.NoOfClients" UpdateSourceTrigger="PropertyChanged">
                                                 <Binding.ValidationRules>
                                                     <v:NoOfClientsRule>
                                                         <v:NoOfClientsRule.Proxy>
@@ -92,7 +92,7 @@
                                     <TextBlock>CIDR</TextBlock>
                                     <TextBox x:Name="TextBoxCidr">
                                         <TextBox.Text>
-                                            <Binding Path="Config.Cidr" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding Source="{x:Static sm:StateManager.Instance}" Path="CurrentConfig.Cidr" UpdateSourceTrigger="PropertyChanged">
                                                 <Binding.ValidationRules>
                                                     <v:CidrRule></v:CidrRule>
                                                 </Binding.ValidationRules>
@@ -105,28 +105,28 @@
                             <UniformGrid Columns="3" Margin="0,0,0,20">
                                 <StackPanel Orientation="Vertical" Margin="0,0,5,0">
                                     <TextBlock>Client Allowed IPs</TextBlock>
-                                    <TextBox Text="{Binding Config.AllowedIPs}"></TextBox>
+                                    <TextBox Text="{Binding Source={x:Static sm:StateManager.Instance}, Path=CurrentConfig.AllowedIPs}"></TextBox>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Vertical" Margin="0,0,5,0">
                                     <TextBlock>Endpoint (Optional)</TextBlock>
-                                    <TextBox Text="{Binding Config.Endpoint}"></TextBox>
+                                    <TextBox Text="{Binding Source={x:Static sm:StateManager.Instance}, Path=CurrentConfig.Endpoint}"></TextBox>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock>DNS (Optional)</TextBlock>
-                                    <TextBox Text="{Binding Config.Dns}"></TextBox>
+                                    <TextBox Text="{Binding Source={x:Static sm:StateManager.Instance}, Path=CurrentConfig.Dns}"></TextBox>
                                 </StackPanel>
                             </UniformGrid>
 
                             <StackPanel Orientation="Vertical" Margin="0,0,0,20">
                                 <TextBlock>Post-Up Rule</TextBlock>
-                                <TextBox Text="{Binding Config.PostUpRule}"></TextBox>
+                                <TextBox Text="{Binding Source={x:Static sm:StateManager.Instance}, Path=CurrentConfig.PostUpRule}"></TextBox>
                             </StackPanel>
 
                             <StackPanel Orientation="Vertical" Margin="0,0,0,20">
                                 <TextBlock>Post-Down Rule</TextBlock>
-                                <TextBox Text="{Binding Config.PostDownRule}"></TextBox>
+                                <TextBox Text="{Binding Source={x:Static sm:StateManager.Instance}, Path=CurrentConfig.PostDownRule}"></TextBox>
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>

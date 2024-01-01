@@ -23,9 +23,6 @@ namespace WireGuardCommand.ViewModels
     {
         private readonly NavigationService navService;
 
-        [ObservableProperty]
-        private WGCConfig? config;
-
         private WGCConfig? oldConfig;
 
         [ObservableProperty]
@@ -73,24 +70,20 @@ namespace WireGuardCommand.ViewModels
 
         public override void Load()
         {
-            if(Config is null)
-            {
-                Config = new WGCConfig();
-            }
-
-            if(Config is not null)
+            var config = StateManager.Instance.CurrentConfig;
+            if (config is not null)
             {
                 oldConfig = new WGCConfig()
                 {
-                    ListenPort = Config.ListenPort,
-                    NoOfClients = Config.NoOfClients,
-                    Cidr = Config.Cidr,
-                    Seed = Config.Seed,
-                    AllowedIPs = Config.AllowedIPs,
-                    Endpoint = Config.Endpoint,
-                    Dns = Config.Dns,
-                    PostUpRule = Config.PostUpRule,
-                    PostDownRule = Config.PostDownRule
+                    ListenPort = config.ListenPort,
+                    NoOfClients = config.NoOfClients,
+                    Cidr = config.Cidr,
+                    Seed = config.Seed,
+                    AllowedIPs = config.AllowedIPs,
+                    Endpoint = config.Endpoint,
+                    Dns = config.Dns,
+                    PostUpRule = config.PostUpRule,
+                    PostDownRule = config.PostDownRule
                 };
             }
         }
@@ -126,13 +119,21 @@ namespace WireGuardCommand.ViewModels
 
         private bool HasUnsavedChanged()
         {
-            return !(Config!.Equals(oldConfig));
+            var config = StateManager.Instance.CurrentConfig;
+
+            if(config is null)
+            {
+                Debug.WriteLine("Failed to assert unsaved changes: config is null.");
+                return false;
+            }
+
+            return !(config.Equals(oldConfig));
         }
 
         [RelayCommand]
         private void NewSeed()
         {
-            Config!.Seed = RandomHelper.GetRandomSeed();
+            StateManager.Instance.CurrentConfig!.Seed = RandomHelper.GetRandomSeed();
         }
 
         [RelayCommand]
@@ -149,25 +150,27 @@ namespace WireGuardCommand.ViewModels
         {
             FinishedLoading = false;
 
-            if(Config is null)
+            var config = StateManager.Instance.CurrentConfig;
+
+            if (config is null)
             {
                 FinishedLoading = true;
                 return;
             }
 
-            Config.GenerateKeyPairs();
+            config.GenerateKeyPairs();
 
             TestClients.Clear();
-            for (int i = 1; i < Config.NoOfClients + 1; i++)
+            for (int i = 1; i < config.NoOfClients + 1; i++)
             {
                 TestClients.Add(new TestClient()
                 {
                     Id = i,
-                    Config = Config.GenerateClient(i)
+                    Config = config.GenerateClient(i)
                 });
             }
 
-            ServerPreview = Config.GenerateServer();
+            ServerPreview = config.GenerateServer();
 
             FinishedLoading = true;
         }

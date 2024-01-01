@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
@@ -20,34 +21,24 @@ namespace WireGuardCommand.Services
             CurrentView = navView;
         }
 
-        public void OpenProjectView(WGCProject project, WGCConfig? config = null)
+        public void OpenProjectView(WGCProject project)
         {
-            StateManager.Instance.SetProject(project);
-
-            // Open a project directly in memory
-            if(config is not null)
-            {
-                CurrentView = new ProjectViewModel(this)
-                {
-                    Config = config
-                };
-
-                CurrentView.Load();
-
-                return;
-            }
+            StateManager.Instance.LoadProject(project);
 
             CurrentView = (project.Encrypted) ?
                 new ProjectDecryptViewModel(this) :
-                new ProjectViewModel(this)
-                {
-                    Config = LoadConfig()
-                };
+                new ProjectViewModel(this);
+
+            // Load the config immedietly if its not encrypted.
+            if(!project.Encrypted)
+            {
+                StateManager.Instance.LoadConfig();
+            }
 
             CurrentView.Load();
         }
 
-        public WGCConfig? LoadConfig()
+        public WGCConfig? LoadConfig(string? json = null)
         {
             if(StateManager.Instance.CurrentProject is null)
             {
@@ -61,8 +52,12 @@ namespace WireGuardCommand.Services
                 return null;
             }
 
-            var path = Path.Combine(WGCProject.PATH_PROJECTS, StateManager.Instance.CurrentProject.Path, "wgc.json");
-            var json = File.ReadAllText(path);
+            if(json is null)
+            {
+                var path = Path.Combine(WGCProject.PATH_PROJECTS, StateManager.Instance.CurrentProject.Path, "wgc.json");
+                json = File.ReadAllText(path);
+            }
+
             var config = JsonSerializer.Deserialize<WGCConfig>(json);
 
             return config;
