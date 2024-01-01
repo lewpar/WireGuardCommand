@@ -50,7 +50,7 @@ namespace WireGuardCommand.Models.Project
 
             try
             {
-                var path = Path.Combine(WGCProject.PATH_PROJECTS, CurrentProject.Path, "wgc.json");
+                var path = Path.Combine(WGCProject.PATH_PROJECTS, CurrentProject.Path, WGCProject.PATH_CONFIG);
                 var json = File.ReadAllText(path);
                 var config = JsonSerializer.Deserialize<WGCConfig>(json);
 

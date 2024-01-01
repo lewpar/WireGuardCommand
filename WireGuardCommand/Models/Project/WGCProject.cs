@@ -21,5 +21,8 @@ namespace WireGuardCommand.Models.Project
 
         [JsonIgnore]
         public const string PATH_PROJECTS = @"./Projects";
+
+        [JsonIgnore]
+        public const string PATH_CONFIG = @"./Config.json";
     }
 }

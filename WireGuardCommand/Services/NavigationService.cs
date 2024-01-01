@@ -38,31 +38,6 @@ namespace WireGuardCommand.Services
             CurrentView.Load();
         }
 
-        public WGCConfig? LoadConfig(string? json = null)
-        {
-            if(StateManager.Instance.CurrentProject is null)
-            {
-                Debug.WriteLine("CurrentProject is null.");
-                return null;
-            }
-
-            if(string.IsNullOrEmpty(StateManager.Instance.CurrentProject.Path))
-            {
-                Debug.WriteLine("CurrentProject Path is null or empty.");
-                return null;
-            }
-
-            if(json is null)
-            {
-                var path = Path.Combine(WGCProject.PATH_PROJECTS, StateManager.Instance.CurrentProject.Path, "wgc.json");
-                json = File.ReadAllText(path);
-            }
-
-            var config = JsonSerializer.Deserialize<WGCConfig>(json);
-
-            return config;
-        }
-
         public void OpenNewProjectView()
         {
             var newProjView = new ProjectNewViewModel(this);

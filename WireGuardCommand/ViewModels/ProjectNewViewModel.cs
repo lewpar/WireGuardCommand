@@ -124,7 +124,7 @@ namespace WireGuardCommand.ViewModels
                 return;
             }
 
-            File.WriteAllText(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, "WGC.json"), JsonSerializer.Serialize<WGCConfig>(new WGCConfig()));
+            File.WriteAllText(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, WGCProject.PATH_CONFIG), JsonSerializer.Serialize<WGCConfig>(new WGCConfig()));
         }
 
         private void CreateEncryptedWireGuardConfig(WGCProject project, string phrase)
@@ -150,7 +150,7 @@ namespace WireGuardCommand.ViewModels
             var data = Encoding.UTF8.GetBytes(json);
             var encryptedData = AESEncryption.Encrypt(data, key, iv);
 
-            File.WriteAllBytes(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, "WGC.bin"), encryptedData);
+            File.WriteAllBytes(Path.Combine(WGCProject.PATH_PROJECTS, ProjectName, WGCProject.PATH_CONFIG), encryptedData);
         }
 
         private void ResetFields()
