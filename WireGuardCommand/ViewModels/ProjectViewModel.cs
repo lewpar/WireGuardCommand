@@ -25,9 +25,6 @@ namespace WireGuardCommand.ViewModels
         private readonly NavigationService navService;
 
         [ObservableProperty]
-        private WGCProject? project;
-
-        [ObservableProperty]
         private WGCConfig? config;
 
         private WGCConfig? oldConfig;

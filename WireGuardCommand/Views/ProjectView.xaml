@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WireGuardCommand.Views"
              xmlns:v="clr-namespace:WireGuardCommand.Validation"
+             xmlns:sm="clr-namespace:WireGuardCommand.Models.Project"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -42,8 +43,8 @@
                 <TabItem Header="Configure">
                     <ScrollViewer>
                         <StackPanel Orientation="Vertical" Margin="20">
-                            <TextBlock Text="{Binding Project.Name}" FontSize="24" FontWeight="SemiBold"></TextBlock>
-                            <TextBlock Text="{Binding Project.Description}" FontSize="16" FontWeight="Normal" Margin="0,0,0,20"></TextBlock>
+                            <TextBlock Text="{Binding Source={x:Static sm:StateManager.Instance}, Path=CurrentProject.Name}" FontSize="24" FontWeight="SemiBold"></TextBlock>
+                            <TextBlock Text="{Binding Source={x:Static sm:StateManager.Instance}, Path=CurrentProject.Description}" FontSize="16" FontWeight="Normal" Margin="0,0,0,20"></TextBlock>
                             <StackPanel Orientation="Vertical" Margin="0,0,0,20">
                                 <TextBlock>Random Seed</TextBlock>
                                 <Grid>

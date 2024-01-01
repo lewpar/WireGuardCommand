@@ -20,12 +20,13 @@ namespace WireGuardCommand.Services
 
         public void OpenProjectView(WGCProject project, WGCConfig? config = null)
         {
+            StateManager.Instance.SetProject(project);
+
             // Open a project directly in memory
             if(config is not null)
             {
                 CurrentView = new ProjectViewModel(this)
                 {
-                    Project = project,
                     Config = config
                 };
 
@@ -35,13 +36,9 @@ namespace WireGuardCommand.Services
             }
 
             CurrentView = (project.Encrypted) ?
-                new ProjectDecryptViewModel(this)
-                {
-                    Project = project,
-                } :
+                new ProjectDecryptViewModel(this) :
                 new ProjectViewModel(this)
                 {
-                    Project = project,
                     Config = LoadConfig(project)
                 };
 
