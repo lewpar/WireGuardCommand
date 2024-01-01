@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 
@@ -41,15 +41,28 @@ namespace WireGuardCommand.Services
                 new ProjectDecryptViewModel(this) :
                 new ProjectViewModel(this)
                 {
-                    Config = LoadConfig(project)
+                    Config = LoadConfig()
                 };
 
             CurrentView.Load();
         }
 
-        public WGCConfig? LoadConfig(WGCProject project)
+        public WGCConfig? LoadConfig()
         {
-            var json = File.ReadAllText(Path.Combine(WGCProject.PATH_PROJECTS, project.Name, "WGC.json"));
+            if(StateManager.Instance.CurrentProject is null)
+            {
+                Debug.WriteLine("CurrentProject is null.");
+                return null;
+            }
+
+            if(string.IsNullOrEmpty(StateManager.Instance.CurrentProject.Path))
+            {
+                Debug.WriteLine("CurrentProject Path is null or empty.");
+                return null;
+            }
+
+            var path = Path.Combine(WGCProject.PATH_PROJECTS, StateManager.Instance.CurrentProject.Path, "wgc.json");
+            var json = File.ReadAllText(path);
             var config = JsonSerializer.Deserialize<WGCConfig>(json);
 
             return config;
