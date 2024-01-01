@@ -39,7 +39,7 @@ namespace WireGuardCommand.Models.Project
         [ObservableProperty]
         private string? postDownRule;
 
-        private CurveKeyPair serverKeyPair;
+        private CurveKeyPair? serverKeyPair;
         private Dictionary<int, CurveKeyPair> clientKeyPairs;
 
         public WGCConfig()
