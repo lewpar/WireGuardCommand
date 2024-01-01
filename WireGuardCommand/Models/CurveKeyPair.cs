@@ -14,9 +14,13 @@ namespace WireGuardCommand.Models
             byte[] buffer = new byte[size];
             RandomNumberGenerator.Create().GetBytes(buffer);
 
-            byte[] privKey = Curve25519.ClampPrivateKey(buffer);
-            byte[] pubKey = Curve25519.GetPublicKey(privKey);
+            return GeneratePair(buffer);
+        }
 
+        public static CurveKeyPair GeneratePair(byte[] seed)
+        {
+            byte[] privKey = Curve25519.ClampPrivateKey(seed);
+            byte[] pubKey = Curve25519.GetPublicKey(privKey);
 
             return new CurveKeyPair()
             {

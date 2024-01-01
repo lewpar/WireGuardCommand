@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Documents;
@@ -37,6 +39,9 @@ namespace WireGuardCommand.Models.Project
         [ObservableProperty]
         private string? postDownRule;
 
+        private CurveKeyPair serverKeyPair;
+        private Dictionary<int, CurveKeyPair> clientKeyPairs;
+
         public WGCConfig()
         {
             ListenPort = 51820;
@@ -49,6 +54,8 @@ namespace WireGuardCommand.Models.Project
             PostDownRule = "iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE";
 
             Seed = RandomHelper.GetRandomSeed();
+
+            clientKeyPairs = new Dictionary<int, CurveKeyPair>();
         }
 
         public bool Equals(WGCConfig? other)
@@ -76,7 +83,17 @@ namespace WireGuardCommand.Models.Project
             sb.AppendLine("[Interface]");
             sb.AppendLine($"Address = {Cidr}"); // TODO: This should not be the cidr but the first / last address in usable addresses.
             sb.AppendLine($"ListenPort = {ListenPort}");
-            sb.AppendLine($"PrivateKey = {Convert.ToBase64String(RandomNumberGenerator.GetBytes(32))}"); // TODO: This should be a private key and not just random bytes.
+
+            serverKeyPair = string.IsNullOrEmpty(Seed) ? CurveKeyPair.GeneratePair() : CurveKeyPair.GeneratePair(Convert.FromBase64String(Seed));
+            
+            if(serverKeyPair.PrivateKey is not null)
+            {
+                sb.AppendLine($"PrivateKey = {serverKeyPair.PrivateKey.ToString()}");
+            }
+            else
+            {
+                Debug.WriteLine("An error occured while trying to generate PrivateKey for server config: PrivateKey was null.");
+            }
 
             if(!string.IsNullOrEmpty(PostUpRule))
             {
