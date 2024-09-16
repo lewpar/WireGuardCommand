@@ -1,0 +1,14 @@
+﻿@page "/ProjectView"
+
+@{
+    var project = ProjectManager.CurrentProject;
+}
+
+@if(project is not null)
+{
+    <div>@project.Name</div>
+}
+else
+{
+    <div>No project loaded!</div>
+}

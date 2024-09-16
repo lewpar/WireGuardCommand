@@ -1,0 +1,22 @@
+﻿@page "/ProjectDecrypt"
+
+<div class="container">
+    <button class="btn-primary" @onclick="GoBack">Back</button>
+
+    @if (ProjectManager.CurrentProject is null)
+    {
+        <div>No project loaded.</div>
+    }
+    else
+    {
+        <div>This project is encrypted and requires a passphrase to access.</div>
+
+        <input type="password" @bind-value="Passphrase" />
+        <button class="btn-primary" @onclick="DecryptProject">Decrypt</button>
+
+        @if (!string.IsNullOrWhiteSpace(Error))
+        {
+            <div style="color: red">@Error</div>
+        }
+    }
+</div>

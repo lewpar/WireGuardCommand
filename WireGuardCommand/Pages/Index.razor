@@ -1,0 +1,53 @@
+﻿@page "/"
+
+@using WireGuardCommand.Pages.Project
+
+@{
+    var projects = ProjectManager.Projects;
+}
+
+<div class="container">
+    <div class="project-list">
+        <div style="display: flex; gap: 0.5rem">
+            <div style="font-weight: bold; font-size: 1.25rem; padding: 1rem">Projects</div>
+            <div style="display: flex; align-items: center;">
+                <button class="btn-primary" @onclick="CreateProject">+ New Project</button>
+            </div>
+        </div>
+        @if (projects.Count < 1)
+        {
+            <div>No projects found.</div>
+        }
+        else
+        {
+            foreach (var project in projects)
+            {
+                <button class="project-card @(project == SelectedProject ? "selected" : "")" @onclick="() => SelectProject(project)">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: bold">
+                        @project.Name
+                        @if(project.IsEncrypted)
+                        {
+                            <img src="/images/lock.png" width="16"/>
+                        }
+                    </div>
+                    <div>@project.Path</div>
+                </button>
+            }
+        }
+    </div>
+
+    @if (SelectedProject is not null)
+    {
+        <div class="project-info">
+            <div class="project-info-body">
+                <div style="font-weight: bold">@SelectedProject.Name</div>
+                <div style="font-size: 0.75rem; word-wrap: anywhere">@SelectedProject.Path</div>
+
+                <div style="display: flex; gap: 0.5rem">
+                    <button style="flex: 8" class="btn-primary" @onclick="() => OpenProject(SelectedProject)">Open</button>
+                    <button style="flex: 2" class="btn-unsafe" @onclick="() => DeleteProject(SelectedProject)">Delete</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

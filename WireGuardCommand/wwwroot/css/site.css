@@ -1,0 +1,50 @@
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+html {
+    font-family: Arial;
+
+    color: white;
+    background-color: #202020;
+}
+
+body {
+    display: flex;
+
+    margin: 0;
+
+    min-height: 100vh;
+}
+
+.btn-primary {
+    padding: 0.5rem;
+
+    border: 0;
+    border-radius: 5px;
+
+    color: white;
+    background-color: dodgerblue;
+
+    text-decoration: none;
+
+    transition: background-color 0.25s;
+}
+.btn-primary:hover {
+    background-color: #46a4ff;
+}
+
+.btn-unsafe {
+    padding: 0.5rem;
+
+    border: 0;
+    border-radius: 5px;
+
+    color: white;
+    background-color: #d71717;
+
+    text-decoration: none;
+
+    transition: background-color 0.25s;
+}
+.btn-unsafe:hover {
+    background-color: #e13b3b;
+}

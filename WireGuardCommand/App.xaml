@@ -1,8 +1,0 @@
-﻿<Application x:Class="WireGuardCommand.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WireGuardCommand">
-    <Application.Resources>
-        <ResourceDictionary Source="./Resources/Themes/BasicButton.xaml"></ResourceDictionary>
-    </Application.Resources>
-</Application>
