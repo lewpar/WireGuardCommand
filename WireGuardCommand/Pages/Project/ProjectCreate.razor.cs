@@ -67,6 +67,7 @@ public partial class ProjectCreate
 
         var config = Options.Value;
 
+        CreateContext.Name = name;
         CreateContext.Path = Path.Combine(config.ProjectsPath, name);
     }
 }
