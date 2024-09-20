@@ -15,6 +15,9 @@
 <body>
     @RenderBody()
 
+    <!-- HACKFIX UNTIL ADDRESSED: https://github.com/ElectronNET/Electron.NET/issues/823 -->
+    <script>process = undefined;</script>
+
     <script src="_framework/blazor.server.js"></script>
 </body>
 </html>

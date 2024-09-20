@@ -1,3 +1,5 @@
+using ElectronNET.API.Entities;
+using ElectronNET.API;
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Services;
 
@@ -5,7 +7,7 @@ namespace WireGuardCommand;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +22,11 @@ public class Program
 
         ConfigureMiddleware(app);
 
-        app.Run();
+        await app.StartAsync();
+
+        await ConfigureElectronAsync();
+
+        await app.WaitForShutdownAsync();
     }
 
     private static void ConfigureServices(WebApplicationBuilder builder)
@@ -43,5 +49,23 @@ public class Program
 
         app.MapBlazorHub();
         app.MapFallbackToPage("/_Host");
+    }
+
+    private static async Task ConfigureElectronAsync()
+    {
+        var windowOptions = new BrowserWindowOptions
+        {
+            WebPreferences = new WebPreferences()
+            {
+                EnableRemoteModule = true,
+                WebSecurity = true,
+                ContextIsolation = true,
+            },
+            Width = 1366,
+            Height = 768,
+            AutoHideMenuBar = true
+        };
+
+        await Electron.WindowManager.CreateWindowAsync(windowOptions);
     }
 }

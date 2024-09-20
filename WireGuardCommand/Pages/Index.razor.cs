@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 
+using WireGuardCommand.Configuration;
 using WireGuardCommand.Services.Models;
 using WireGuardCommand.Services;
 
 using System.Runtime.Versioning;
 using System.Diagnostics;
+
 using Microsoft.Extensions.Options;
-using WireGuardCommand.Configuration;
-using System.Xml.Linq;
 
 namespace WireGuardCommand.Pages;
 
@@ -38,7 +38,7 @@ public partial class Index
     {
         ProjectManager.CurrentProject.Metadata = project;
 
-        NavigationManager.NavigateTo(project.IsEncrypted ? "ProjectDecrypt" : "ProjectView");
+        NavigationManager.NavigateTo("ProjectLoad");
     }
 
     private void DeleteProject(ProjectMetadata project)

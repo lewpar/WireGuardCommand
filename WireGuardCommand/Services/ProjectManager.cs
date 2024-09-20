@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
 
+using System.Security.Cryptography;
 using System.Text.Json;
 
 using WireGuardCommand.Configuration;
+using WireGuardCommand.Extensions;
 using WireGuardCommand.Models;
 using WireGuardCommand.Services.Models;
 
@@ -22,6 +24,29 @@ public class ProjectManager
 
         Projects = new List<ProjectMetadata>();
         this.serviceProvider = serviceProvider;
+    }
+
+    public async Task LoadProjectAsync()
+    {
+        if(CurrentProject is null || 
+            CurrentProject.Metadata is null)
+        {
+            return;
+        }
+
+        var project = CurrentProject.Metadata;
+
+        if(string.IsNullOrWhiteSpace(project.Path))
+        {
+            return;
+        }
+
+        var dataPath = Path.Combine(project.Path, "data.json");
+        using(var fs = File.OpenRead(dataPath))
+        {
+            var data = await JsonSerializer.DeserializeAsync<ProjectData>(fs);
+            CurrentProject.ProjectData = data;
+        }
     }
 
     public async Task LoadProjectsAsync()
@@ -158,8 +183,21 @@ public class ProjectManager
                 Path = metadataPath
             };
 
-            using var fs = File.OpenWrite(metadata.Path);
-            await JsonSerializer.SerializeAsync<ProjectMetadata>(fs, metadata);
+            using (var fs = File.OpenWrite(metadataPath))
+            {
+                await JsonSerializer.SerializeAsync<ProjectMetadata>(fs, metadata);
+            }
+
+            var dataPath = Path.Combine(createContext.Path, "data.json");
+            var data = new ProjectData()
+            {
+                Seed = RandomNumberGenerator.GetBytes(32).ToBase64()
+            };
+
+            using (var fs = File.OpenWrite(dataPath))
+            {
+                await JsonSerializer.SerializeAsync<ProjectData>(fs, data);
+            }
         }
         catch(Exception ex)
         {

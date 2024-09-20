@@ -4,11 +4,74 @@
     var project = ProjectManager.CurrentProject;
 }
 
-@if(project.Metadata is not null)
-{
-    <div>@project.Metadata.Name</div>
-}
-else
-{
-    <div>No project loaded!</div>
-}
+<div class="container">
+    @if(project is not null && 
+        project.Metadata is not null &&
+        project.ProjectData is not null)
+    {
+        <div class="project-view-header">
+            <div style="font-weight: bold; font-size: 1.25rem; padding: 1rem">@project.Metadata.Name</div>
+            <div style="display: flex; align-items: center;">
+                <button class="btn-primary" @onclick="GoBack">Back</button>
+            </div>
+        </div>
+
+        <div class="project-view-body">
+            <div style="display: flex; flex-direction: column">
+                <label>Seed</label>
+                <div style="display: flex; gap: 0.5rem">
+                    <input @bind="project.ProjectData.Seed"/>
+                    <button @onclick="GenerateSeed">Generate</button>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column">
+                <label>Server Listen Port</label>
+                <input />
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>No. Clients (Max: 253)</label>
+                <input />
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Transit Subnet</label>
+                <input />
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Allowed IPs (Client)</label>
+                <input />
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Endpoint Including Port (Optional)</label>
+                <input />
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Remote DNS (Optional)</label>
+                <input />
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Interface Name (Optional)</label>
+                <input />
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Use Pre-Shared Keys</label>
+                <input type="checkbox" />
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Assign Last IP (Server)</label>
+                <input type="checkbox" />
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>Project failed to load.</div>
+    }
+</div>
