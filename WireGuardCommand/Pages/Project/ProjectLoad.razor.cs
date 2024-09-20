@@ -33,7 +33,7 @@ public partial class ProjectLoad
 
         await ProjectManager.LoadProjectAsync();
 
-        await Task.Delay(2500);
+        await Task.Delay(1000);
 
         NavigationManager.NavigateTo("ProjectView");
     }

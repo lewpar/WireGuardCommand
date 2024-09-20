@@ -28,20 +28,17 @@ public class ProjectManager
 
     public async Task LoadProjectAsync()
     {
-        if(CurrentProject is null || 
-            CurrentProject.Metadata is null)
+        if(CurrentProject is null)
         {
             return;
         }
 
-        var project = CurrentProject.Metadata;
-
-        if(string.IsNullOrWhiteSpace(project.Path))
+        if(string.IsNullOrWhiteSpace(CurrentProject.Path))
         {
             return;
         }
 
-        var dataPath = Path.Combine(project.Path, "data.json");
+        var dataPath = Path.Combine(CurrentProject.Path, "data.json");
         using(var fs = File.OpenRead(dataPath))
         {
             var data = await JsonSerializer.DeserializeAsync<ProjectData>(fs);

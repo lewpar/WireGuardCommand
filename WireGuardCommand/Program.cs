@@ -1,5 +1,6 @@
 using ElectronNET.API.Entities;
 using ElectronNET.API;
+
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Services;
 
@@ -7,9 +8,12 @@ namespace WireGuardCommand;
 
 public class Program
 {
-    public static async void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.WebHost.UseElectron(args);
+        builder.WebHost.UseStaticWebAssets();
 
         ConfigureServices(builder);
 
