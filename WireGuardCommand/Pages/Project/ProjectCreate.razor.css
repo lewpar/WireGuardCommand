@@ -4,3 +4,27 @@
     display: flex;
     flex-direction: column;
 }
+
+.project-create-header {
+    display: flex; 
+    
+    gap: 0.5rem;
+
+    background-color: #151515;
+}
+
+.project-create-body {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+
+    padding: 1rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.25rem;
+}

@@ -13,6 +13,13 @@
 
     overflow-y: hidden;
 }
+.project-list-header {
+    display: flex; 
+    
+    gap: 0.5rem;
+
+    background-color: #151515;
+}
 .project-info {
     flex: 3;
 

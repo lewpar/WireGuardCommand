@@ -11,8 +11,8 @@
     {
         <div>This project is encrypted and requires a passphrase to access.</div>
 
-        <input type="password" @bind-value="Passphrase" />
-        <button class="btn-primary" @onclick="DecryptProject">Decrypt</button>
+        <input type="password" @bind-value="ProjectManager.CurrentProject.Passphrase" />
+        <button class="btn-primary" @onclick="DecryptProjectAsync">Decrypt</button>
 
         @if (!string.IsNullOrWhiteSpace(Error))
         {

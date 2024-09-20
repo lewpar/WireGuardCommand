@@ -2,12 +2,24 @@
 
 public class WGCConfig
 {
-    public string ProjectsPath { get; set; }
+    private string? projectsPath;
+    public string ProjectsPath
+    {
+        get
+        {
+            return projectsPath ?? "";
+        }
+        set
+        {
+            projectsPath = Path.GetFullPath(value);
+        }
+    }
+
     public bool EncryptByDefault { get; set; }
 
     public WGCConfig()
     {
-        ProjectsPath = "./Projects";
+        ProjectsPath = Path.GetFullPath(".\\Projects");
         EncryptByDefault = true;
     }
 }

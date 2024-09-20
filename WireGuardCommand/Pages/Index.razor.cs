@@ -3,6 +3,12 @@
 using WireGuardCommand.Services.Models;
 using WireGuardCommand.Services;
 
+using System.Runtime.Versioning;
+using System.Diagnostics;
+using Microsoft.Extensions.Options;
+using WireGuardCommand.Configuration;
+using System.Xml.Linq;
+
 namespace WireGuardCommand.Pages;
 
 public partial class Index
@@ -13,9 +19,12 @@ public partial class Index
     [Inject]
     public NavigationManager NavigationManager { get; set; } = default!;
 
+    [Inject]
+    public IOptions<WGCConfig> Options { get; set; } = default!;
+
     public ProjectMetadata? SelectedProject { get; set; }
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         await ProjectManager.LoadProjectsAsync();
     }
@@ -27,19 +36,27 @@ public partial class Index
 
     private void OpenProject(ProjectMetadata project)
     {
-        ProjectManager.CurrentProject = project;
+        ProjectManager.CurrentProject.Metadata = project;
 
         NavigationManager.NavigateTo(project.IsEncrypted ? "ProjectDecrypt" : "ProjectView");
     }
 
     private void DeleteProject(ProjectMetadata project)
     {
-        ProjectManager.CurrentProject = project;
+        ProjectManager.CurrentProject.Metadata = project;
         NavigationManager.NavigateTo("ProjectDelete");
     }
 
     private void CreateProject()
     {
         NavigationManager.NavigateTo("ProjectCreate");
+    }
+
+    [SupportedOSPlatform("Windows")]
+    private void BrowseProjects()
+    {
+        var config = Options.Value;
+
+        Process.Start("explorer.exe", config.ProjectsPath);
     }
 }

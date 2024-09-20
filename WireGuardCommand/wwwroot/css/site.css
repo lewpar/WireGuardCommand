@@ -48,3 +48,33 @@ body {
 .btn-unsafe:hover {
     background-color: #e13b3b;
 }
+
+input {
+    padding: 0.5rem;
+
+    color: white;
+    background-color: #303030;
+
+    border: 1px solid #505050;
+}
+input {
+    padding: 0.5rem;
+
+    color: white;
+    background-color: #303030;
+
+    border: 1px solid #505050;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+.rotate-animation {
+    animation: rotating 2s linear infinite;
+}

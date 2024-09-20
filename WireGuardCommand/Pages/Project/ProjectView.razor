@@ -4,9 +4,9 @@
     var project = ProjectManager.CurrentProject;
 }
 
-@if(project is not null)
+@if(project.Metadata is not null)
 {
-    <div>@project.Name</div>
+    <div>@project.Metadata.Name</div>
 }
 else
 {

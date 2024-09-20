@@ -12,15 +12,14 @@ public partial class ProjectDecrypt
     [Inject]
     public ProjectManager ProjectManager { get; set; } = default!;
 
-    public string? Passphrase { get; set; }
-
     public string? Error { get; set; }
 
-    private void DecryptProject()
+    private async Task DecryptProjectAsync()
     {
-        if(string.IsNullOrWhiteSpace(Passphrase))
+        var result = await ProjectManager.TryDecryptDataAsync();
+        if(!result.Success)
         {
-            Error = "You must enter a passphrase to decrypt the project.";
+            Error = result.Message;
             return;
         }
     }

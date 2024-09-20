@@ -1,8 +1,48 @@
 ﻿@page "/ProjectCreate"
 
+@{
+    var project = ProjectManager.CurrentProject;
+}
+
 <div class="container">
-    <div>
-        <label>Project Name</label>
-        <input type="text"/>
+    <div class="project-create-header">
+        <div style="font-weight: bold; font-size: 1.25rem; padding: 1rem">Create Project</div>
+        <div style="display: flex; align-items: center;">
+            <button class="btn-primary" @onclick="GoBack">Back</button>
+        </div>
+    </div>
+
+    <div class="project-create-body">
+        <div class="field">
+            <label>Project Name</label>
+            <input type="text" value="@(CreateContext.Name)" @onchange="OnProjectNameChanged" />
+        </div>
+
+        <div class="field">
+            <label>Project Path</label>
+            <input type="text" @bind="CreateContext.Path" readonly />
+        </div>
+
+        <div>
+            <label>Encrypted</label>
+            <input type="checkbox" @bind="CreateContext.IsEncrypted" />
+        </div>
+
+        @if (CreateContext.IsEncrypted)
+        {
+            <div class="field">
+                <label>Passphrase</label>
+                <input type="password" @bind="CreateContext.Passphrase" />
+            </div>
+        }
+
+        <div>
+            <button class="btn-primary" @onclick="CreateProjectAsync">Create</button>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Error))
+        {
+            <div style="color: red">@Error</div>
+        }
     </div>
 </div>
