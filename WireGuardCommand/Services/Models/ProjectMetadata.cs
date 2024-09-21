@@ -12,4 +12,10 @@ public class ProjectMetadata
 
     [JsonPropertyName("IsEncrypted")]
     public bool IsEncrypted { get; set; }
+
+    [JsonPropertyName("Salt")]
+    public string? Salt { get; set; }
+
+    [JsonPropertyName("IV")]
+    public string? IV { get; set; }
 }

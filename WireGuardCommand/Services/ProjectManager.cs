@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
 
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Extensions;
 using WireGuardCommand.Models;
+using WireGuardCommand.Security;
 using WireGuardCommand.Services.Models;
 
 namespace WireGuardCommand.Services;
@@ -26,23 +28,70 @@ public class ProjectManager
         this.serviceProvider = serviceProvider;
     }
 
-    public async Task LoadProjectAsync()
+    public async Task<ActionResult> TryLoadProjectAsync()
     {
         if(CurrentProject is null)
         {
-            return;
+            return ActionResult.Fail("No project currently loaded.");
         }
 
         if(string.IsNullOrWhiteSpace(CurrentProject.Path))
         {
-            return;
+            return ActionResult.Fail("No path was found for current project.");
         }
 
-        var dataPath = Path.Combine(CurrentProject.Path, "data.json");
-        using(var fs = File.OpenRead(dataPath))
+        try
         {
-            var data = await JsonSerializer.DeserializeAsync<ProjectData>(fs);
-            CurrentProject.ProjectData = data;
+            if(CurrentProject.Metadata is null)
+            {
+                return ActionResult.Fail("Failed to load metadata for current project.");
+            }
+
+            var dataPath = Path.Combine(CurrentProject.Path, 
+                CurrentProject.Metadata.IsEncrypted ? "data.bin" : "data.json");
+
+            using (var fs = File.OpenRead(dataPath))
+            {
+                if(CurrentProject.Metadata.IsEncrypted)
+                {
+                    if(string.IsNullOrWhiteSpace(CurrentProject.Passphrase))
+                    {
+                        return ActionResult.Fail("No passphrase found for current project.");
+                    }
+
+                    if (string.IsNullOrEmpty(CurrentProject.Metadata.Salt))
+                    {
+                        return ActionResult.Fail("Failed to retrieve Salt from metadata.");
+                    }
+
+                    if (string.IsNullOrEmpty(CurrentProject.Metadata.IV))
+                    {
+                        return ActionResult.Fail("Failed to retrieve IV from metadata.");
+                    }
+
+                    var salt = CurrentProject.Metadata.Salt.FromBase64();
+                    var iv = CurrentProject.Metadata.IV.FromBase64();
+
+                    var data = AESProvider.Decrypt(fs, AESProvider.GenerateKey(CurrentProject.Passphrase, salt), iv);
+                    if(data is null)
+                    {
+                        return ActionResult.Fail("Failed to decrypt project.");
+                    }
+
+                    using var ms = new MemoryStream(data);
+                    CurrentProject.ProjectData = await JsonSerializer.DeserializeAsync<ProjectData>(ms);
+                }
+                else
+                {
+                    CurrentProject.ProjectData = await JsonSerializer.DeserializeAsync<ProjectData>(fs);
+                }
+            }
+
+            return ActionResult.Pass();
+        }
+        catch(Exception ex)
+        {
+            return ActionResult.Fail($"An error occured while trying to load the project: {ex.Message}");
         }
     }
 
@@ -177,7 +226,9 @@ public class ProjectManager
             {
                 Name = createContext.Name,
                 IsEncrypted = createContext.IsEncrypted,
-                Path = metadataPath
+                Path = metadataPath,
+                Salt = RandomNumberGenerator.GetBytes(32).ToBase64(),
+                IV = AESProvider.GenerateIV().ToBase64()
             };
 
             using (var fs = File.OpenWrite(metadataPath))
@@ -185,7 +236,7 @@ public class ProjectManager
                 await JsonSerializer.SerializeAsync<ProjectMetadata>(fs, metadata);
             }
 
-            var dataPath = Path.Combine(createContext.Path, "data.json");
+            var dataPath = Path.Combine(createContext.Path, metadata.IsEncrypted ? "data.bin" : "data.json");
             var data = new ProjectData()
             {
                 Seed = RandomNumberGenerator.GetBytes(32).ToBase64()
@@ -193,7 +244,20 @@ public class ProjectManager
 
             using (var fs = File.OpenWrite(dataPath))
             {
-                await JsonSerializer.SerializeAsync<ProjectData>(fs, data);
+                if(metadata.IsEncrypted)
+                {
+                    var key = AESProvider.GenerateKey(createContext.Passphrase, metadata.Salt.FromBase64());
+                    using var ms = new MemoryStream();
+
+                    await JsonSerializer.SerializeAsync<ProjectData>(ms, data);
+                    var encryptedData = AESProvider.Encrypt(ms.ToArray(), key, metadata.IV.FromBase64());
+
+                    fs.Write(encryptedData, 0, encryptedData.Length);
+                }
+                else
+                {
+                    await JsonSerializer.SerializeAsync<ProjectData>(fs, data);
+                }
             }
         }
         catch(Exception ex)

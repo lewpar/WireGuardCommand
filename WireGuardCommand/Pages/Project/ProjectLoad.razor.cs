@@ -31,17 +31,20 @@ public partial class ProjectLoad
             return;
         }
 
-        await ProjectManager.LoadProjectAsync();
-
-        await Task.Delay(1000);
+        var result = await ProjectManager.TryLoadProjectAsync();
+        if(!result.Success)
+        {
+            Error = result.Message;
+            return;
+        }
 
         NavigationManager.NavigateTo("ProjectView");
     }
 
     private async Task DecryptProjectAsync()
     {
-        var result = await ProjectManager.TryDecryptDataAsync();
-        if(!result.Success)
+        var result = await ProjectManager.TryLoadProjectAsync();
+        if (!result.Success)
         {
             Error = result.Message;
             return;
