@@ -3,14 +3,25 @@
 
     display: flex;
     flex-direction: column;
+}
 
-    gap: 0.5rem;
+.project-view-error {
+    display: flex;
+
+    padding: 0.5rem;
+
+    align-items: center;
+
+    background-color: darkred;
 }
 
 .project-view-header {
     display: flex;
     
     gap: 0.5rem;
+    padding: 1rem;
+
+    align-items: center;
 
     background-color: #151515;
 }

@@ -9,11 +9,23 @@
         project.Metadata is not null &&
         project.ProjectData is not null)
     {
-        <div class="project-view-header">
-            <div style="font-weight: bold; font-size: 1.25rem; padding: 1rem">@project.Metadata.Name</div>
-            <div style="display: flex; align-items: center;">
-                <button class="btn-primary" @onclick="GoBack">Back</button>
+        @if (!string.IsNullOrWhiteSpace(Error))
+        {
+            <div class="project-view-error">
+                @Error
             </div>
+        }
+
+        <div class="project-view-header">
+            <div style="flex: 1; display: flex; flex-direction: column">
+                <div style="font-weight: bold; font-size: 1.25rem">@project.Metadata.Name</div>
+
+                @if(HasUnsavedChanges)
+                {
+                    <div style="font-size: 0.75rem">Unsaved Changes</div>
+                }
+            </div>
+            <button class="btn-unsafe" @onclick="GoBack">Close Project</button>
         </div>
 
         <div class="project-view-body">
