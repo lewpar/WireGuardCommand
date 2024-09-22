@@ -3,12 +3,12 @@
 @using System.Runtime.InteropServices
 @using WireGuardCommand.Pages.Project
 
-@{
-    var projects = ProjectManager.Projects;
-}
-
 <div class="container">
     <div class="project-list">
+        @if(!string.IsNullOrWhiteSpace(Error))
+        {
+            <div style="padding: 0.5rem; background-color: darkred">@Error</div>
+        }
         <div class="project-list-header">
             <div style="font-weight: bold; font-size: 1.25rem; padding: 1rem">Projects</div>
             <div style="display: flex; align-items: center; gap: 1rem">
@@ -21,18 +21,25 @@
             </div>
         </div>
 
-        @foreach (var project in projects)
+        @foreach (var project in Projects)
         {
-        <button class="project-card @(project == SelectedProject ? "selected" : "")" @onclick="() => SelectProject(project)">
-            <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: bold">
-                @project.Name
-                @if (project.IsEncrypted)
-                {
-                    <img src="/images/lock.png" width="16" />
-                }
+            <button class="project-card @(project == SelectedProject ? "selected" : "")" @onclick="() => SelectProject(project)">
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: bold">
+                    @project.Name
+                    @if (project.IsEncrypted)
+                    {
+                        <img src="/images/lock.png" width="16" />
+                    }
+                </div>
+                <div>@project.Path</div>
+            </button>
+        }
+
+        @if(Projects.Count < 1 && Loaded)
+        {
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center">
+                No projects found.
             </div>
-            <div>@project.Path</div>
-        </button>
         }
     </div>
 
@@ -48,8 +55,8 @@
                 <div style="font-size: 0.75rem; word-wrap: anywhere">@SelectedProject.Path</div>
 
                 <div style="display: flex; gap: 0.5rem">
-                    <button style="flex: 8" class="btn-primary" @onclick="() => OpenProject(SelectedProject)">Open</button>
-                    <button style="flex: 2" class="btn-unsafe" @onclick="() => DeleteProject(SelectedProject)">Delete</button>
+                    <button style="flex: 8" class="btn-primary" @onclick="OpenProject">Open</button>
+                    <button style="flex: 2" class="btn-unsafe" @onclick="DeleteProject">Delete</button>
                 </div>
             </div>
         </div>

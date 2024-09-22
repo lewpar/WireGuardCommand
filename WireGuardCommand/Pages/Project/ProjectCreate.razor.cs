@@ -13,6 +13,9 @@ public partial class ProjectCreate
     public ProjectManager ProjectManager { get; set; } = default!;
 
     [Inject]
+    public ProjectCache Cache { get; set; } = default!;
+
+    [Inject]
     public NavigationManager NavigationManager { get; set; } = default!;
 
     [Inject]
@@ -38,14 +41,15 @@ public partial class ProjectCreate
 
     private async Task CreateProjectAsync()
     {
-        var result = await ProjectManager.TryCreateProjectAsync(CreateContext);
-        if(!result.Success)
+        try
         {
-            Error = result.Message;
-            return;
+            await ProjectManager.CreateProjectAsync(CreateContext);
+            NavigationManager.NavigateTo("/");
         }
-
-        NavigationManager.NavigateTo("/");
+        catch(Exception ex)
+        {
+            Error = $"Failed to create project: {ex.Message}";
+        }
     }
 
     private void GoBack()

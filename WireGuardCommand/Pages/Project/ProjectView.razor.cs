@@ -11,18 +11,21 @@ public partial class ProjectView
     public ProjectManager ProjectManager { get; set; } = default!;
 
     [Inject]
+    public ProjectCache Cache { get; set; } = default!;
+
+    [Inject]
     public NavigationManager NavigationManager { get; set; } = default!;
 
     private void GoBack()
     {
+        Cache.Clear();
         NavigationManager.NavigateTo("/");
     }
 
     private void GenerateSeed()
     {
-        var project = ProjectManager.CurrentProject;
-        if(project is null ||
-            project.ProjectData is null)
+        var project = Cache.CurrentProject;
+        if(project.ProjectData is null)
         {
             return;
         }

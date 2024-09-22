@@ -1,7 +1,7 @@
 ﻿@page "/ProjectView"
 
 @{
-    var project = ProjectManager.CurrentProject;
+    var project = Cache.CurrentProject;
 }
 
 <div class="container">
@@ -72,6 +72,9 @@
     }
     else
     {
+        <div style="display: flex; align-items: center;">
+            <button class="btn-primary" @onclick="GoBack">Back</button>
+        </div>
         <div>Project failed to load.</div>
     }
 </div>

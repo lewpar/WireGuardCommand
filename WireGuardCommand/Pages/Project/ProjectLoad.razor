@@ -1,6 +1,6 @@
 ﻿@page "/ProjectLoad"
 @{
-    var project = ProjectManager.CurrentProject;
+    var project = Cache.CurrentProject;
 }
 
 <div class="container">
@@ -13,7 +13,7 @@
 
             <div>This project is encrypted and requires a passphrase to access.</div>
 
-            <input type="password" @bind-value="ProjectManager.CurrentProject.Passphrase" />
+            <input type="password" @bind-value="project.Passphrase" />
             <button class="btn-primary" @onclick="DecryptProjectAsync">Decrypt</button>
 
             @if (!string.IsNullOrWhiteSpace(Error))
@@ -23,7 +23,14 @@
         }
         else
         {
-            <div>Loading..</div>
+            @if (!string.IsNullOrWhiteSpace(Error))
+            {
+                <div style="color: red">@Error</div>
+            }
+            else
+            {
+                <div>Loading..</div>
+            }
         }
     }
     else

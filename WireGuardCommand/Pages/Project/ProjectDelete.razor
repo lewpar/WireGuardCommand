@@ -1,3 +1,36 @@
 ﻿@page "/ProjectDelete"
 
-Delete Project
+@{
+    var metadata = Cache.CurrentProject.Metadata;
+}
+
+<div class="container">
+    <div class="dialog">
+        @if (!string.IsNullOrWhiteSpace(Error))
+        {
+            <div>@Error</div>
+        }
+
+        @if(metadata is not null)
+        {
+            <div>Are you sure you want to delete the project @metadata.Name?</div>
+            <div style="display: flex; flex-direction: row; gap: 0.5rem">
+                <button style="flex: 3" class="btn-primary" @onclick="Confirm">Confirm</button>
+                <button style="flex: 7" class="btn-unsafe" @onclick="Cancel">Cancel</button>
+            </div>
+        }
+        else
+        {
+            @if(!string.IsNullOrWhiteSpace(Error))
+            {
+                <div>@Error</div>
+            }
+            else
+            {
+                <div>Failed to load project.</div>
+            }
+
+            <button class="btn-primary" @onclick="Cancel">Go back</button>
+        }
+    </div>
+</div>

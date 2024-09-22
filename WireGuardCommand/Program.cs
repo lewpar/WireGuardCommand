@@ -39,6 +39,7 @@ public class Program
 
         builder.Configuration.Bind("WireGuardCommand", new WGCConfig());
 
+        services.AddSingleton<ProjectCache>();
         services.AddSingleton<ProjectManager>();
 
         services.AddRazorPages();
