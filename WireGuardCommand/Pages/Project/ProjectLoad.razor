@@ -4,38 +4,42 @@
 }
 
 <div class="container">
-    @if (project is not null &&
-            project.Metadata is not null)
-    {
-        if (project.Metadata.IsEncrypted)
+    <div class="dialog">
+        @if (project is not null &&
+                project.Metadata is not null)
         {
-            <button class="btn-primary" @onclick="GoBack">Back</button>
-
-            <div>This project is encrypted and requires a passphrase to access.</div>
-
-            <input type="password" @bind-value="project.Passphrase" />
-            <button class="btn-primary" @onclick="DecryptProjectAsync">Decrypt</button>
-
-            @if (!string.IsNullOrWhiteSpace(Error))
+            if (project.Metadata.IsEncrypted)
             {
-                <div style="color: red">@Error</div>
+                <div>This project is encrypted and requires a passphrase to access.</div>
+
+                <input type="password" @bind-value="project.Passphrase" />
+
+                <div style="display: flex; gap: 0.5rem;">
+                    <button style="flex: 1" class="btn-unsafe" @onclick="GoBack">Back</button>
+                    <button style="flex: 1" class="btn-primary" @onclick="DecryptProjectAsync">Decrypt</button>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Error))
+                {
+                    <div style="color: red">@Error</div>
+                }
+            }
+            else
+            {
+                @if (!string.IsNullOrWhiteSpace(Error))
+                {
+                    <div style="color: red">@Error</div>
+                }
+                else
+                {
+                    <div>Loading..</div>
+                }
             }
         }
         else
         {
-            @if (!string.IsNullOrWhiteSpace(Error))
-            {
-                <div style="color: red">@Error</div>
-            }
-            else
-            {
-                <div>Loading..</div>
-            }
+            <button class="btn-primary" @onclick="GoBack">Back</button>
+            <div>Failed to load project.</div>
         }
-    }
-    else
-    {
-        <button class="btn-primary" @onclick="GoBack">Back</button>
-        <div>Failed to load project.</div>
-    }
+    </div>
 </div>
