@@ -5,7 +5,6 @@ using System.Text.Json;
 
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Extensions;
-using WireGuardCommand.Models;
 using WireGuardCommand.Security;
 using WireGuardCommand.Services.Models;
 
@@ -213,24 +212,24 @@ public class ProjectManager
     {
         if(string.IsNullOrWhiteSpace(createContext.Path))
         {
-            new Exception("No project path is set.");
+            throw new Exception("No project path is set.");
         }
 
         if(string.IsNullOrWhiteSpace(createContext.Name))
         {
-            new Exception("No project name is set.");
+            throw new Exception("No project name is set.");
         }
 
         if(createContext.IsEncrypted &&
             string.IsNullOrWhiteSpace(createContext.Passphrase))
         {
-            new Exception("No passphrase is set.");
+            throw new Exception("No passphrase is set.");
         }
 
         if (Directory.Exists(createContext.Path) &&
             Directory.GetFiles(createContext.Path).Length != 0)
         {
-            new Exception("A project already exists at this path.");
+            throw new Exception("A project already exists at that location.");
         }
 
         Directory.CreateDirectory(createContext.Path);
