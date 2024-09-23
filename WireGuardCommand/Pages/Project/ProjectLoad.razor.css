@@ -6,11 +6,3 @@
     align-items: center;
     justify-content: center;
 }
-
-.dialog {
-    display: flex;
-    flex-direction: column;
-
-    gap: 0.5rem;
-    padding: 1rem;
-}

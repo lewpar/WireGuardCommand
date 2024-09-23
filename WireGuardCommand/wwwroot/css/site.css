@@ -70,15 +70,14 @@ input {
     border: 1px solid #505050;
 }
 
-@keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
+.dialog {
+    display: flex;
+    flex-direction: column;
 
-    to {
-        transform: rotate(360deg);
-    }
-}
-.rotate-animation {
-    animation: rotating 2s linear infinite;
+    gap: 0.5rem;
+    padding: 1rem;
+
+    background-color: #303030;
+
+    border-radius: 5px;
 }

@@ -20,6 +20,6 @@ public class WGCConfig
     public WGCConfig()
     {
         ProjectsPath = Path.GetFullPath(".\\Projects");
-        EncryptByDefault = true;
+        EncryptByDefault = false;
     }
 }
