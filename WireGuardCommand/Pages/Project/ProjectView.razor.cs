@@ -80,6 +80,17 @@ public partial class ProjectView
             return;
         }
 
+        try
+        {
+            await ProjectManager.SaveProjectAsync(Cache.CurrentProject);
+        }
+        catch (Exception ex)
+        {
+            Error = $"Failed to save project: {ex.Message}";
+            StateHasChanged();
+            return;
+        }
+
         originalData = Cache.CurrentProject.ProjectData.Copy();
         StateHasChanged();
     }

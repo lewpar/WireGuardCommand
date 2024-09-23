@@ -83,6 +83,64 @@ public class ProjectManager
         }
     }
 
+    public async Task SaveProjectAsync(ProjectContext context)
+    {
+        var metadata = context.Metadata;
+        if(metadata is null)
+        {
+            throw new Exception("Metadata not found for project.");
+        }
+
+        var data = context.ProjectData;
+        if (data is null)
+        {
+            throw new Exception("Project data not found for project.");
+        }
+
+        var projectPath = metadata.Path;
+        if (string.IsNullOrWhiteSpace(projectPath))
+        {
+            throw new Exception("No path was found for the project.");
+        }
+
+        var dataPath = Path.Combine(projectPath, metadata.IsEncrypted ? "data.bin" : "data.json");
+        using var fs = File.OpenWrite(dataPath);
+
+        if (metadata.IsEncrypted)
+        {
+            if (string.IsNullOrWhiteSpace(context.Passphrase))
+            {
+                throw new Exception("No passphrase found for current project.");
+            }
+
+            if (string.IsNullOrEmpty(metadata.Salt))
+            {
+                throw new Exception("Failed to retrieve Salt from metadata.");
+            }
+
+            if (string.IsNullOrEmpty(metadata.IV))
+            {
+                throw new Exception("Failed to retrieve IV from metadata.");
+            }
+
+            var salt = metadata.Salt.FromBase64();
+            var iv = metadata.IV.FromBase64();
+
+            var key = AESProvider.GenerateKey(context.Passphrase, salt);
+
+            using var ms = new MemoryStream();
+            await JsonSerializer.SerializeAsync(ms, data);
+
+            var buffer = AESProvider.Encrypt(ms.ToArray(), key, iv);
+
+            fs.Write(buffer, 0, buffer.Length);
+        }
+        else
+        {
+            await JsonSerializer.SerializeAsync(fs, data);
+        }
+    }
+
     public async Task<List<ProjectMetadata>> GetProjectsAsync()
     {
         var projects = new List<ProjectMetadata>();
