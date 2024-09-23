@@ -11,24 +11,33 @@
         }
         <div class="project-list-header">
             <div style="font-weight: bold; font-size: 1.25rem; padding: 1rem">Projects</div>
-            <div style="display: flex; align-items: center; gap: 1rem">
+            <div style="flex: 1; display: flex; align-items: center; gap: 1rem; padding: 1rem;">
                 <button class="btn-primary" @onclick="CreateProject">+ New Project</button>
 
                 @if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                <button class="btn-primary" @onclick="BrowseProjects">Open Folder</button>
+                    <button class="btn-primary" @onclick="BrowseProjects">Open Folder</button>
                 }
+
+                <!-- Divider -->
+                <div style="flex: 1;"></div>
+
+                <button class="btn-primary" @onclick="LoadProjectsAsync">Refresh</button>
             </div>
         </div>
 
         @foreach (var project in Projects)
         {
             <button class="project-card @(project == SelectedProject ? "selected" : "")" @onclick="() => SelectProject(project)">
-                <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: bold">
-                    @project.Name
-                    @if (project.IsEncrypted)
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: bold;">
+                    <div>@project.Name</div>
+                    @if (project.IsCorrupted)
                     {
-                        <img src="/images/lock.png" width="16" />
+                        <img src="/images/warning.png" width="20"/>
+                    }
+                    else if (project.IsEncrypted)
+                    {
+                        <img src="/images/lock.png" width="20" />
                     }
                 </div>
                 <div>@project.Path</div>
@@ -48,14 +57,22 @@
         <div class="project-info">
             <div class="project-info-body">
                 <div style="font-weight: bold">@SelectedProject.Name</div>
-                @if (SelectedProject.IsEncrypted)
+                @if(SelectedProject.IsCorrupted)
+                {
+                    <div style="color: orange; font-size: 0.75rem">This project is corrupted.</div>
+                }
+                else if (SelectedProject.IsEncrypted)
                 {
                     <div style="color: dodgerblue; font-size: 0.75rem">Encrypted</div>
                 }
                 <div style="font-size: 0.75rem; word-wrap: anywhere">@SelectedProject.Path</div>
 
                 <div style="display: flex; gap: 0.5rem">
-                    <button style="flex: 8" class="btn-primary" @onclick="OpenProject">Open</button>
+                    @if(!SelectedProject.IsCorrupted)
+                    {
+                        <button style="flex: 8" class="btn-primary" @onclick="OpenProject">Open</button>
+                    }
+
                     <button style="flex: 2" class="btn-unsafe" @onclick="DeleteProject">Delete</button>
                 </div>
             </div>

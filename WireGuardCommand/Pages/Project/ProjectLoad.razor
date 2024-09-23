@@ -6,7 +6,8 @@
 <div class="container">
     <div class="dialog">
         @if (project is not null &&
-                project.Metadata is not null)
+                project.Metadata is not null &&
+                string.IsNullOrWhiteSpace(Error))
         {
             if (project.Metadata.IsEncrypted)
             {
@@ -18,28 +19,20 @@
                     <button style="flex: 1" class="btn-unsafe" @onclick="GoBack">Back</button>
                     <button style="flex: 1" class="btn-primary" @onclick="DecryptProjectAsync">Decrypt</button>
                 </div>
-
-                @if (!string.IsNullOrWhiteSpace(Error))
-                {
-                    <div style="color: red">@Error</div>
-                }
             }
             else
             {
-                @if (!string.IsNullOrWhiteSpace(Error))
-                {
-                    <div style="color: red">@Error</div>
-                }
-                else
-                {
-                    <div>Loading..</div>
-                }
+                <div>Loading..</div>
             }
         }
         else
         {
             <button class="btn-primary" @onclick="GoBack">Back</button>
-            <div>Failed to load project.</div>
+
+            @if (!string.IsNullOrWhiteSpace(Error))
+            {
+                <div style="color: red">@Error</div>
+            }
         }
     </div>
 </div>

@@ -110,10 +110,24 @@ public class ProjectManager
                 continue;
             }
 
-            var metadata = await GetMetadataAsync(metadataPath);
-            metadata.Path = directory;
+            ProjectMetadata? metadata = null;
 
-            if(projects.Contains(metadata))
+            try
+            {
+                metadata = await GetMetadataAsync(metadataPath);
+                metadata.Path = directory;
+            }
+            catch
+            {
+                metadata = new ProjectMetadata()
+                {
+                    Name = Path.GetFileName(directory),
+                    Path = directory,
+                    IsCorrupted = true
+                };
+            }
+
+            if (projects.Contains(metadata))
             {
                 continue;
             }

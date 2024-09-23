@@ -7,6 +7,9 @@ public class ProjectMetadata
     [JsonIgnore]
     public string? Path { get; set; }
 
+    [JsonIgnore]
+    public bool IsCorrupted { get; set; }
+
     [JsonPropertyName("Name")]
     public string? Name { get; set; }
 

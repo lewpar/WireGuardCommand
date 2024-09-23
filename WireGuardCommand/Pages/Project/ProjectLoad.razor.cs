@@ -41,6 +41,7 @@ public partial class ProjectLoad
         catch(Exception ex)
         {
             Error = $"Failed to load project: {ex.Message}";
+            StateHasChanged();
             return;
         }
     }

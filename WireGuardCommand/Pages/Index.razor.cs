@@ -35,11 +35,18 @@ public partial class Index
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadProjectsAsync();
+    }
+
+    private async Task LoadProjectsAsync()
+    {
+        Loaded = false;
+
         try
         {
             Projects = await ProjectManager.GetProjectsAsync();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Error = $"Failed to load projects: {ex.Message}";
         }

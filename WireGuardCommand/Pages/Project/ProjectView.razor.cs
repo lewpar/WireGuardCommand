@@ -20,6 +20,9 @@ public partial class ProjectView
     [Inject]
     public NavigationManager NavigationManager { get; set; } = default!;
 
+    [Inject]
+    public ILogger<ProjectView> Logger { get; set; } = default!;
+
     public string? Error { get; set; }
 
     public bool HasUnsavedChanges
@@ -32,6 +35,7 @@ public partial class ProjectView
     protected override void OnAfterRender(bool firstRender)
     {
         originalData = Cache.CurrentProject.ProjectData;
+        Logger.LogInformation("Loaded project.");
     }
 
     private void GoBack()
