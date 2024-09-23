@@ -31,6 +31,10 @@ body {
 .btn-primary:hover {
     background-color: #46a4ff;
 }
+.btn-primary:disabled {
+    color: lightgray;
+    background-color: #145a9e;
+}
 
 .btn-unsafe {
     padding: 0.5rem;

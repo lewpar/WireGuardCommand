@@ -32,9 +32,14 @@ public partial class ProjectView
 
     private ProjectData? originalData;
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override void OnInitialized()
     {
-        originalData = Cache.CurrentProject.ProjectData;
+        if(Cache.CurrentProject.ProjectData is null)
+        {
+            return;
+        }
+
+        originalData = Cache.CurrentProject.ProjectData.Copy();
         Logger.LogInformation("Loaded project.");
     }
 
@@ -54,8 +59,6 @@ public partial class ProjectView
         }
 
         project.ProjectData.Seed = RandomNumberGenerator.GetBytes(32).ToBase64();
-
-        StateHasChanged();
     }
 
     private bool HasChanges()
@@ -67,7 +70,17 @@ public partial class ProjectView
             return false;
         }
 
-        return JsonSerializer.Serialize(originalData) !=
-            JsonSerializer.Serialize(Cache.CurrentProject.ProjectData);
+        return JsonSerializer.Serialize(originalData) != JsonSerializer.Serialize(Cache.CurrentProject.ProjectData);
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        if(Cache.CurrentProject.ProjectData is null)
+        {
+            return;
+        }
+
+        originalData = Cache.CurrentProject.ProjectData.Copy();
+        StateHasChanged();
     }
 }
