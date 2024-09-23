@@ -35,52 +35,8 @@
                 <label>Seed</label>
                 <div style="display: flex; gap: 0.5rem">
                     <input @bind="project.ProjectData.Seed"/>
-                    <button @onclick="GenerateSeed">Generate</button>
+                    <button @onclick="GenerateSeed" class="btn-primary">Generate</button>
                 </div>
-            </div>
-            <div style="display: flex; flex-direction: column">
-                <label>Server Listen Port</label>
-                <input />
-            </div>
-
-            <div style="display: flex; flex-direction: column">
-                <label>No. Clients (Max: 253)</label>
-                <input />
-            </div>
-
-            <div style="display: flex; flex-direction: column">
-                <label>Transit Subnet</label>
-                <input />
-            </div>
-
-            <div style="display: flex; flex-direction: column">
-                <label>Allowed IPs (Client)</label>
-                <input />
-            </div>
-
-            <div style="display: flex; flex-direction: column">
-                <label>Endpoint Including Port (Optional)</label>
-                <input />
-            </div>
-
-            <div style="display: flex; flex-direction: column">
-                <label>Remote DNS (Optional)</label>
-                <input />
-            </div>
-
-            <div style="display: flex; flex-direction: column">
-                <label>Interface Name (Optional)</label>
-                <input />
-            </div>
-
-            <div style="display: flex; flex-direction: column">
-                <label>Use Pre-Shared Keys</label>
-                <input type="checkbox" />
-            </div>
-
-            <div style="display: flex; flex-direction: column">
-                <label>Assign Last IP (Server)</label>
-                <input type="checkbox" />
             </div>
         </div>
     }

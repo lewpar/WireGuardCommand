@@ -66,8 +66,8 @@ public class Program
                 WebSecurity = true,
                 ContextIsolation = true,
             },
-            Width = 1366,
-            Height = 768,
+            Width = 800,
+            Height = 450,
             AutoHideMenuBar = true
         };
 
