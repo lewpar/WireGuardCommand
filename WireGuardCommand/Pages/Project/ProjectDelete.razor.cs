@@ -36,18 +36,14 @@ public partial class ProjectDelete
             Error = $"Failed to delete project: {ex.Message}";
             return;
         }
-        finally
-        {
-            Cache.Clear();
-        }
 
         NavigationManager.NavigateTo("/");
+        Cache.Clear();
     }
 
     public void Cancel()
     {
-        Cache.Clear();
-
         NavigationManager.NavigateTo("/");
+        Cache.Clear();
     }
 }

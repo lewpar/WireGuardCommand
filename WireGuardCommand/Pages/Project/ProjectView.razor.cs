@@ -36,8 +36,8 @@ public partial class ProjectView
 
     private void GoBack()
     {
-        Cache.Clear();
         NavigationManager.NavigateTo("/");
+        Cache.Clear();
     }
 
     private void GenerateSeed()
