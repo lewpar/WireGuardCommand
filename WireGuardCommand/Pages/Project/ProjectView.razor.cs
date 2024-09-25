@@ -80,6 +80,8 @@ public partial class ProjectView
             return;
         }
 
+        var project = Cache.CurrentProject.ProjectData;
+
         try
         {
             await ProjectManager.SaveProjectAsync(Cache.CurrentProject);
@@ -91,7 +93,28 @@ public partial class ProjectView
             return;
         }
 
-        originalData = Cache.CurrentProject.ProjectData.Copy();
+        originalData = project.Copy();
         StateHasChanged();
+    }
+
+    public void GenerateConfigs()
+    {
+        if (Cache.CurrentProject.ProjectData is null)
+        {
+            return;
+        }
+
+        var project = Cache.CurrentProject.ProjectData;
+
+        try
+        {
+            var config = new WireGuardConfig();
+            config.Generate("./Output", project.Seed.FromBase64());
+        }
+        catch(Exception ex)
+        {
+            Error = $"Failed to generate configs: {ex.Message}";
+            StateHasChanged();
+        }
     }
 }

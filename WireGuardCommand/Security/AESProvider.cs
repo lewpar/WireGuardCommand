@@ -21,12 +21,12 @@ public class AESProvider
 
     public static byte[] Encrypt(byte[] data, byte[] key, byte[] iv)
     {
-        using (Aes aesAlg = Aes.Create())
+        using (var aes = Aes.Create())
         {
-            aesAlg.Key = key;
-            aesAlg.IV = iv;
+            aes.Key = key;
+            aes.IV = iv;
 
-            ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+            ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
 
             using (MemoryStream msEncrypt = new MemoryStream())
             {
