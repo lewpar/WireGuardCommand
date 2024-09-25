@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text;
+
 using WireGuardCommand.Extensions;
 using WireGuardCommand.Security;
 
@@ -83,13 +84,12 @@ public class WireGuardConfig
         foreach(var peer in peers) 
         {
             CurveKeypair? presharedKey = null;
-
-            if(project.UsePresharedKeys)
-            {
-                presharedKey = new CurveKeypair(project.Seed.FromBase64());
-            }
-
             int peerId = peer.Id - 1;
+
+            if (project.UsePresharedKeys)
+            {
+                presharedKey = new CurveKeypair();
+            }
 
             server.AppendLine($"# Peer {peerId}");
             server.AppendLine("[Peer]");
@@ -127,7 +127,11 @@ public class WireGuardConfig
             }
 
             client.AppendLine($"AllowedIPs = {peer.AllowedIPs}");
-            client.AppendLine($"Endpoint = {peer.Endpoint}");
+
+            if(!string.IsNullOrWhiteSpace(peer.Endpoint))
+            {
+                client.AppendLine($"Endpoint = {peer.Endpoint}");
+            }
 
 
             File.WriteAllText(Path.Combine(path, $"peer-{peerId}.conf"), client.ToString());

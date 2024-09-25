@@ -15,6 +15,16 @@
     background-color: darkred;
 }
 
+.project-view-status {
+    display: flex;
+
+    padding: 0.5rem;
+
+    align-items: center;
+
+    background-color: dodgerblue;
+}
+
 .project-view-header {
     display: flex;
     

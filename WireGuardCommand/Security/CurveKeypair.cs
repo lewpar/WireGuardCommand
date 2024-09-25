@@ -18,7 +18,6 @@ public class CurveKeypair
         byte[] privKey = Curve25519.ClampPrivateKey(seed);
         byte[] pubKey = Curve25519.GetPublicKey(privKey);
 
-
         PublicKey = new CurveKey()
         {
             Key = pubKey

@@ -1,4 +1,5 @@
 ﻿@page "/ProjectView"
+@using System.Runtime.InteropServices
 
 @{
     var project = Cache.CurrentProject;
@@ -12,7 +13,15 @@
         @if (!string.IsNullOrWhiteSpace(Error))
         {
             <div class="project-view-error">
-                @Error
+                <span style="flex: 1;">@Error</span>
+                <span style="cursor: pointer; font-size: 1.25rem" @onclick="() => { Status = string.Empty; }">⨯</span>
+            </div>
+        }
+        else if(!string.IsNullOrWhiteSpace(Status))
+        {
+            <div class="project-view-status">
+                <span style="flex: 1;">@Status</span>
+                <span style="cursor: pointer; font-size: 1.25rem" @onclick="() => { Status = string.Empty; }">⨯</span>
             </div>
         }
 
@@ -27,6 +36,12 @@
             </div>
             <button class="btn-primary" disabled="@(!HasUnsavedChanges)" @onclick="SaveChangesAsync">Save</button>
             <div style="flex: 1"></div>
+
+            @if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                <button class="btn-primary" @onclick="BrowseProject">Open Folder</button>
+            }
+
             <button class="btn-unsafe" @onclick="GoBack">Close Project</button>
         </div>
 
@@ -50,6 +65,41 @@
                 <label>Subnet</label>
                 <div style="display: flex; gap: 0.5rem">
                     <input @bind="project.ProjectData.Subnet" />
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>DNS (Optional)</label>
+                <div style="display: flex; gap: 0.5rem">
+                    <input @bind="project.ProjectData.DNS" />
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Allowed IPs</label>
+                <div style="display: flex; gap: 0.5rem">
+                    <input @bind="project.ProjectData.AllowedIPs" />
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Endpoint</label>
+                <div style="display: flex; gap: 0.5rem">
+                    <input @bind="project.ProjectData.Endpoint" />
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Use Preshared Keys</label>
+                <div style="display: flex; gap: 0.5rem">
+                    <input type="checkbox" @bind="project.ProjectData.UsePresharedKeys" />
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Listen Port</label>
+                <div style="display: flex; gap: 0.5rem">
+                    <input @bind="project.ProjectData.ListenPort" />
                 </div>
             </div>
             <button class="btn-primary" @onclick="GenerateConfigs">Generate</button>

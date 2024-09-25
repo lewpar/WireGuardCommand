@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 
+using System.Diagnostics;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.Json;
 
@@ -23,6 +25,7 @@ public partial class ProjectView
     [Inject]
     public ILogger<ProjectView> Logger { get; set; } = default!;
 
+    public string? Status { get; set; }
     public string? Error { get; set; }
 
     public bool HasUnsavedChanges
@@ -85,6 +88,7 @@ public partial class ProjectView
         try
         {
             await ProjectManager.SaveProjectAsync(Cache.CurrentProject);
+            Status = "Saved changes.";
         }
         catch (Exception ex)
         {
@@ -124,11 +128,26 @@ public partial class ProjectView
 
             var config = new WireGuardConfig(project);
             config.Generate(outputPath);
+
+            Status = "Generated configuration.";
         }
         catch(Exception ex)
         {
             Error = $"Failed to generate configs: {ex.Message}";
-            StateHasChanged();
         }
+    }
+
+    [SupportedOSPlatform("Windows")]
+    private void BrowseProject()
+    {
+        var metadata = Cache.CurrentProject.Metadata;
+
+        if (metadata is null ||
+            string.IsNullOrWhiteSpace(metadata.Path))
+        {
+            return;
+        }
+
+        Process.Start("explorer.exe", metadata.Path);
     }
 }

@@ -22,8 +22,8 @@ public class ProjectData
         Subnet = "10.0.0.0/24";
         UsePresharedKeys = false;
         DNS = "";
-        Endpoint = "";
-        ListenPort = 55820;
+        Endpoint = "remote.endpoint.net:51820";
+        ListenPort = 51820;
         AllowedIPs = "0.0.0.0/0, ::/0";
     }
 
