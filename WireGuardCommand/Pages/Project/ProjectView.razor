@@ -55,7 +55,12 @@
             </div>
 
             <div style="display: flex; flex-direction: column">
-                <label>No. of Clients</label>
+                <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
+                    <label>No. of Clients</label>
+                    <div class="tooltip">
+                        <div class="content"><b>Number of Clients</b><br /><br />Sets the number of generated client peers.<br /><br /> Limited by the transit subnet, but can be manually extended later if within subnet transit limits.</div>
+                    </div>
+                </div>
                 <div style="display: flex; gap: 0.5rem">
                     <input @bind="project.ProjectData.NumberOfClients" />
                 </div>
@@ -104,12 +109,17 @@
             </div>
 
             <div style="display: flex; flex-direction: column">
-                <label>Listen Port</label>
+                <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
+                    <label>Listen Port</label>
+                    <div class="tooltip">
+                        <div class="content"><b>Listen Port</b><br /><br />Sets the WireGuard interface UDP listen port for the server and peers.<br /><br />It must be unique in the case of other existing interfaces.</div>
+                    </div>
+                </div>
                 <div style="display: flex; gap: 0.5rem">
                     <input @bind="project.ProjectData.ListenPort" />
                 </div>
             </div>
-            <button class="btn-primary" @onclick="GenerateConfigs">Generate</button>
+            <button class="btn-primary" @onclick="GenerateConfigs">Generate Configs</button>
         </div>
     }
     else
