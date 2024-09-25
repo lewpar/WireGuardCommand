@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 using WireGuardCommand.Security;
@@ -99,6 +98,9 @@ public class WireGuardConfig
 
         foreach(var peer in peers) 
         {
+            int peerId = peer.Id - 1;
+
+            server.AppendLine($"# Peer {peerId}");
             server.AppendLine("[Peer]");
             server.AppendLine($"PublicKey = {peer.PublicKey}");
 
@@ -110,12 +112,9 @@ public class WireGuardConfig
             server.AppendLine($"AllowedIPs = {peer.Address}/32");
             server.AppendLine();
 
-
-            int peerId = peer.Id - 1;
-
             var client = new StringBuilder();
 
-            client.AppendLine($"# Client {peerId}");
+            client.AppendLine($"# Peer {peerId}");
             client.AppendLine("[Interface]");
             client.AppendLine($"Address = {peer.Address}/{ peer.Subnet.Cidr}");
             client.AppendLine($"ListenPort = {peer.Port}");
