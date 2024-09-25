@@ -2,6 +2,7 @@
 using System.Text;
 
 using WireGuardCommand.Extensions;
+using WireGuardCommand.Models;
 using WireGuardCommand.Security;
 using WireGuardCommand.Services.Models;
 

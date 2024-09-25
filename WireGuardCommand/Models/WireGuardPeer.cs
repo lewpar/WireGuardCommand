@@ -1,8 +1,7 @@
 ﻿using System.Net;
-
 using WireGuardCommand.Security;
 
-namespace WireGuardCommand.Services.Models;
+namespace WireGuardCommand.Models;
 
 public class WireGuardPeer
 {

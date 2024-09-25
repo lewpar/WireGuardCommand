@@ -4,11 +4,16 @@
 @using WireGuardCommand.Pages.Project
 
 <div class="container">
-    <div class="project-list">
-        @if(!string.IsNullOrWhiteSpace(Error))
-        {
-            <div style="padding: 0.5rem; background-color: darkred">@Error</div>
-        }
+
+    @if(!string.IsNullOrWhiteSpace(Error))
+    {
+        <div class="alert-error">
+            <span class="alert-content">@Error</span>
+            <span style="cursor: pointer; font-size: 1.25rem" @onclick="() => { Error = string.Empty; }">⨯</span>
+        </div>
+    }
+
+    <div class="project-list" @onclick="() => { SelectedProject = null; }">
         <div class="project-list-header">
             <div style="font-weight: bold; font-size: 1.25rem; padding: 1rem">Projects</div>
             <div style="flex: 1; display: flex; align-items: center; gap: 1rem; padding: 1rem;">
@@ -28,7 +33,7 @@
 
         @foreach (var project in Projects)
         {
-            <button class="project-card @(project == SelectedProject ? "selected" : "")" @onclick="() => SelectProject(project)">
+            <button class="project-card @(project == SelectedProject ? "selected" : "")" @onclick="() => SelectProject(project)" @onclick:stopPropagation="true">
                 <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: bold;">
                     <div>@project.Name</div>
                     @if (project.IsCorrupted)

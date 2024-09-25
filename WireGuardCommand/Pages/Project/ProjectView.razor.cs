@@ -55,6 +55,8 @@ public partial class ProjectView
 
     private void GenerateSeed()
     {
+        Error = "";
+
         var project = Cache.CurrentProject;
         if(project.ProjectData is null)
         {
@@ -67,6 +69,8 @@ public partial class ProjectView
 
     private bool HasChanges()
     {
+        Error = "";
+
         if(originalData is null || 
             Cache.CurrentProject.ProjectData is null)
         {
@@ -79,6 +83,9 @@ public partial class ProjectView
 
     public async Task SaveChangesAsync()
     {
+        Error = "";
+        Status = "";
+
         if(Cache.CurrentProject.ProjectData is null)
         {
             return;
@@ -104,6 +111,9 @@ public partial class ProjectView
 
     public async Task GenerateConfigsAsync()
     {
+        Error = "";
+        Status = "";
+
         if (Cache.CurrentProject.ProjectData is null ||
             Cache.CurrentProject.Metadata is null)
         {
@@ -141,11 +151,14 @@ public partial class ProjectView
     [SupportedOSPlatform("Windows")]
     private void BrowseProject()
     {
+        Error = "";
+
         var metadata = Cache.CurrentProject.Metadata;
 
         if (metadata is null ||
             string.IsNullOrWhiteSpace(metadata.Path))
         {
+            Error = "Failed to open project path, no path was found.";
             return;
         }
 
