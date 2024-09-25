@@ -99,17 +99,31 @@ public partial class ProjectView
 
     public void GenerateConfigs()
     {
-        if (Cache.CurrentProject.ProjectData is null)
+        if (Cache.CurrentProject.ProjectData is null ||
+            Cache.CurrentProject.Metadata is null)
         {
             return;
         }
 
         var project = Cache.CurrentProject.ProjectData;
+        var metadata = Cache.CurrentProject.Metadata;
+
+        if(string.IsNullOrWhiteSpace(metadata.Path))
+        {
+            Error = "Failed to generate: Failed to find path to project.";
+            return;
+        }
 
         try
         {
-            var config = new WireGuardConfig();
-            config.Generate("./Output", project.Seed.FromBase64());
+            var outputPath = Path.Combine(metadata.Path, "Output");
+            if(!Directory.Exists(outputPath))
+            {
+                Directory.CreateDirectory(outputPath);
+            }
+
+            var config = new WireGuardConfig(project);
+            config.Generate(outputPath);
         }
         catch(Exception ex)
         {

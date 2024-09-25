@@ -38,6 +38,20 @@
                     <button @onclick="GenerateSeed" class="btn-primary">Generate</button>
                 </div>
             </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>No. of Clients</label>
+                <div style="display: flex; gap: 0.5rem">
+                    <input @bind="project.ProjectData.NumberOfClients" />
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column">
+                <label>Subnet</label>
+                <div style="display: flex; gap: 0.5rem">
+                    <input @bind="project.ProjectData.Subnet" />
+                </div>
+            </div>
             <button class="btn-primary" @onclick="GenerateConfigs">Generate</button>
         </div>
     }

@@ -1,38 +1,22 @@
 ﻿using System.Net;
 using System.Text;
-
+using WireGuardCommand.Extensions;
 using WireGuardCommand.Security;
 
 namespace WireGuardCommand.Services.Models;
 
 public class WireGuardConfig
 {
-    public WireGuardServerConfig Server { get; set; }
-    public WireGuardClientConfig Client { get; set; }
+    private readonly ProjectData project;
 
-    public string Interface { get; set; }
-
-    public int NoOfClients { get; set; }
-    public string Subnet { get; set; }
-
-    public bool UsePresharedKeys { get; set; }
-
-    public WireGuardConfig()
+    public WireGuardConfig(ProjectData project)
     {
-        Server = new WireGuardServerConfig();
-        Client = new WireGuardClientConfig();
-
-        Interface = "WireGuardInterface1";
-
-        NoOfClients = 3;
-        Subnet = "10.0.0.0/24";
-
-        UsePresharedKeys = false;
+        this.project = project;
     }
 
-    public List<WireGuardPeer> GetPeers(byte[] seed)
+    public List<WireGuardPeer> GetPeers()
     {
-        if (!TryParseAddress(Subnet, out IPNetwork2 subnet))
+        if (!TryParseAddress(project.Subnet, out IPNetwork2 subnet))
         {
             throw new Exception("Invalid subnet.");
         }
@@ -43,12 +27,12 @@ public class WireGuardConfig
         foreach(var address in subnet.ListIPAddress(FilterEnum.Usable))
         {
             // + 1 to account for server peer.
-            if(peerId > NoOfClients + 1)
+            if(peerId > project.NumberOfClients + 1)
             {
                 break;
             }
 
-            var keypair = new CurveKeypair(seed);
+            var keypair = new CurveKeypair(project.Seed.FromBase64());
 
             var peer = new WireGuardPeer()
             {
@@ -56,15 +40,15 @@ public class WireGuardConfig
 
                 Subnet = subnet,
                 Address = address,
-                Port = Server.ListenPort,
+                Port = project.ListenPort,
 
-                AllowedIPs = Client.AllowedIPs,
+                AllowedIPs = project.AllowedIPs,
 
                 PublicKey = keypair.PublicKey,
                 PrivateKey = keypair.PrivateKey,
 
-                DNS = Client.DNS,
-                Endpoint = Server.Endpoint
+                DNS = project.DNS,
+                Endpoint = project.Endpoint
             };
 
             peers.Add(peer);
@@ -75,14 +59,14 @@ public class WireGuardConfig
         return peers;
     }
 
-    public void Generate(string path, byte[] seed)
+    public void Generate(string path)
     {
         if(!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
         }
 
-        var peers = GetPeers(seed);
+        var peers = GetPeers();
 
         // Take first peer out of the list to use as server.
         var serverPeer = peers.First();
@@ -92,21 +76,28 @@ public class WireGuardConfig
 
         server.AppendLine("[Interface]");
         server.AppendLine($"Address = {serverPeer.Address}/{serverPeer.Subnet.Cidr}");
-        server.AppendLine($"ListenPort = {Server.ListenPort}");
+        server.AppendLine($"ListenPort = {project.ListenPort}");
         server.AppendLine($"PrivateKey = {serverPeer.PrivateKey}");
         server.AppendLine();
 
         foreach(var peer in peers) 
         {
+            CurveKeypair? presharedKey = null;
+
+            if(project.UsePresharedKeys)
+            {
+                presharedKey = new CurveKeypair(project.Seed.FromBase64());
+            }
+
             int peerId = peer.Id - 1;
 
             server.AppendLine($"# Peer {peerId}");
             server.AppendLine("[Peer]");
             server.AppendLine($"PublicKey = {peer.PublicKey}");
 
-            if(UsePresharedKeys)
+            if(presharedKey is not null)
             {
-                server.AppendLine("PresharedKey = TODO");
+                server.AppendLine($"PresharedKey = {presharedKey.PrivateKey}");
             }
 
             server.AppendLine($"AllowedIPs = {peer.Address}/32");
@@ -130,9 +121,9 @@ public class WireGuardConfig
             client.AppendLine("[Peer]");
             client.AppendLine($"PublicKey = {serverPeer.PublicKey}");
 
-            if(UsePresharedKeys)
+            if (presharedKey is not null)
             {
-                client.AppendLine($"PresharedKey = TODO");
+                client.AppendLine($"PresharedKey = {presharedKey.PrivateKey}");
             }
 
             client.AppendLine($"AllowedIPs = {peer.AllowedIPs}");

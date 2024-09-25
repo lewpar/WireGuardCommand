@@ -7,17 +7,32 @@ namespace WireGuardCommand.Services.Models;
 public class ProjectData
 {
     public string Seed { get; set; }
+    public int NumberOfClients { get; set; }
+    public string Subnet { get; set; }
+    public bool UsePresharedKeys { get; set; }
+    public string DNS { get; set; }
+    public string Endpoint { get; set; }
+    public int ListenPort { get; set; }
+    public string AllowedIPs { get; set; }
 
     public ProjectData()
     {
         Seed = RandomNumberGenerator.GetBytes(32).ToBase64();
+        NumberOfClients = 3;
+        Subnet = "10.0.0.0/24";
+        UsePresharedKeys = false;
+        DNS = "";
+        Endpoint = "";
+        ListenPort = 55820;
+        AllowedIPs = "0.0.0.0/0, ::/0";
     }
 
     public ProjectData Copy()
     {
         return new ProjectData()
         {
-            Seed = Seed
+            Seed = Seed,
+            NumberOfClients = NumberOfClients
         };
     }
 }
