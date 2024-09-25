@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 
 using WireGuardCommand.Extensions;
+using WireGuardCommand.IO;
 using WireGuardCommand.Services;
 using WireGuardCommand.Services.Models;
 
@@ -101,7 +102,7 @@ public partial class ProjectView
         StateHasChanged();
     }
 
-    public void GenerateConfigs()
+    public async Task GenerateConfigsAsync()
     {
         if (Cache.CurrentProject.ProjectData is null ||
             Cache.CurrentProject.Metadata is null)
@@ -126,8 +127,8 @@ public partial class ProjectView
                 Directory.CreateDirectory(outputPath);
             }
 
-            var config = new WireGuardConfig(project);
-            config.Generate(outputPath);
+            var writer = new ProjectWriter(project);
+            await writer.WriteConfigsAsync(outputPath);
 
             Status = "Generated configuration.";
         }

@@ -3,21 +3,22 @@ using System.Text;
 
 using WireGuardCommand.Extensions;
 using WireGuardCommand.Security;
+using WireGuardCommand.Services.Models;
 
-namespace WireGuardCommand.Services.Models;
+namespace WireGuardCommand.IO;
 
-public class WireGuardConfig
+public class ProjectWriter
 {
     private readonly ProjectData project;
 
-    public WireGuardConfig(ProjectData project)
+    public ProjectWriter(ProjectData project)
     {
         this.project = project;
     }
 
-    public List<WireGuardPeer> GetPeers()
+    private List<WireGuardPeer> GeneratePeers()
     {
-        if (!TryParseAddress(project.Subnet, out IPNetwork2 subnet))
+        if (!project.Subnet.TryParseAddress(out IPNetwork2 subnet))
         {
             throw new Exception("Invalid subnet.");
         }
@@ -25,10 +26,10 @@ public class WireGuardConfig
         int peerId = 1;
         var peers = new List<WireGuardPeer>();
 
-        foreach(var address in subnet.ListIPAddress(FilterEnum.Usable))
+        foreach (var address in subnet.ListIPAddress(FilterEnum.Usable))
         {
             // + 1 to account for server peer.
-            if(peerId > project.NumberOfClients + 1)
+            if (peerId > project.NumberOfClients + 1)
             {
                 break;
             }
@@ -60,14 +61,14 @@ public class WireGuardConfig
         return peers;
     }
 
-    public void Generate(string path)
+    public async Task WriteConfigsAsync(string path)
     {
-        if(!Directory.Exists(path))
+        if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
         }
 
-        var peers = GetPeers();
+        var peers = GeneratePeers();
 
         // Take first/last peer out of the list to use as server.
         var serverPeer = project.UseLastAddress ? peers.Last() : peers.First();
@@ -81,7 +82,7 @@ public class WireGuardConfig
         server.AppendLine($"PrivateKey = {serverPeer.PrivateKey}");
         server.AppendLine();
 
-        foreach(var peer in peers) 
+        foreach (var peer in peers)
         {
             CurveKeypair? presharedKey = null;
             int peerId = project.UseLastAddress ? peer.Id : peer.Id - 1;
@@ -95,7 +96,7 @@ public class WireGuardConfig
             server.AppendLine("[Peer]");
             server.AppendLine($"PublicKey = {peer.PublicKey}");
 
-            if(presharedKey is not null)
+            if (presharedKey is not null)
             {
                 server.AppendLine($"PresharedKey = {presharedKey.PrivateKey}");
             }
@@ -107,11 +108,11 @@ public class WireGuardConfig
 
             client.AppendLine($"# Peer {peerId}");
             client.AppendLine("[Interface]");
-            client.AppendLine($"Address = {peer.Address}/{ peer.Subnet.Cidr}");
+            client.AppendLine($"Address = {peer.Address}/{peer.Subnet.Cidr}");
             client.AppendLine($"ListenPort = {peer.Port}");
             client.AppendLine($"PrivateKey = {peer.PrivateKey}");
 
-            if(!string.IsNullOrWhiteSpace(peer.DNS))
+            if (!string.IsNullOrWhiteSpace(peer.DNS))
             {
                 client.AppendLine($"DNS = {peer.DNS}");
             }
@@ -128,29 +129,14 @@ public class WireGuardConfig
 
             client.AppendLine($"AllowedIPs = {peer.AllowedIPs}");
 
-            if(!string.IsNullOrWhiteSpace(peer.Endpoint))
+            if (!string.IsNullOrWhiteSpace(peer.Endpoint))
             {
                 client.AppendLine($"Endpoint = {peer.Endpoint}");
             }
 
-
-            File.WriteAllText(Path.Combine(path, $"peer-{peerId}.conf"), client.ToString());
+            await File.WriteAllTextAsync(Path.Combine(path, $"peer-{peerId}.conf"), client.ToString());
         }
 
-        File.WriteAllText(Path.Combine(path, "server.conf"), server.ToString());
-    }
-
-    private static bool TryParseAddress(string address, out IPNetwork2 result)
-    {
-        try
-        {
-            result = IPNetwork2.Parse(address);
-            return true;
-        }
-        catch
-        {
-            result = new IPNetwork2();
-            return false;
-        }
+        await File.WriteAllTextAsync(Path.Combine(path, "server.conf"), server.ToString());
     }
 }
