@@ -14,6 +14,7 @@ public class ProjectData
     public string Endpoint { get; set; }
     public int ListenPort { get; set; }
     public string AllowedIPs { get; set; }
+    public bool UseLastAddress { get; set; }
 
     public ProjectData()
     {
@@ -25,6 +26,7 @@ public class ProjectData
         Endpoint = "remote.endpoint.net:51820";
         ListenPort = 51820;
         AllowedIPs = "0.0.0.0/0, ::/0";
+        UseLastAddress = false;
     }
 
     public ProjectData Copy()

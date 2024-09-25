@@ -69,9 +69,9 @@ public class WireGuardConfig
 
         var peers = GetPeers();
 
-        // Take first peer out of the list to use as server.
-        var serverPeer = peers.First();
-        peers = peers.Skip(1).ToList();
+        // Take first/last peer out of the list to use as server.
+        var serverPeer = project.UseLastAddress ? peers.Last() : peers.First();
+        peers = project.UseLastAddress ? peers.Take(peers.Count - 1).ToList() : peers.Skip(1).ToList();
 
         var server = new StringBuilder();
 
@@ -84,7 +84,7 @@ public class WireGuardConfig
         foreach(var peer in peers) 
         {
             CurveKeypair? presharedKey = null;
-            int peerId = peer.Id - 1;
+            int peerId = project.UseLastAddress ? peer.Id : peer.Id - 1;
 
             if (project.UsePresharedKeys)
             {

@@ -97,6 +97,13 @@
             </div>
 
             <div style="display: flex; flex-direction: column">
+                <label>Use Last Address</label>
+                <div style="display: flex; gap: 0.5rem">
+                    <input type="checkbox" @bind="project.ProjectData.UseLastAddress" />
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column">
                 <label>Listen Port</label>
                 <div style="display: flex; gap: 0.5rem">
                     <input @bind="project.ProjectData.ListenPort" />
