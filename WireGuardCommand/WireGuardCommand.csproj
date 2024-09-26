@@ -6,9 +6,11 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Components\Alert.razor.css" />
+    <None Remove="Components\Tooltip.razor.css" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Components\Alert.razor.css" />
+    <Content Include="Components\Tooltip.razor.css" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ElectronNET.API" Version="23.6.2" />

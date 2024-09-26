@@ -1,0 +1,32 @@
+﻿.tooltip {
+    position: relative;
+
+    width: 24px;
+    height: 24px;
+
+    background-image: url('./images/warning.png');
+    background-size: contain;
+
+    cursor: help;
+}
+.tooltip:hover .content {
+    display: inline;
+}
+.tooltip .content {
+    display: none;
+    position: absolute;
+
+    border: 1px solid #404040;
+    border-radius: 5px;
+
+    background-color: #303030;
+
+    padding: 1rem;
+
+    width: 45ch;
+    max-width: 70ch;
+}
+
+.tooltip .content p {
+    margin: 0;
+}

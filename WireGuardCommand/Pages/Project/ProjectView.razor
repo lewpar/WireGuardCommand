@@ -48,9 +48,9 @@
             <div style="display: flex; flex-direction: column">
                 <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                     <label>No. of Clients</label>
-                    <div class="tooltip">
-                        <div class="content"><b>Number of Clients</b><br /><br />Sets the number of generated client peers.<br /><br /> Limited by the transit subnet, but can be manually extended later if within subnet transit limits.</div>
-                    </div>
+                    <Tooltip 
+                        Title="Number of Clients" 
+                        Content="Sets the number of generated client peers. <br/><br/>Limited by the transit subnet, but can be manually extended later if within subnet transit limits." />
                 </div>
                 <div style="display: flex; gap: 0.5rem">
                     <input @bind="project.ProjectData.NumberOfClients" />

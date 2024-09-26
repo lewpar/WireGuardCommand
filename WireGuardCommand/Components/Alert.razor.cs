@@ -2,6 +2,9 @@
 
 namespace WireGuardCommand.Components;
 
+/// <summary>
+/// Creates an alert component that displays a alert message at the top of the page.
+/// </summary>
 public partial class Alert
 {
     [Parameter]
