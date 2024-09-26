@@ -3,11 +3,12 @@
 @using System.Runtime.InteropServices
 
 @using WireGuardCommand.Components;
+@using WireGuardCommand.Components.Models;
 @using WireGuardCommand.Pages.Project
 
 <div class="container">
 
-    <Alert Type="Error" @bind-Content="Error"/>
+    <Alert Type="AlertType.Error" @bind-Content="Error"/>
 
     <div class="project-list" @onclick="() => { SelectedProject = null; }">
         <div class="project-list-header">

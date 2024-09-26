@@ -1,13 +1,14 @@
 ﻿@page "/ProjectDelete"
 
 @using WireGuardCommand.Components;
+@using WireGuardCommand.Components.Models;
 
 @{
     var metadata = Cache.CurrentProject.Metadata;
 }
 
 <div class="container">
-    <Alert Type="Error" @bind-Content="Error"/>
+    <Alert Type="AlertType.Error" @bind-Content="Error"/>
 
     <div class="dialog">
         @if(metadata is not null)

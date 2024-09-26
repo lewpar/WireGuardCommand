@@ -16,7 +16,7 @@
     z-index: 99;
 }
 
-.alert.status {
+.alert.info {
     background-color: #345cc3;
     border-bottom: 1px solid #5664ff;
 }

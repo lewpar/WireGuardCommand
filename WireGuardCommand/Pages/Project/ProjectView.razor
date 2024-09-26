@@ -1,7 +1,9 @@
 ﻿@page "/ProjectView"
 
 @using System.Runtime.InteropServices
+
 @using WireGuardCommand.Components;
+@using WireGuardCommand.Components.Models;
 
 @{
     var project = Cache.CurrentProject;
@@ -12,8 +14,8 @@
         project.Metadata is not null &&
         project.ProjectData is not null)
     {
-        <Alert Type="Error" @bind-Content="Error" />
-        <Alert Type="Status" @bind-Content="Status" />
+        <Alert Type="AlertType.Error" @bind-Content="Error" />
+        <Alert Type="AlertType.Info" @bind-Content="Status" />
 
         <div class="project-view-header">
             <div style="display: flex; flex-direction: column">

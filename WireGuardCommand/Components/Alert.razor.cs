@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
+using WireGuardCommand.Components.Models;
 
 namespace WireGuardCommand.Components;
 
 public partial class Alert
 {
     [Parameter]
-    public string Type { get; set; } = "Status";
+    public AlertType Type { get; set; } = AlertType.Info;
 
     [Parameter]
     public string? Content { get; set; }
