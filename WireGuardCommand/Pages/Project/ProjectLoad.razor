@@ -1,9 +1,14 @@
 ﻿@page "/ProjectLoad"
+
+@using WireGuardCommand.Components;
+
 @{
     var project = Cache.CurrentProject;
 }
 
 <div class="container">
+    <Alert Type="Error" @bind-Content="Error" />
+
     <div class="dialog">
         @if (project is not null &&
                 project.Metadata is not null &&
@@ -28,11 +33,6 @@
         else
         {
             <button class="btn-primary" @onclick="GoBack">Back</button>
-
-            @if (!string.IsNullOrWhiteSpace(Error))
-            {
-                <div style="color: red">@Error</div>
-            }
         }
     </div>
 </div>

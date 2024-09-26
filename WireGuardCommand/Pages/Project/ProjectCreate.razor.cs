@@ -41,6 +41,8 @@ public partial class ProjectCreate
 
     private async Task CreateProjectAsync()
     {
+        Error = "";
+
         try
         {
             await ProjectManager.CreateProjectAsync(CreateContext);

@@ -82,54 +82,6 @@ input {
     border-radius: 5px;
 }
 
-.alert-status {
-    display: flex;
-    position: absolute;
-
-    top: 0;
-    width: calc(100% - 2rem);
-
-    padding: 1rem;
-
-    transform: translateY(-100%);
-
-    animation-name: dropdown;
-    animation-duration: 0.5s;
-    animation-fill-mode: both;
-
-    background-color: #345cc3;
-    border-bottom: 1px solid #5664ff;
-    backdrop-filter: blur(10px);
-
-
-    z-index: 99;
-}
-.alert-error {
-    display: flex;
-    position: absolute;
-
-    top: 0;
-    width: calc(100% - 2rem);
-
-    padding: 1rem;
-
-    transform: translateY(-100%);
-
-    animation-name: dropdown;
-    animation-duration: 0.5s;
-    animation-fill-mode: both;
-
-    background-color: #c33434;
-    border-bottom: 1px solid #ff5656;
-    backdrop-filter: blur(10px);
-
-
-    z-index: 99;
-}
-.alert-content {
-    flex: 1;
-}
-
 @keyframes dropdown {
     from {
         transform: translateY(-100%);

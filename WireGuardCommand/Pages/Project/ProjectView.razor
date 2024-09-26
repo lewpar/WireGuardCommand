@@ -1,5 +1,7 @@
 ﻿@page "/ProjectView"
+
 @using System.Runtime.InteropServices
+@using WireGuardCommand.Components;
 
 @{
     var project = Cache.CurrentProject;
@@ -10,21 +12,8 @@
         project.Metadata is not null &&
         project.ProjectData is not null)
     {
-        @if (!string.IsNullOrWhiteSpace(Error))
-        {
-            <div class="alert-error">
-                <span class="alert-content">@Error</span>
-                <span style="cursor: pointer; font-size: 1.25rem" @onclick="() => { Error = string.Empty; }">⨯</span>
-            </div>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Status))
-        {
-            <div class="alert-status">
-                <span class="alert-content">@Status</span>
-                <span style="cursor: pointer; font-size: 1.25rem" @onclick="() => { Status = string.Empty; }">⨯</span>
-            </div>
-        }
+        <Alert Type="Error" @bind-Content="Error" />
+        <Alert Type="Status" @bind-Content="Status" />
 
         <div class="project-view-header">
             <div style="display: flex; flex-direction: column">

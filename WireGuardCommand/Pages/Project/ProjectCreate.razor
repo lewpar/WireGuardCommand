@@ -1,10 +1,14 @@
 ﻿@page "/ProjectCreate"
 
+@using WireGuardCommand.Components;
+
 @{
     var project = Cache.CurrentProject;
 }
 
 <div class="container">
+    <Alert Type="Error" @bind-Content="Error"/>
+
     <div class="project-create-header">
         <div style="font-weight: bold; font-size: 1.25rem; padding: 1rem">Create Project</div>
         <div style="display: flex; align-items: center;">
@@ -39,10 +43,5 @@
         <div>
             <button class="btn-primary" @onclick="CreateProjectAsync">Create</button>
         </div>
-
-        @if (!string.IsNullOrWhiteSpace(Error))
-        {
-            <div style="color: red">@Error</div>
-        }
     </div>
 </div>

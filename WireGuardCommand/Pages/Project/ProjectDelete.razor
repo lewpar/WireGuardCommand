@@ -1,16 +1,15 @@
 ﻿@page "/ProjectDelete"
 
+@using WireGuardCommand.Components;
+
 @{
     var metadata = Cache.CurrentProject.Metadata;
 }
 
 <div class="container">
-    <div class="dialog">
-        @if (!string.IsNullOrWhiteSpace(Error))
-        {
-            <div>@Error</div>
-        }
+    <Alert Type="Error" @bind-Content="Error"/>
 
+    <div class="dialog">
         @if(metadata is not null)
         {
             <div>Are you sure you want to delete <span style="color: darkgray">@metadata.Name?</span></div>
@@ -21,14 +20,7 @@
         }
         else
         {
-            @if(!string.IsNullOrWhiteSpace(Error))
-            {
-                <div>@Error</div>
-            }
-            else
-            {
-                <div>Failed to load project.</div>
-            }
+            <div>Failed to load project.</div>
 
             <button class="btn-primary" @onclick="Cancel">Go back</button>
         }

@@ -1,0 +1,32 @@
+﻿.alert {
+    display: flex;
+    position: absolute;
+
+    top: 0;
+    width: calc(100% - 2rem);
+
+    padding: 1rem;
+
+    transform: translateY(-100%);
+
+    animation-name: dropdown;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+
+    z-index: 99;
+}
+
+.alert.status {
+    background-color: #345cc3;
+    border-bottom: 1px solid #5664ff;
+}
+.alert.error {
+    background-color: #c33434;
+    border-bottom: 1px solid #ff5656;
+}
+.alert-content {
+    flex: 1;
+}
+.alert-close {
+    cursor: pointer;
+}
