@@ -1,4 +1,4 @@
-﻿namespace WireGuardCommand.Components.Models;
+﻿namespace WireGuardCommand.Components;
 
 public enum AlertType
 {

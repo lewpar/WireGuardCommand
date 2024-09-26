@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using WireGuardCommand.Components.Models;
 
 namespace WireGuardCommand.Components;
 
