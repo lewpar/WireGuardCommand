@@ -18,4 +18,6 @@ public partial class Tooltip
     /// </summary>
     [Parameter]
     public string Content { get; set; } = "";
+
+    public bool IsVisible { get; set; }
 }

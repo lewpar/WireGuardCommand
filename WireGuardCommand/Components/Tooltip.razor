@@ -1,6 +1,15 @@
-﻿<div class="tooltip">
-    <div class="content">
-        <b>@(this.Title)</b>
-        <p>@((MarkupString)this.Content)</p>
-    </div>
+﻿<div class="tooltip" @onclick="() => { IsVisible = true; }">
 </div>
+
+@if(IsVisible)
+{
+    <div class="tooltip-container">
+        <div class="tooltip-content">
+            <b>@(this.Title)</b>
+            <p>@((MarkupString)this.Content)</p>
+            <div class="tooltip-exit" @onclick="() => { IsVisible = false; }">
+                ✖
+            </div>
+        </div>
+    </div>
+}
