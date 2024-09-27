@@ -16,6 +16,9 @@ public class ProjectData
     public string AllowedIPs { get; set; }
     public bool UseLastAddress { get; set; }
 
+    public bool IsZippedOutput { get; set; }
+    public string ZipPassphrase { get; set; }
+
     public ProjectData()
     {
         Seed = RandomNumberGenerator.GetBytes(256).ToBase64();
@@ -27,6 +30,9 @@ public class ProjectData
         ListenPort = 51820;
         AllowedIPs = "0.0.0.0/0, ::/0";
         UseLastAddress = false;
+
+        IsZippedOutput = false;
+        ZipPassphrase = "";
     }
 
     public ProjectData Copy()

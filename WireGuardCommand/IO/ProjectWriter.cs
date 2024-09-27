@@ -1,4 +1,5 @@
-﻿using ElectronNET.API.Entities;
+﻿using ICSharpCode.SharpZipLib.Zip;
+
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -158,5 +159,35 @@ public class ProjectWriter
         }
 
         await File.WriteAllTextAsync(Path.Combine(path, "server.conf"), server.ToString());
+
+        if(project.IsZippedOutput)
+        {
+            using var fs = File.OpenWrite(Path.Combine(path, "output.zip"));
+            using var zipStream = new ZipOutputStream(fs);
+
+            bool hasPassword = !string.IsNullOrWhiteSpace(project.ZipPassphrase);
+
+            if (hasPassword)
+            {
+                zipStream.Password = project.ZipPassphrase;
+            }
+
+            var files = Directory.GetFiles(path, "*.conf", SearchOption.AllDirectories);
+            foreach(var file in files)
+            {
+                var fileName = Path.GetFileName(file);
+
+                var newEntry = new ZipEntry(fileName)
+                {
+                    DateTime = DateTime.Now
+                };
+
+                zipStream.PutNextEntry(newEntry);
+
+                using var configStream = File.OpenRead(file);
+                await configStream.CopyToAsync(zipStream);
+                zipStream.CloseEntry();
+            }
+        }
     }
 }

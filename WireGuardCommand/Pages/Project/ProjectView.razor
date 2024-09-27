@@ -141,6 +141,29 @@
                 }
                 else if(CurrentTab == ProjectViewTab.Export)
                 {
+                    <div style="display: flex; flex-direction: row">
+                        <div style="display: flex; gap: 0.5rem">
+                            <input type="checkbox" @bind="project.ProjectData.IsZippedOutput" />
+                        </div>
+                        <div style="display: flex; gap: 0.25rem; align-items: center">
+                            <label>Export to Zip</label>
+                        </div>
+                    </div>
+
+                    @if(project.ProjectData.IsZippedOutput)
+                    {
+                        <div style="display: flex; flex-direction: column">
+                            <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
+                                <label>Zip Passphrase</label>
+                                <Tooltip Title="Zip Passphrase"
+                                         Content="The passphrase to protect the output zip file with." />
+                            </div>
+                            <div style="display: flex; gap: 0.5rem">
+                                <input @bind="project.ProjectData.ZipPassphrase" />
+                            </div>
+                        </div>
+                    }
+
                     <div style="display: flex; flex-direction: column">
                         <label>Seed</label>
                         <div style="display: flex; gap: 0.5rem">
