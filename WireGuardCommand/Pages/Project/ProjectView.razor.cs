@@ -61,7 +61,7 @@ public partial class ProjectView
             return;
         }
 
-        originalData = Cache.CurrentProject.ProjectData.Copy();
+        originalData = Cache.CurrentProject.ProjectData.Clone();
         Logger.LogInformation("Loaded project.");
     }
 
@@ -157,7 +157,7 @@ public partial class ProjectView
             return;
         }
 
-        originalData = project.Copy();
+        originalData = project.Clone();
         StateHasChanged();
     }
 

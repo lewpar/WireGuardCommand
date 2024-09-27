@@ -35,12 +35,22 @@ public class ProjectData
         ZipPassphrase = "";
     }
 
-    public ProjectData Copy()
+    public ProjectData Clone()
     {
         return new ProjectData()
         {
             Seed = Seed,
-            NumberOfClients = NumberOfClients
+            NumberOfClients = NumberOfClients,
+            Subnet = Subnet,
+            UsePresharedKeys = UsePresharedKeys,
+            DNS = DNS,
+            Endpoint = Endpoint,
+            ListenPort = ListenPort,
+            AllowedIPs = AllowedIPs,
+            UseLastAddress = UseLastAddress,
+
+            IsZippedOutput = IsZippedOutput,
+            ZipPassphrase = ZipPassphrase
         };
     }
 }
