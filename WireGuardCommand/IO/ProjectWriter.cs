@@ -184,9 +184,13 @@ public class ProjectWriter
 
                 zipStream.PutNextEntry(newEntry);
 
-                using var configStream = File.OpenRead(file);
-                await configStream.CopyToAsync(zipStream);
-                zipStream.CloseEntry();
+                using (var configStream = File.OpenRead(file))
+                {
+                    await configStream.CopyToAsync(zipStream);
+                    zipStream.CloseEntry();
+                }
+
+                File.Delete(file);
             }
         }
     }
