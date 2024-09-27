@@ -26,6 +26,14 @@ public partial class ProjectView
     [Inject]
     public ILogger<ProjectView> Logger { get; set; } = default!;
 
+    public enum ProjectViewTab
+    {
+        General,
+        Export
+    }
+
+    public ProjectViewTab CurrentTab { get; set; } = ProjectViewTab.General;
+
     public string? Status { get; set; }
     public string? Error { get; set; }
 
