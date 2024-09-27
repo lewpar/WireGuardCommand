@@ -46,136 +46,145 @@
             </div>
 
             <div class="project-view-tab">
-                @if(CurrentTab == ProjectViewTab.General)
+                @if(CurrentTab == ProjectViewTab.Configuration)
                 {
-                    <div class="field">
-                        <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
-                            <label>No. of Clients</label>
-                            <Tooltip Title="Number of Clients"
-                                     Content="Sets the number of generated client peers. <br/><br/>Limited by the transit subnet, but can be manually extended later if within subnet transit limits." />
-                        </div>
-                        <div style="display: flex; gap: 0.5rem">
-                            <input @bind="project.ProjectData.NumberOfClients" />
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <div style="display: flex; gap: 0.25rem; align-items: center">
-                            <label>Subnet</label>
-                            <Tooltip Title="Subnet"
-                                     Content="Sets the transit network that exists between the clients local subnet and the hosts internal set of subnets.<br/><br/>This avoids conflicts and allows easier filtering. It's also what limits the amount of client peers.<br/><br/><b>Example</b><br/>10.0.0.0/24" />
+                    <fieldset class="field-group row">
+                        <legend>General</legend>
+                        <div class="field">
+                            <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
+                                <label>No. of Clients</label>
+                                <Tooltip Title="Number of Clients"
+                                         Content="Sets the number of generated client peers. <br/><br/>Limited by the transit subnet, but can be manually extended later if within subnet transit limits." />
+                            </div>
+                            <div style="display: flex; gap: 0.5rem">
+                                <input @bind="project.ProjectData.NumberOfClients" />
+                            </div>
                         </div>
 
-                        <div style="display: flex; gap: 0.5rem">
-                            <input @bind="project.ProjectData.Subnet" />
-                        </div>
-                    </div>
+                        <div class="field">
+                            <div style="display: flex; gap: 0.25rem; align-items: center">
+                                <label>Subnet</label>
+                                <Tooltip Title="Subnet"
+                                         Content="Sets the transit network that exists between the clients local subnet and the hosts internal set of subnets.<br/><br/>This avoids conflicts and allows easier filtering. It's also what limits the amount of client peers.<br/><br/><b>Example</b><br/>10.0.0.0/24" />
+                            </div>
 
-                    <div class="field">
-                        <div style="display: flex; gap: 0.25rem; align-items: center">
-                            <label>DNS (Optional)</label>
-                            <Tooltip Title="DNS"
-                                     Content="Allows client side remote subnet name resolution when you have a DNS server on the hosting subnet, often used when on-premise DNS exists.<br/><br/>A DNS suffix can also be added here allowing client name resolution without FQDN usage in a domain environment.<br/><br/><b>Example</b><br/>10.0.0.10<br/>domain.local" />
-                        </div>
-
-                        <div style="display: flex; gap: 0.5rem">
-                            <input @bind="project.ProjectData.DNS" />
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <div style="display: flex; gap: 0.25rem; align-items: center">
-                            <label>Allowed IPs</label>
-                            <Tooltip Title="Allowed IPs"
-                                     Content="Sets the subnets that the client will attempt routing to through an established WireGuard tunnel.<br/><br/>When 0.0.0.0/0 is specified, all traffic will route through the tunnel." />
+                            <div style="display: flex; gap: 0.5rem">
+                                <input @bind="project.ProjectData.Subnet" />
+                            </div>
                         </div>
 
-                        <div style="display: flex; gap: 0.5rem">
-                            <input @bind="project.ProjectData.AllowedIPs" />
-                        </div>
-                    </div>
+                        <div class="field">
+                            <div style="display: flex; gap: 0.25rem; align-items: center">
+                                <label>DNS (Optional)</label>
+                                <Tooltip Title="DNS"
+                                         Content="Allows client side remote subnet name resolution when you have a DNS server on the hosting subnet, often used when on-premise DNS exists.<br/><br/>A DNS suffix can also be added here allowing client name resolution without FQDN usage in a domain environment.<br/><br/><b>Example</b><br/>10.0.0.10<br/>domain.local" />
+                            </div>
 
-                    <div class="field">
-                        <div style="display: flex; gap: 0.25rem; align-items: center">
-                            <label>Endpoint</label>
-                            <Tooltip Title="Endpoint"
-                                     Content="The endpoint is not mandatory.<br/><br/>However, it enforces the client to connect to the hosting endpoint and not to the endpoint that the public key routes to." />
+                            <div style="display: flex; gap: 0.5rem">
+                                <input @bind="project.ProjectData.DNS" />
+                            </div>
                         </div>
 
-                        <div style="display: flex; gap: 0.5rem">
-                            <input @bind="project.ProjectData.Endpoint" />
-                        </div>
-                    </div>
+                        <div class="field">
+                            <div style="display: flex; gap: 0.25rem; align-items: center">
+                                <label>Allowed IPs</label>
+                                <Tooltip Title="Allowed IPs"
+                                         Content="Sets the subnets that the client will attempt routing to through an established WireGuard tunnel.<br/><br/>When 0.0.0.0/0 is specified, all traffic will route through the tunnel." />
+                            </div>
 
-                    <div class="field">
-                        <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
-                            <label>Listen Port</label>
-                            <Tooltip Title="Listen Port"
-                                     Content="Sets the WireGuard interface UDP listen port for the server and peers.<br /><br />It must be unique in the case of other existing interfaces." />
+                            <div style="display: flex; gap: 0.5rem">
+                                <input @bind="project.ProjectData.AllowedIPs" />
+                            </div>
                         </div>
-                        <div style="display: flex; gap: 0.5rem">
-                            <input @bind="project.ProjectData.ListenPort" />
-                        </div>
-                    </div>
 
-                    <div class="field horizontal">
-                        <div style="display: flex; gap: 0.5rem">
-                            <input type="checkbox" @bind="project.ProjectData.UsePresharedKeys" />
-                        </div>
-                        <div style="display: flex; gap: 0.25rem; align-items: center">
-                            <label>Use Preshared Keys</label>
-                            <Tooltip Title="Preshared Keys"
-                                     Content="Adds another layer of security where the peers have to not only match their keypairs, but also have to pass a pre-shared key check." />
-                        </div>
-                    </div>
+                        <div class="field">
+                            <div style="display: flex; gap: 0.25rem; align-items: center">
+                                <label>Endpoint</label>
+                                <Tooltip Title="Endpoint"
+                                         Content="The endpoint is not mandatory.<br/><br/>However, it enforces the client to connect to the hosting endpoint and not to the endpoint that the public key routes to." />
+                            </div>
 
-                    <div class="field horizontal">
-                        <div style="display: flex; gap: 0.5rem">
-                            <input type="checkbox" @bind="project.ProjectData.UseLastAddress" />
+                            <div style="display: flex; gap: 0.5rem">
+                                <input @bind="project.ProjectData.Endpoint" />
+                            </div>
                         </div>
-                        <div style="display: flex; gap: 0.25rem; align-items: center">
-                            <label>Use Last Address</label>
-                            <Tooltip Title="Last Address"
-                                     Content="Assigns the last IP in the subnet to the server.<br/><br/>This is useful where you want to match the client IP to their id." />
+
+                        <div class="field">
+                            <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
+                                <label>Listen Port</label>
+                                <Tooltip Title="Listen Port"
+                                         Content="Sets the WireGuard interface UDP listen port for the server and peers.<br /><br />It must be unique in the case of other existing interfaces." />
+                            </div>
+                            <div style="display: flex; gap: 0.5rem">
+                                <input @bind="project.ProjectData.ListenPort" />
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="field horizontal">
+                            <div style="display: flex; gap: 0.5rem">
+                                <input type="checkbox" @bind="project.ProjectData.UsePresharedKeys" />
+                            </div>
+                            <div style="display: flex; gap: 0.25rem; align-items: center">
+                                <label>Use Preshared Keys</label>
+                                <Tooltip Title="Preshared Keys"
+                                         Content="Adds another layer of security where the peers have to not only match their keypairs, but also have to pass a pre-shared key check." />
+                            </div>
+                        </div>
+
+                        <div class="field horizontal">
+                            <div style="display: flex; gap: 0.5rem">
+                                <input type="checkbox" @bind="project.ProjectData.UseLastAddress" />
+                            </div>
+                            <div style="display: flex; gap: 0.25rem; align-items: center">
+                                <label>Use Last Address</label>
+                                <Tooltip Title="Last Address"
+                                         Content="Assigns the last IP in the subnet to the server.<br/><br/>This is useful where you want to match the client IP to their id." />
+                            </div>
+                        </div>
+                    </fieldset>
                 }
                 else if(CurrentTab == ProjectViewTab.Export)
                 {
-                    <div class="field horizontal">
-                        <div style="display: flex; gap: 0.5rem">
-                            <input type="checkbox" @bind="project.ProjectData.IsZippedOutput" />
-                        </div>
-                        <div style="display: flex; gap: 0.25rem; align-items: center">
-                            <label>Export to Zip</label>
-                        </div>
-                    </div>
-
-                    @if(project.ProjectData.IsZippedOutput)
-                    {
+                    <fieldset class="field-group">
+                        <legend>General</legend>
                         <div class="field">
-                            <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
-                                <label>Zip Passphrase</label>
-                                <Tooltip Title="Zip Passphrase"
-                                         Content="The passphrase to protect the output zip file with." />
-                            </div>
+                            <label>Seed</label>
                             <div style="display: flex; gap: 0.5rem">
-                                <input @bind="project.ProjectData.ZipPassphrase" />
+                                <input @bind="project.ProjectData.Seed" style="flex: 1" />
+                                <button @onclick="RegenerateSeed" class="btn-primary">Regenerate</button>
                             </div>
                         </div>
-                    }
+                    </fieldset>
 
-                    <div class="field">
-                        <label>Seed</label>
-                        <div style="display: flex; gap: 0.5rem">
-                            <input @bind="project.ProjectData.Seed" />
-                            <button @onclick="RegenerateSeed" class="btn-primary">Regenerate</button>
+                    <fieldset class="field-group column">
+                        <legend>Output</legend>
+                        <div class="field horizontal">
+                            <div style="display: flex; gap: 0.5rem">
+                                <input type="checkbox" @bind="project.ProjectData.IsZippedOutput" />
+                            </div>
+                            <div style="display: flex; gap: 0.25rem; align-items: center">
+                                <label>Export to Zip</label>
+                            </div>
                         </div>
-                    </div>
+
+                        @if (project.ProjectData.IsZippedOutput)
+                        {
+                            <div class="field">
+                                <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
+                                    <label>Zip Passphrase</label>
+                                    <Tooltip Title="Zip Passphrase"
+                                             Content="The passphrase to protect the output zip file with." />
+                                </div>
+                                <div style="display: flex; gap: 0.5rem">
+                                    <input @bind="project.ProjectData.ZipPassphrase" style="flex: 1" />
+                                </div>
+                            </div>
+                        }
+                    </fieldset>
+
+                    <button class="btn-primary" @onclick="GenerateConfigsAsync">Export</button>
                 }
             </div>
-
-            <button class="btn-primary" @onclick="GenerateConfigsAsync">Export</button>
         </div>
     }
     else

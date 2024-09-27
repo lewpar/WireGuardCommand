@@ -5,7 +5,11 @@
 {
     <div class="tooltip-container">
         <div class="tooltip-content">
-            <b>@(this.Title)</b>
+            <div style="display: flex; gap: 0.5rem; align-items: center">
+                <img src="/images/info.png" width="24" />
+                <b>@(this.Title)</b>
+            </div>
+
             <p>@((MarkupString)this.Content)</p>
             <div class="tooltip-exit" @onclick="() => { IsVisible = false; }">
                 ✖

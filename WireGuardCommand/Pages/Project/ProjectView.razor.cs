@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.Json;
+
 using WireGuardCommand.Components;
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Extensions;
@@ -33,11 +34,11 @@ public partial class ProjectView
 
     public enum ProjectViewTab
     {
-        General,
+        Configuration,
         Export
     }
 
-    public ProjectViewTab CurrentTab { get; set; } = ProjectViewTab.General;
+    public ProjectViewTab CurrentTab { get; set; } = ProjectViewTab.Configuration;
 
     public string? Status { get; set; }
     public string? Error { get; set; }

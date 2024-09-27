@@ -47,7 +47,7 @@
     flex: 1;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 
     gap: 0.5rem;
     flex-wrap: wrap;
@@ -59,8 +59,6 @@
     border-top-left-radius: 0px;
 
     padding: 1rem;
-
-    margin-bottom: 1rem;
 }
 
 .tab-button {
@@ -75,7 +73,7 @@
     border-bottom-right-radius: 0px;
 
     min-width: 4rem;
-    padding: 0.25rem;
+    padding: 0.5rem;
 
     transition: background-color 0.5s;
 }
@@ -88,7 +86,28 @@
     background-color: rgb(64, 64, 64);
 }
 
+.field-group {
+    display: flex;
+
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    border: 1px solid #404040;
+    background-color: #202020;
+
+    padding: 1rem;
+
+    box-shadow: #101010 1px 1px inset;
+}
+.field-group.row {
+    flex-direction: row;
+}
+.field-group.column {
+    flex-direction: column;
+}
+
 .field {
+    flex: 1;
     display: flex;
     flex-direction: column;
 
