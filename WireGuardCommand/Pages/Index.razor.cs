@@ -8,6 +8,7 @@ using System.Runtime.Versioning;
 using System.Diagnostics;
 
 using Microsoft.Extensions.Options;
+using WireGuardCommand.Components;
 
 namespace WireGuardCommand.Pages;
 
@@ -32,6 +33,11 @@ public partial class Index
     public ProjectMetadata? SelectedProject { get; set; }
 
     public bool Loaded { get; set; }
+
+    public Dialog? Dialog { get; set; }
+    public Action DialogYes { get; set; } = () => { };
+    public string DialogTitle { get; set; } = "";
+    public string DialogContent { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -65,12 +71,6 @@ public partial class Index
         NavigationManager.NavigateTo("ProjectLoad");
     }
 
-    private void DeleteProject()
-    {
-        Cache.CurrentProject.Metadata = SelectedProject;
-        NavigationManager.NavigateTo("ProjectDelete");
-    }
-
     private void CreateProject()
     {
         NavigationManager.NavigateTo("ProjectCreate");
@@ -82,5 +82,44 @@ public partial class Index
         var config = Options.Value;
 
         Process.Start("explorer.exe", config.ProjectsPath);
+    }
+
+    private void PromptDeleteProject()
+    {
+        if(Dialog is null)
+        {
+            return;
+        }
+
+        DialogTitle = "Delete Project";
+        DialogContent = $"Are you sure you want to delete <b>{SelectedProject?.Name}</b>?";
+        DialogYes = async () => 
+        {
+            DeleteProject();
+            await LoadProjectsAsync();
+        };
+
+        Dialog.Show();
+    }
+
+    private void DeleteProject()
+    {
+        Error = "";
+
+        if(SelectedProject is null)
+        {
+            return;
+        }
+
+        try
+        {
+            ProjectManager.DeleteProject(SelectedProject);
+            Cache.Clear();
+            SelectedProject = null;
+        }
+        catch(Exception ex)
+        {
+            Error = $"Failed to delete project: {ex.Message}";
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -7,6 +8,7 @@ using WireGuardCommand.Configuration;
 using WireGuardCommand.Extensions;
 using WireGuardCommand.Security;
 using WireGuardCommand.Services.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WireGuardCommand.Services;
 
@@ -284,5 +286,15 @@ public class ProjectManager
                 await JsonSerializer.SerializeAsync<ProjectData>(fs, data);
             }
         }
+    }
+
+    public void DeleteProject(ProjectMetadata metadata)
+    {
+        if (string.IsNullOrWhiteSpace(metadata.Path))
+        {
+            throw new Exception("No path was found for the project.");
+        }
+
+        Directory.Delete(metadata.Path, true);
     }
 }

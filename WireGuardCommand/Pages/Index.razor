@@ -8,6 +8,7 @@
 <div class="container">
 
     <Alert Type="AlertType.Error" Content="@Error" OnDismiss="() => { Error = string.Empty; }"/>
+    <Dialog Title="@DialogTitle" Content="@DialogContent" Type="DialogType.YesNo" ClickYes="DialogYes" @ref="Dialog"/>
 
     <div class="project-list" @onclick="() => { SelectedProject = null; }">
         <div class="project-list-header">
@@ -74,7 +75,7 @@
                         <button style="flex: 8" class="btn-primary" @onclick="OpenProject">Open</button>
                     }
 
-                    <button style="flex: 2" class="btn-unsafe" @onclick="DeleteProject">Delete</button>
+                    <button style="flex: 2" class="btn-unsafe" @onclick="PromptDeleteProject">Delete</button>
                 </div>
             </div>
         </div>
