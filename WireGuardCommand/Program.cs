@@ -12,8 +12,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        //builder.WebHost.UseElectron(args);
-        //builder.WebHost.UseStaticWebAssets();
+        builder.WebHost.UseElectron(args);
+        builder.WebHost.UseStaticWebAssets();
 
         ConfigureServices(builder);
 
@@ -28,7 +28,7 @@ public class Program
 
         await app.StartAsync();
 
-        //await ConfigureElectronAsync();
+        await ConfigureElectronAsync();
 
         await app.WaitForShutdownAsync();
     }
@@ -37,7 +37,7 @@ public class Program
     {
         var services = builder.Services;
 
-        builder.Configuration.Bind("WireGuardCommand", new WGCConfig());
+        builder.Configuration.Bind(WGCConfig.AppSettingsKey, new WGCConfig());
 
         services.AddSingleton<ProjectCache>();
         services.AddSingleton<ProjectManager>();

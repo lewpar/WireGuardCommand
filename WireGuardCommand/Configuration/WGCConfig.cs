@@ -2,6 +2,8 @@
 
 public class WGCConfig
 {
+    public const string AppSettingsKey = "WireGuardCommand";
+
     private string? projectsPath;
     public string ProjectsPath
     {
