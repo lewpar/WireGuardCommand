@@ -7,7 +7,7 @@
 }
 
 <div class="container">
-    <Alert Type="AlertType.Error" @bind-Content="Error"/>
+    <Alert Type="AlertType.Error" Content="@Error" OnDismiss="() => { Error = string.Empty; }" />
 
     <div class="project-create-header">
         <div style="font-weight: bold; font-size: 1.25rem; padding: 1rem">Create Project</div>

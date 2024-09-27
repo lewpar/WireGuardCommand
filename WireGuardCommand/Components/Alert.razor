@@ -2,6 +2,6 @@
 {
     <div class="alert @(this.Type.ToString().ToLower())">
         <span class="alert-content">@(this.Content)</span>
-        <span class="alert-close" @onclick="() => { this.Content = string.Empty; }">x</span>
+        <span class="alert-close" @onclick="Dismiss">x</span>
     </div>
 }

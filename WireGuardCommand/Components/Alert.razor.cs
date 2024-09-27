@@ -14,5 +14,15 @@ public partial class Alert
     public string? Content { get; set; }
 
     [Parameter]
-    public EventCallback<string> ContentChanged { get; set; }
+    public EventCallback OnDismiss { get; set; }
+
+    private void Dismiss()
+    {
+        this.Content = string.Empty;
+
+        if(OnDismiss.HasDelegate)
+        {
+            OnDismiss.InvokeAsync(null);
+        }
+    }
 }

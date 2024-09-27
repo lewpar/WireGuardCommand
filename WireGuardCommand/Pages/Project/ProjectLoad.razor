@@ -7,7 +7,7 @@
 }
 
 <div class="container">
-    <Alert Type="AlertType.Error" @bind-Content="Error" />
+    <Alert Type="AlertType.Error" Content="@Error" OnDismiss="() => { Error = string.Empty; }" />
 
     <div class="dialog">
         @if (project is not null &&

@@ -13,8 +13,8 @@
         project.Metadata is not null &&
         project.ProjectData is not null)
     {
-        <Alert Type="AlertType.Error" @bind-Content="Error" />
-        <Alert Type="AlertType.Info" @bind-Content="Status" />
+        <Alert Type="AlertType.Error" Content="@Error" OnDismiss="() => { Error = string.Empty; }" />
+        <Alert Type="AlertType.Info" Content="@Status" OnDismiss="() => { Status = string.Empty; }" />
 
         <div class="project-view-header">
             <div style="display: flex; flex-direction: column">

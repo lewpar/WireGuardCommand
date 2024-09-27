@@ -44,6 +44,11 @@ public partial class ProjectView
 
     private ProjectData? originalData;
 
+    private void ResetStatus(string status)
+    {
+
+    }
+
     protected override void OnInitialized()
     {
         if(Cache.CurrentProject.ProjectData is null)
