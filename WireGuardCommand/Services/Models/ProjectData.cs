@@ -6,6 +6,8 @@ namespace WireGuardCommand.Services.Models;
 
 public class ProjectData
 {
+    public string Interface { get; set; }
+
     public string Seed { get; set; }
     public int NumberOfClients { get; set; }
     public string Subnet { get; set; }
@@ -21,6 +23,8 @@ public class ProjectData
 
     public ProjectData()
     {
+        Interface = "wg0";
+
         Seed = RandomNumberGenerator.GetBytes(256).ToBase64();
         NumberOfClients = 3;
         Subnet = "10.0.0.0/24";
@@ -39,6 +43,8 @@ public class ProjectData
     {
         return new ProjectData()
         {
+            Interface = Interface,
+
             Seed = Seed,
             NumberOfClients = NumberOfClients,
             Subnet = Subnet,

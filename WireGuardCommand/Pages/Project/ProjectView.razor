@@ -63,8 +63,8 @@
 
                         <div class="field">
                             <div style="display: flex; gap: 0.25rem; align-items: center">
-                                <label>Subnet</label>
-                                <Tooltip Title="Subnet"
+                                <label>Transit Subnet</label>
+                                <Tooltip Title="Transit Subnet"
                                          Content="Sets the transit network that exists between the clients local subnet and the hosts internal set of subnets.<br/><br/>This avoids conflicts and allows easier filtering. It's also what limits the amount of client peers.<br/><br/><b>Example</b><br/>10.0.0.0/24" />
                             </div>
 
@@ -106,6 +106,18 @@
 
                             <div style="display: flex; gap: 0.5rem">
                                 <input @bind="project.ProjectData.Endpoint" />
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div style="display: flex; gap: 0.25rem; align-items: center">
+                                <label>Interface Name</label>
+                                <Tooltip Title="Interface Name"
+                                         Content="Sets the name of the interface that will be created by WireGuard on the peers." />
+                            </div>
+
+                            <div style="display: flex; gap: 0.5rem">
+                                <input @bind="project.ProjectData.Interface" />
                             </div>
                         </div>
 
