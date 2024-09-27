@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using ElectronNET.API.Entities;
+using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 
 using WireGuardCommand.Extensions;
@@ -15,6 +17,19 @@ public class ProjectWriter
     public ProjectWriter(ProjectData project)
     {
         this.project = project;
+    }
+
+    private byte[] GetPeerSeed(byte[] seed, int peerId)
+    {
+        using var sha256 = SHA256.Create();
+
+        byte[] dataIdBytes = BitConverter.GetBytes(peerId);
+
+        byte[] combined = new byte[seed.Length + dataIdBytes.Length];
+        Buffer.BlockCopy(seed, 0, combined, 0, seed.Length);
+        Buffer.BlockCopy(dataIdBytes, 0, combined, seed.Length, dataIdBytes.Length);
+
+        return sha256.ComputeHash(combined);
     }
 
     private List<WireGuardPeer> GeneratePeers()
@@ -35,7 +50,7 @@ public class ProjectWriter
                 break;
             }
 
-            var keypair = new CurveKeypair(project.Seed.FromBase64());
+            var keypair = new CurveKeypair(GetPeerSeed(project.Seed.FromBase64(), peerId));
 
             var peer = new WireGuardPeer()
             {
@@ -90,7 +105,11 @@ public class ProjectWriter
 
             if (project.UsePresharedKeys)
             {
-                presharedKey = new CurveKeypair();
+                // Reverse the seed so it is different from the main seed and generates 
+                // different keys.
+                var reversedSeed = GetPeerSeed(project.Seed.FromBase64(), peerId).Reverse().ToArray();
+
+                presharedKey = new CurveKeypair(reversedSeed);
             }
 
             server.AppendLine($"# Peer {peerId}");
