@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 
 using System.Diagnostics;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.Json;
 
+using WireGuardCommand.Configuration;
 using WireGuardCommand.Extensions;
 using WireGuardCommand.IO;
 using WireGuardCommand.Services;
@@ -26,6 +28,9 @@ public partial class ProjectView
     [Inject]
     public ILogger<ProjectView> Logger { get; set; } = default!;
 
+    [Inject]
+    public IOptions<WGCConfig> Options { get; set; } = default!;
+
     public enum ProjectViewTab
     {
         General,
@@ -44,11 +49,6 @@ public partial class ProjectView
 
     private ProjectData? originalData;
 
-    private void ResetStatus(string status)
-    {
-
-    }
-
     protected override void OnInitialized()
     {
         if(Cache.CurrentProject.ProjectData is null)
@@ -66,7 +66,7 @@ public partial class ProjectView
         Cache.Clear();
     }
 
-    private void GenerateSeed()
+    private void RegenerateSeed()
     {
         Error = "";
 
@@ -77,7 +77,9 @@ public partial class ProjectView
             return;
         }
 
-        project.ProjectData.Seed = RandomNumberGenerator.GetBytes(32).ToBase64();
+        var config = Options.Value;
+
+        project.ProjectData.Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64();
     }
 
     private bool HasChanges()

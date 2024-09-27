@@ -48,14 +48,6 @@
                 @if(CurrentTab == ProjectViewTab.General)
                 {
                     <div style="display: flex; flex-direction: column">
-                        <label>Seed</label>
-                        <div style="display: flex; gap: 0.5rem">
-                            <input @bind="project.ProjectData.Seed" />
-                            <button @onclick="GenerateSeed" class="btn-primary">Generate</button>
-                        </div>
-                    </div>
-
-                    <div style="display: flex; flex-direction: column">
                         <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                             <label>No. of Clients</label>
                             <Tooltip Title="Number of Clients"
@@ -149,6 +141,14 @@
                 }
                 else if(CurrentTab == ProjectViewTab.Export)
                 {
+                    <div style="display: flex; flex-direction: column">
+                        <label>Seed</label>
+                        <div style="display: flex; gap: 0.5rem">
+                            <input @bind="project.ProjectData.Seed" />
+                            <button @onclick="RegenerateSeed" class="btn-primary">Regenerate</button>
+                        </div>
+                    </div>
+
                     <button class="btn-primary" @onclick="GenerateConfigsAsync">Generate Configs</button>
                 }
             </div>

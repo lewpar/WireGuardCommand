@@ -210,7 +210,17 @@ public class ProjectManager
 
     public async Task CreateProjectAsync(ProjectCreateContext createContext)
     {
-        if(string.IsNullOrWhiteSpace(createContext.Path))
+        using var scope = serviceProvider.CreateAsyncScope();
+
+        var options = scope.ServiceProvider.GetService<IOptions<WGCConfig>>();
+        if (options is null)
+        {
+            throw new Exception("Failed to get configuration service.");
+        }
+
+        var config = options.Value;
+
+        if (string.IsNullOrWhiteSpace(createContext.Path))
         {
             throw new Exception("No project path is set.");
         }
@@ -252,7 +262,7 @@ public class ProjectManager
         var dataPath = Path.Combine(createContext.Path, metadata.IsEncrypted ? "data.bin" : "data.json");
         var data = new ProjectData()
         {
-            Seed = RandomNumberGenerator.GetBytes(32).ToBase64()
+            Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64()
         };
 
         using (var fs = File.OpenWrite(dataPath))

@@ -18,7 +18,7 @@ public class ProjectData
 
     public ProjectData()
     {
-        Seed = RandomNumberGenerator.GetBytes(32).ToBase64();
+        Seed = RandomNumberGenerator.GetBytes(256).ToBase64();
         NumberOfClients = 3;
         Subnet = "10.0.0.0/24";
         UsePresharedKeys = false;

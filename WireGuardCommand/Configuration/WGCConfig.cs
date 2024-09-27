@@ -18,10 +18,12 @@ public class WGCConfig
     }
 
     public bool EncryptByDefault { get; set; }
+    public int SeedSize { get; set; }
 
     public WGCConfig()
     {
         ProjectsPath = Path.GetFullPath(".\\Projects");
         EncryptByDefault = false;
+        SeedSize = 2048;
     }
 }
