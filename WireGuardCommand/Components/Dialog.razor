@@ -1,0 +1,21 @@
+﻿@if(isVisible)
+{
+    <div class="container">
+        <div class="dialog">
+            <b>@this.Title</b>
+            <div>@((MarkupString)this.Content)</div>
+
+            @if (this.Type == DialogType.Ok)
+            {
+                <button class="btn-primary" @onclick="OnClickOk">Ok</button>
+            }
+            else if (this.Type == DialogType.YesNo)
+            {
+                <div style="display: flex; gap: 0.5rem">
+                    <button class="btn-unsafe" style="flex: 3" @onclick="OnClickYes">Yes</button>
+                    <button class="btn-primary" style="flex: 7" @onclick="OnClickNo">No</button>
+                </div>
+            }
+        </div>
+    </div>
+}

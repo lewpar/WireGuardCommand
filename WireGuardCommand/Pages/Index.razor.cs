@@ -8,7 +8,6 @@ using System.Runtime.Versioning;
 using System.Diagnostics;
 
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace WireGuardCommand.Pages;
 

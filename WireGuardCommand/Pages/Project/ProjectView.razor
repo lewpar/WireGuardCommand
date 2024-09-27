@@ -15,6 +15,7 @@
     {
         <Alert Type="AlertType.Error" Content="@Error" OnDismiss="() => { Error = string.Empty; }" />
         <Alert Type="AlertType.Info" Content="@Status" OnDismiss="() => { Status = string.Empty; }" />
+        <Dialog Type="DialogType.YesNo" Title="@DialogTitle" Content="@DialogContent" ClickYes="@DialogYes" @ref="Dialog"/>
 
         <div class="project-view-header">
             <div style="display: flex; flex-direction: column">
@@ -33,7 +34,7 @@
                 <button class="btn-primary" @onclick="BrowseProject">Open Folder</button>
             }
 
-            <button class="btn-unsafe" @onclick="GoBack">Close Project</button>
+            <button class="btn-unsafe" @onclick="CloseProject">Close Project</button>
         </div>
 
         <div class="project-view-body">
@@ -180,7 +181,7 @@
     else
     {
         <div style="display: flex; align-items: center;">
-            <button class="btn-primary" @onclick="GoBack">Back</button>
+            <button class="btn-primary" @onclick="CloseProject">Back</button>
         </div>
         <div>Project failed to load.</div>
     }

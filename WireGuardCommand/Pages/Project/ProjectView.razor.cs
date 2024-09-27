@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.Json;
-
+using WireGuardCommand.Components;
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Extensions;
 using WireGuardCommand.IO;
@@ -49,6 +49,11 @@ public partial class ProjectView
 
     private ProjectData? originalData;
 
+    public Dialog? Dialog { get; set; }
+    public string DialogTitle { get; set; } = "";
+    public string DialogContent { get; set; } = "";
+    public Action DialogYes { get; set; } = () => { };
+
     protected override void OnInitialized()
     {
         if(Cache.CurrentProject.ProjectData is null)
@@ -60,26 +65,58 @@ public partial class ProjectView
         Logger.LogInformation("Loaded project.");
     }
 
-    private void GoBack()
+    private void CloseProject()
     {
-        NavigationManager.NavigateTo("/");
-        Cache.Clear();
+        if(HasUnsavedChanges)
+        {
+            if(Dialog is null)
+            {
+                return;
+            }
+
+            DialogTitle = "Unsaved Changes";
+            DialogContent = "You have unsaved changes, are you sure you want to close the project?";
+            Dialog.Show();
+
+            DialogYes = () =>
+            {
+                NavigationManager.NavigateTo("/");
+                Cache.Clear();
+            };
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/");
+            Cache.Clear();
+        }
     }
 
     private void RegenerateSeed()
     {
         Error = "";
 
-        var project = Cache.CurrentProject;
-        if(project.ProjectData is null)
+        if (Dialog is null)
         {
-            Error = "Failed to generate seed.";
             return;
         }
 
-        var config = Options.Value;
+        DialogTitle = "Regenerate Seed";
+        DialogContent = "Are you sure you want to regenerate the project seed?<br/>This is <b>irreversable</b> and will require you to redeploy all of your peers.";
+        Dialog.Show();
 
-        project.ProjectData.Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64();
+        DialogYes = () =>
+        {
+            var project = Cache.CurrentProject;
+            if (project.ProjectData is null)
+            {
+                Error = "Failed to generate seed.";
+                return;
+            }
+
+            var config = Options.Value;
+
+            project.ProjectData.Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64();
+        };
     }
 
     private bool HasChanges()
