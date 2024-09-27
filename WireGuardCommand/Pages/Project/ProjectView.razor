@@ -47,7 +47,7 @@
             <div class="project-view-tab">
                 @if(CurrentTab == ProjectViewTab.General)
                 {
-                    <div style="display: flex; flex-direction: column">
+                    <div class="field">
                         <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                             <label>No. of Clients</label>
                             <Tooltip Title="Number of Clients"
@@ -58,7 +58,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: column">
+                    <div class="field">
                         <div style="display: flex; gap: 0.25rem; align-items: center">
                             <label>Subnet</label>
                             <Tooltip Title="Subnet"
@@ -70,7 +70,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: column">
+                    <div class="field">
                         <div style="display: flex; gap: 0.25rem; align-items: center">
                             <label>DNS (Optional)</label>
                             <Tooltip Title="DNS"
@@ -82,7 +82,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: column">
+                    <div class="field">
                         <div style="display: flex; gap: 0.25rem; align-items: center">
                             <label>Allowed IPs</label>
                             <Tooltip Title="Allowed IPs"
@@ -94,7 +94,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: column">
+                    <div class="field">
                         <div style="display: flex; gap: 0.25rem; align-items: center">
                             <label>Endpoint</label>
                             <Tooltip Title="Endpoint"
@@ -106,7 +106,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: column">
+                    <div class="field">
                         <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                             <label>Listen Port</label>
                             <Tooltip Title="Listen Port"
@@ -117,7 +117,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: row">
+                    <div class="field horizontal">
                         <div style="display: flex; gap: 0.5rem">
                             <input type="checkbox" @bind="project.ProjectData.UsePresharedKeys" />
                         </div>
@@ -128,7 +128,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: row">
+                    <div class="field horizontal">
                         <div style="display: flex; gap: 0.5rem">
                             <input type="checkbox" @bind="project.ProjectData.UseLastAddress" />
                         </div>
@@ -141,7 +141,7 @@
                 }
                 else if(CurrentTab == ProjectViewTab.Export)
                 {
-                    <div style="display: flex; flex-direction: row">
+                    <div class="field horizontal">
                         <div style="display: flex; gap: 0.5rem">
                             <input type="checkbox" @bind="project.ProjectData.IsZippedOutput" />
                         </div>
@@ -152,7 +152,7 @@
 
                     @if(project.ProjectData.IsZippedOutput)
                     {
-                        <div style="display: flex; flex-direction: column">
+                        <div class="field">
                             <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                                 <label>Zip Passphrase</label>
                                 <Tooltip Title="Zip Passphrase"
@@ -164,17 +164,17 @@
                         </div>
                     }
 
-                    <div style="display: flex; flex-direction: column">
+                    <div class="field">
                         <label>Seed</label>
                         <div style="display: flex; gap: 0.5rem">
                             <input @bind="project.ProjectData.Seed" />
                             <button @onclick="RegenerateSeed" class="btn-primary">Regenerate</button>
                         </div>
                     </div>
-
-                    <button class="btn-primary" @onclick="GenerateConfigsAsync">Generate Configs</button>
                 }
             </div>
+
+            <button class="btn-primary" @onclick="GenerateConfigsAsync">Export</button>
         </div>
     }
     else

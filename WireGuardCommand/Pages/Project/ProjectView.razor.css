@@ -59,6 +59,8 @@
     border-top-left-radius: 0px;
 
     padding: 1rem;
+
+    margin-bottom: 1rem;
 }
 
 .tab-button {
@@ -84,4 +86,14 @@
 .tab-button.active {
     color: white;
     background-color: rgb(64, 64, 64);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+}
+.field.horizontal {
+    flex-direction: row;
 }
