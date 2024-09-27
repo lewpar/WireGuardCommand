@@ -103,7 +103,9 @@ public class ProjectManager
         }
 
         var dataPath = Path.Combine(projectPath, metadata.IsEncrypted ? "data.bin" : "data.json");
+
         using var fs = File.OpenWrite(dataPath);
+        fs.SetLength(0);
 
         if (metadata.IsEncrypted)
         {
@@ -132,7 +134,7 @@ public class ProjectManager
 
             var buffer = AESProvider.Encrypt(ms.ToArray(), key, iv);
 
-            fs.Write(buffer, 0, buffer.Length);
+            await fs.WriteAsync(buffer, 0, buffer.Length);
         }
         else
         {
