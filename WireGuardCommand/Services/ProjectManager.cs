@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -8,7 +7,6 @@ using WireGuardCommand.Configuration;
 using WireGuardCommand.Extensions;
 using WireGuardCommand.Security;
 using WireGuardCommand.Services.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WireGuardCommand.Services;
 

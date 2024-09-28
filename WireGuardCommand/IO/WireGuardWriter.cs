@@ -6,12 +6,12 @@ namespace WireGuardCommand.IO;
 
 public class WireGuardWriter
 {
-    public void Write(WireGuardPeer client, Stream outputStream)
+    private string GenerateConfig(WireGuardPeer client)
     {
         var sb = new StringBuilder();
         bool isServer = client.Role == WireGuardPeerRole.Server;
 
-        if(isServer)
+        if (isServer)
         {
             sb.AppendLine($"# Server");
         }
@@ -29,7 +29,7 @@ public class WireGuardWriter
 
         foreach (var peer in client.Peers)
         {
-            if(peer.Role == WireGuardPeerRole.Server)
+            if (peer.Role == WireGuardPeerRole.Server)
             {
                 sb.AppendLine($"# Server");
             }
@@ -40,16 +40,16 @@ public class WireGuardWriter
             sb.AppendLine("[Peer]");
             sb.AppendLine($"PublicKey = {peer.PublicKey}");
 
-            if(isServer && peer.PresharedKey is not null)
+            if (isServer && peer.PresharedKey is not null)
             {
                 sb.AppendLine($"PresharedKey = {peer.PresharedKey}");
             }
-            else if(!isServer && client.PresharedKey is not null)
+            else if (!isServer && client.PresharedKey is not null)
             {
                 sb.AppendLine($"PresharedKey = {client.PresharedKey}");
             }
 
-            if(isServer)
+            if (isServer)
             {
                 sb.AppendLine($"AllowedIPs = {peer.Address}/32");
             }
@@ -61,7 +61,18 @@ public class WireGuardWriter
             sb.AppendLine();
         }
 
-        var data = Encoding.UTF8.GetBytes(sb.ToString());
+        return sb.ToString();
+    }
+
+    public void Write(WireGuardPeer client, Stream outputStream)
+    {
+        var data = Encoding.UTF8.GetBytes(GenerateConfig(client));
         outputStream.Write(data, 0, data.Length);
+    }
+
+    public async Task WriteAsync(WireGuardPeer client, Stream outputStream)
+    {
+        var data = Encoding.UTF8.GetBytes(GenerateConfig(client));
+        await outputStream.WriteAsync(data, 0, data.Length);
     }
 }

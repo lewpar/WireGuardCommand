@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 
 using System.Diagnostics;
+using System.Net;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -12,6 +13,7 @@ using WireGuardCommand.Extensions;
 using WireGuardCommand.IO;
 using WireGuardCommand.Services;
 using WireGuardCommand.Services.Models;
+using WireGuardCommand.WireGuard;
 
 namespace WireGuardCommand.Pages.Project;
 
@@ -190,8 +192,46 @@ public partial class ProjectView
                 Directory.CreateDirectory(outputPath);
             }
 
-            var writer = new ProjectWriter(project);
-            await writer.WriteConfigsAsync(outputPath);
+            var subnet = project.Subnet.Split('/');
+            if(subnet.Length < 2)
+            {
+                throw new Exception("Invalid transit subnet, ensure you have included a CIDR.");
+            }
+
+            if(!byte.TryParse(subnet[1], out byte cidr))
+            {
+                throw new Exception("Invalid transit subnet CIDR.");
+            }
+
+            var builder = new WireGuardBuilder(new WireGuardBuilderOptions()
+            {
+                Seed = project.Seed.FromBase64(),
+                Subnet = new IPNetwork2(IPAddress.Parse(subnet[0]), cidr),
+                ListenPort = project.ListenPort,
+                AllowedIPs = project.AllowedIPs,
+                UseLastAddress = project.UseLastAddress,
+                UsePresharedKeys = project.UsePresharedKeys
+            });
+
+            using var fsServer = File.OpenWrite(Path.Combine(outputPath, "server.conf"));
+
+            for(int i = 0; i < project.NumberOfClients; i++)
+            {
+                builder.AddPeer();
+            }
+
+            var server = builder.Build();
+
+            var writer = new WireGuardWriter();
+
+            await writer.WriteAsync(server, fsServer);
+
+            foreach (var peer in server.Peers)
+            {
+                using var fsClient = File.OpenWrite(Path.Combine(outputPath, $"peer-{peer.Id}.conf"));
+
+                await writer.WriteAsync(peer, fsClient);
+            }
 
             Status = "Generated configuration.";
         }
