@@ -22,4 +22,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\lib\highlightjs\es\core.js" />
+    <None Include="wwwroot\lib\highlightjs\es\core.min.js" />
+    <None Include="wwwroot\lib\highlightjs\es\highlight.js" />
+    <None Include="wwwroot\lib\highlightjs\es\highlight.min.js" />
+    <None Include="wwwroot\lib\highlightjs\es\languages\ini.js" />
+    <None Include="wwwroot\lib\highlightjs\es\languages\ini.min.js" />
+    <None Include="wwwroot\lib\highlightjs\languages\ini.js" />
+    <None Include="wwwroot\lib\highlightjs\languages\ini.min.js" />
+  </ItemGroup>
 </Project>

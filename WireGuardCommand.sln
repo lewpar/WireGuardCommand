@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WireGuardCommand", "WireGuardCommand\WireGuardCommand.csproj", "{B9EA67CE-5B0F-4D4D-9A82-BF1A37DA2B0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WireGuardCommand.Tests", "WireGuardCommand.Tests\WireGuardCommand.Tests.csproj", "{C5209C97-F909-4B50-8651-3124946C6CDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WireGuardCommand.Tests", "WireGuardCommand.Tests\WireGuardCommand.Tests.csproj", "{C5209C97-F909-4B50-8651-3124946C6CDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

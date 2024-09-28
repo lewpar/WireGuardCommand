@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
-
+using Microsoft.JSInterop;
 using System.Diagnostics;
 using System.Net;
 using System.Runtime.Versioning;
@@ -34,6 +34,9 @@ public partial class ProjectView
 
     [Inject]
     public IOptions<WGCConfig> Options { get; set; } = default!;
+
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; } = default!;
 
     public Dictionary<string, string>? PreviewConfigs { get; set; }
 

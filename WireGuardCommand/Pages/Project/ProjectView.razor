@@ -2,6 +2,7 @@
 
 @using System.Runtime.InteropServices
 
+@using Microsoft.AspNetCore.Components.Sections
 @using WireGuardCommand.Components;
 
 @{
@@ -172,8 +173,8 @@
                             @foreach(var config in PreviewConfigs)
                             {
                                 <div style="display: flex; flex-direction: column;">
-                                    <div>@config.Key</div>
-                                    <textarea rows="8">@config.Value</textarea>
+                                    <div style="font-size: 1.25rem; font-weight: bold">@config.Key</div>
+                                    <CodeHighlighter Code="@config.Value" Language="language-ini" />
                                 </div>
                             }
                         </div>
