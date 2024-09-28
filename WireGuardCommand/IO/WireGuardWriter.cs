@@ -1,6 +1,5 @@
 ﻿using System.Text;
-
-using WireGuardCommand.Models;
+using WireGuardCommand.WireGuard;
 
 namespace WireGuardCommand.IO;
 

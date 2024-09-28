@@ -1,7 +1,5 @@
 ﻿using System.Net;
 using System.Security.Cryptography;
-
-using WireGuardCommand.Models;
 using WireGuardCommand.Security;
 
 namespace WireGuardCommand.WireGuard;

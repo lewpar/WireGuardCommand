@@ -2,7 +2,6 @@ using System.Net;
 using System.Text;
 
 using WireGuardCommand.IO;
-using WireGuardCommand.Models;
 using WireGuardCommand.WireGuard;
 
 namespace WireGuardCommand.Tests
