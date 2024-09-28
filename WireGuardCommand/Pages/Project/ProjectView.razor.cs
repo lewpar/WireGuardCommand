@@ -38,7 +38,7 @@ public partial class ProjectView
     [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
 
-    public Dictionary<string, string>? PreviewConfigs { get; set; }
+    public Dictionary<string, string> PreviewConfigs { get; set; } = new Dictionary<string, string>();
 
     public enum ProjectViewTab
     {
@@ -278,11 +278,6 @@ public partial class ProjectView
 
     private async Task GeneratePreviewAsync()
     {
-        if(PreviewConfigs is null)
-        {
-            PreviewConfigs = new Dictionary<string, string>();
-        }
-
         PreviewConfigs.Clear();
 
         var server = GenerateServerPeer();
@@ -304,6 +299,16 @@ public partial class ProjectView
 
                 PreviewConfigs.Add($"Peer {peer.Id}", Encoding.UTF8.GetString(ms.ToArray()));
             }
+        }
+    }
+
+    private async Task UpdateTabAsync(ProjectViewTab tab)
+    {
+        CurrentTab = tab;
+
+        if (tab == ProjectViewTab.Preview)
+        {
+            await GeneratePreviewAsync();
         }
     }
 }

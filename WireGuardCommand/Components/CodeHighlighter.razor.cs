@@ -16,6 +16,11 @@ public partial class CodeHighlighter
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if(JSRuntime is null)
+        {
+            return;
+        }
+
         await JSRuntime.InvokeVoidAsync("hljs.highlightAll");
     }
 }
