@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WireGuardCommand.Components;
 
@@ -22,5 +23,15 @@ public partial class CodeHighlighter
         }
 
         await JSRuntime.InvokeVoidAsync("hljs.highlightAll");
+    }
+
+    private async Task CopyToClipboardAsync()
+    {
+        if(JSRuntime is null)
+        {
+            return;
+        }
+
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", Code);
     }
 }
