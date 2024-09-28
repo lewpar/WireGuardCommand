@@ -59,7 +59,7 @@ public class ProjectWriter
 
                 Subnet = subnet,
                 Address = address,
-                Port = project.ListenPort,
+                ListenPort = project.ListenPort,
 
                 AllowedIPs = project.AllowedIPs,
 
@@ -130,7 +130,7 @@ public class ProjectWriter
             client.AppendLine($"# Peer {peerId}");
             client.AppendLine("[Interface]");
             client.AppendLine($"Address = {peer.Address}/{peer.Subnet.Cidr}");
-            client.AppendLine($"ListenPort = {peer.Port}");
+            client.AppendLine($"ListenPort = {peer.ListenPort}");
             client.AppendLine($"PrivateKey = {peer.PrivateKey}");
 
             if (!string.IsNullOrWhiteSpace(peer.DNS))
