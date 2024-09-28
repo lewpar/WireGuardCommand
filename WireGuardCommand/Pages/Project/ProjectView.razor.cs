@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 
 using WireGuardCommand.Components;
@@ -34,9 +35,12 @@ public partial class ProjectView
     [Inject]
     public IOptions<WGCConfig> Options { get; set; } = default!;
 
+    public Dictionary<string, string>? PreviewConfigs { get; set; }
+
     public enum ProjectViewTab
     {
         Configuration,
+        Preview,
         Export
     }
 
@@ -192,35 +196,9 @@ public partial class ProjectView
                 Directory.CreateDirectory(outputPath);
             }
 
-            var subnet = project.Subnet.Split('/');
-            if(subnet.Length < 2)
-            {
-                throw new Exception("Invalid transit subnet, ensure you have included a CIDR.");
-            }
-
-            if(!byte.TryParse(subnet[1], out byte cidr))
-            {
-                throw new Exception("Invalid transit subnet CIDR.");
-            }
-
-            var builder = new WireGuardBuilder(new WireGuardBuilderOptions()
-            {
-                Seed = project.Seed.FromBase64(),
-                Subnet = new IPNetwork2(IPAddress.Parse(subnet[0]), cidr),
-                ListenPort = project.ListenPort,
-                AllowedIPs = project.AllowedIPs,
-                UseLastAddress = project.UseLastAddress,
-                UsePresharedKeys = project.UsePresharedKeys
-            });
-
             using var fsServer = File.OpenWrite(Path.Combine(outputPath, "server.conf"));
 
-            for(int i = 0; i < project.NumberOfClients; i++)
-            {
-                builder.AddPeer();
-            }
-
-            var server = builder.Build();
+            var server = GenerateServerPeer();
 
             var writer = new WireGuardWriter();
 
@@ -256,5 +234,73 @@ public partial class ProjectView
         }
 
         Process.Start("explorer.exe", metadata.Path);
+    }
+
+    private WireGuardPeer GenerateServerPeer()
+    {
+        var project = Cache.CurrentProject.ProjectData;
+        if(project is null)
+        {
+            throw new Exception("Failed to load project data.");
+        }
+
+        var subnet = project.Subnet.Split('/');
+        if (subnet.Length < 2)
+        {
+            throw new Exception("Invalid transit subnet, ensure you have included a CIDR.");
+        }
+
+        if (!byte.TryParse(subnet[1], out byte cidr))
+        {
+            throw new Exception("Invalid transit subnet CIDR.");
+        }
+
+        var builder = new WireGuardBuilder(new WireGuardBuilderOptions()
+        {
+            Seed = project.Seed.FromBase64(),
+            Subnet = new IPNetwork2(IPAddress.Parse(subnet[0]), cidr),
+            ListenPort = project.ListenPort,
+            AllowedIPs = project.AllowedIPs,
+            UseLastAddress = project.UseLastAddress,
+            UsePresharedKeys = project.UsePresharedKeys
+        });
+
+        for (int i = 0; i < project.NumberOfClients; i++)
+        {
+            builder.AddPeer();
+        }
+
+        return builder.Build();
+    }
+
+    private async Task GeneratePreviewAsync()
+    {
+        if(PreviewConfigs is null)
+        {
+            PreviewConfigs = new Dictionary<string, string>();
+        }
+
+        PreviewConfigs.Clear();
+
+        var server = GenerateServerPeer();
+
+        var writer = new WireGuardWriter();
+
+        using (var ms = new MemoryStream())
+        {
+            await writer.WriteAsync(server, ms);
+
+            PreviewConfigs.Add("Server", Encoding.UTF8.GetString(ms.ToArray()));
+        }
+
+        foreach(var peer in server.Peers)
+        {
+            using (var ms = new MemoryStream())
+            {
+                await writer.WriteAsync(peer, ms);
+
+                PreviewConfigs.Add($"Peer {peer.Id}", Encoding.UTF8.GetString(ms.ToArray()));
+            }
+        }
     }
 }

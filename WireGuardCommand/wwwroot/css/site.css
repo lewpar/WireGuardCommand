@@ -61,13 +61,14 @@ input {
 
     border: 1px solid #505050;
 }
-input {
+textarea {
     padding: 0.5rem;
 
     color: white;
-    background-color: #303030;
+    background-color: #202020;
 
-    border: 1px solid #505050;
+    border: 1px solid #404040;
+    box-shadow: black 1px 1px inset;
 }
 
 .dialog {
