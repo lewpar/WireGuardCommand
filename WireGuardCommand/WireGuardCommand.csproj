@@ -5,6 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="wwwroot\lib\highlightjs\es\**" />
+    <Content Remove="wwwroot\lib\highlightjs\es\**" />
+    <EmbeddedResource Remove="wwwroot\lib\highlightjs\es\**" />
+    <None Remove="wwwroot\lib\highlightjs\es\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Components\Alert.razor.css" />
     <None Remove="Components\Tooltip.razor.css" />
   </ItemGroup>
@@ -23,12 +29,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="wwwroot\lib\highlightjs\es\core.js" />
-    <None Include="wwwroot\lib\highlightjs\es\core.min.js" />
-    <None Include="wwwroot\lib\highlightjs\es\highlight.js" />
-    <None Include="wwwroot\lib\highlightjs\es\highlight.min.js" />
-    <None Include="wwwroot\lib\highlightjs\es\languages\ini.js" />
-    <None Include="wwwroot\lib\highlightjs\es\languages\ini.min.js" />
     <None Include="wwwroot\lib\highlightjs\languages\ini.js" />
     <None Include="wwwroot\lib\highlightjs\languages\ini.min.js" />
   </ItemGroup>

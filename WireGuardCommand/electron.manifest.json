@@ -9,7 +9,7 @@
   "environment": "Production",
   "build": {
     "appId": "com.WireGuardCommand.app",
-    "productName": "WireGuardCommand",
+    "productName": "WireGuard Command",
     "copyright": "Copyright © 2020",
     "buildVersion": "1.0.0",
     "compression": "maximum",
@@ -30,6 +30,9 @@
         "filter": [ "**/*" ]
       },
       "**/*"
-    ]
+    ],
+    "win": {
+      "icon": "../../../icon.ico"
+    }
   }
 }
