@@ -33,6 +33,9 @@ public class WireGuardBuilder
             ListenPort = options.ListenPort,
             Endpoint = options.Endpoint,
 
+            PostUp = options.PostUp,
+            PostDown = options.PostDown,
+
             PrivateKey = keypair.PrivateKey,
             PublicKey = keypair.PublicKey
         };

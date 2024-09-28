@@ -21,6 +21,9 @@ public class ProjectData
     public bool IsZippedOutput { get; set; }
     public string ZipPassphrase { get; set; }
 
+    public string PostUp { get; set; }
+    public string PostDown { get; set; }
+
     public ProjectData()
     {
         Interface = "wg0";
@@ -37,6 +40,9 @@ public class ProjectData
 
         IsZippedOutput = false;
         ZipPassphrase = "";
+
+        PostUp = "iptables -A FORWARD -i %i -j ACCEPT\niptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\r\n";
+        PostDown = "iptables -D FORWARD -i %i -j ACCEPT\niptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\r\n";
     }
 
     public ProjectData Clone()

@@ -24,7 +24,36 @@ public class WireGuardWriter
         sb.AppendLine($"Address = {client.Address}/{client.Subnet.Cidr}");
         sb.AppendLine($"ListenPort = {client.ListenPort}");
         sb.AppendLine($"PrivateKey = {client.PrivateKey}");
+
         sb.AppendLine();
+
+        if (isServer && !string.IsNullOrWhiteSpace(client.PostUp))
+        {
+            var commands = client.PostUp.Split('\n');
+            foreach (var command in commands)
+            {
+                if(string.IsNullOrWhiteSpace(command))
+                {
+                    continue;
+                }
+
+                sb.AppendLine($"PostUp = {command}");
+            }
+        }
+
+        if (isServer && !string.IsNullOrWhiteSpace(client.PostDown))
+        {
+            var commands = client.PostDown.Split('\n');
+            foreach (var command in commands)
+            {
+                if(string.IsNullOrWhiteSpace(command))
+                {
+                    continue;
+                }
+
+                sb.AppendLine($"PostDown = {command}");
+            }
+        }
 
         foreach (var peer in client.Peers)
         {
@@ -58,9 +87,9 @@ public class WireGuardWriter
             }
 
             if(peer.Role == WireGuardPeerRole.Server && 
-                !string.IsNullOrWhiteSpace(client.Endpoint))
+                !string.IsNullOrWhiteSpace(peer.Endpoint))
             {
-                sb.AppendLine($"Endpoint = {client.Endpoint}");
+                sb.AppendLine($"Endpoint = {peer.Endpoint}");
             }
 
             sb.AppendLine();

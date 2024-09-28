@@ -155,6 +155,30 @@
                             </div>
                         </div>
                     </fieldset>
+                    <fieldset class="field-group column">
+                        <legend>Commands</legend>
+                        <div class="field">
+                            <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
+                                <label>Post Up</label>
+                                <Tooltip Title="Post Up"
+                                         Content="The commands to be executed when the servers WireGuard interface is brought online.<br/><br/>Add a newline between each new command." />
+                            </div>
+                            <div style="display: flex; gap: 0.5rem">
+                                <textarea style="flex: 1" rows="4" @bind="project.ProjectData.PostUp" />
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
+                                <label>Post Down</label>
+                                <Tooltip Title="Post Down"
+                                         Content="The commands to be executed when the servers WireGuard interface is brought offline.<br/><br/>Add a newline between each new command." />
+                            </div>
+                            <div style="display: flex; gap: 0.5rem">
+                                <textarea style="flex: 1" rows="4" @bind="project.ProjectData.PostDown" />
+                            </div>
+                        </div>
+                    </fieldset>
                 }
                 else if(CurrentTab == ProjectViewTab.Preview)
                 {

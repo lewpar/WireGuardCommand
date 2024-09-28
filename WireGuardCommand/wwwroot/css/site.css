@@ -65,10 +65,9 @@ textarea {
     padding: 0.5rem;
 
     color: white;
-    background-color: #202020;
+    background-color: #303030;
 
-    border: 1px solid #404040;
-    box-shadow: black 1px 1px inset;
+    border: 1px solid #505050;
 }
 
 .dialog {

@@ -23,6 +23,9 @@ public class WireGuardPeer
     public string? DNS { get; set; }
     public string? Endpoint { get; set; }
 
+    public string? PostUp { get; set; }
+    public string? PostDown { get; set; }
+
     public List<WireGuardPeer> Peers { get; set; }
 
     public WireGuardPeer()

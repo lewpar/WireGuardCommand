@@ -12,6 +12,9 @@ public class WireGuardBuilderOptions
 
     public string? Endpoint { get; set; }
 
+    public string? PostUp { get; set; }
+    public string? PostDown { get; set; }
+
     public bool UseLastAddress { get; set; }
     public bool UsePresharedKeys { get; set; }
 }

@@ -266,7 +266,9 @@ public partial class ProjectView
             AllowedIPs = project.AllowedIPs,
             Endpoint = project.Endpoint,
             UseLastAddress = project.UseLastAddress,
-            UsePresharedKeys = project.UsePresharedKeys
+            UsePresharedKeys = project.UsePresharedKeys,
+            PostUp = project.PostUp,
+            PostDown = project.PostDown
         });
 
         for (int i = 0; i < project.NumberOfClients; i++)
