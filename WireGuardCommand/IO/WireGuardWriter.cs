@@ -54,7 +54,13 @@ public class WireGuardWriter
             }
             else
             {
-                sb.Append($"AllowedIPs = {peer.AllowedIPs}");
+                sb.AppendLine($"AllowedIPs = {peer.AllowedIPs}");
+            }
+
+            if(peer.Role == WireGuardPeerRole.Server && 
+                !string.IsNullOrWhiteSpace(client.Endpoint))
+            {
+                sb.AppendLine($"Endpoint = {client.Endpoint}");
             }
 
             sb.AppendLine();

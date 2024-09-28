@@ -264,6 +264,7 @@ public partial class ProjectView
             Subnet = new IPNetwork2(IPAddress.Parse(subnet[0]), cidr),
             ListenPort = project.ListenPort,
             AllowedIPs = project.AllowedIPs,
+            Endpoint = project.Endpoint,
             UseLastAddress = project.UseLastAddress,
             UsePresharedKeys = project.UsePresharedKeys
         });

@@ -20,8 +20,8 @@ public class WireGuardPeer
     public CurveKey PrivateKey { get; set; }
     public CurveKey? PresharedKey { get; set; }
 
-    public string DNS { get; set; }
-    public string Endpoint { get; set; }
+    public string? DNS { get; set; }
+    public string? Endpoint { get; set; }
 
     public List<WireGuardPeer> Peers { get; set; }
 

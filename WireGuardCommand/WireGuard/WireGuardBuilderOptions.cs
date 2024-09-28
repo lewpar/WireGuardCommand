@@ -10,6 +10,8 @@ public class WireGuardBuilderOptions
     public required int ListenPort { get; set; }
     public required string AllowedIPs { get; set; }
 
+    public string? Endpoint { get; set; }
+
     public bool UseLastAddress { get; set; }
     public bool UsePresharedKeys { get; set; }
 }

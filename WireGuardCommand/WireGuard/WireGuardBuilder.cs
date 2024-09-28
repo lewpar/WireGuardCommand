@@ -31,6 +31,7 @@ public class WireGuardBuilder
                         options.Subnet.LastUsable : 
                         options.Subnet.FirstUsable,
             ListenPort = options.ListenPort,
+            Endpoint = options.Endpoint,
 
             PrivateKey = keypair.PrivateKey,
             PublicKey = keypair.PublicKey
