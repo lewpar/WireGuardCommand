@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+
 using QRCoder;
+
 using WireGuardCommand.Extensions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace WireGuardCommand.Components;
 
@@ -50,5 +51,15 @@ public partial class CodeHighlighter
         {
             return qrCode.GetGraphic(20);
         }
+    }
+
+    private async Task SaveConfigAsync()
+    {
+        if(JSRuntime is null)
+        {
+            return;
+        }
+
+        await JSRuntime.InvokeVoidAsync("SaveTextToFile", new[] { "wg.conf",  Code });
     }
 }

@@ -15,21 +15,9 @@
     top: 10px;
 }
 
-.clipboard {
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
-
-    background-color: #303030;
-
-    border: 1px solid #404040;
-    border-radius: 5px;
-}
-
-.qrcode {
+.clipboard,
+.qrcode,
+.save {
     display: flex;
 
     align-items: center;

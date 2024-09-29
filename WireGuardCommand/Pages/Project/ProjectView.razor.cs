@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
-using QRCoder;
+
 using System.Diagnostics;
 using System.Net;
 using System.Runtime.Versioning;
@@ -160,6 +160,7 @@ public partial class ProjectView
         try
         {
             await ProjectManager.SaveProjectAsync(Cache.CurrentProject);
+
             Status = "Saved changes.";
         }
         catch (Exception ex)
