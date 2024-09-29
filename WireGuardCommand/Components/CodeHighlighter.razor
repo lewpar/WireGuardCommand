@@ -1,10 +1,17 @@
 ﻿<div class="code">
+    <Dialog Title="QR Code" Content="@qrCode" Type="DialogType.Ok" @ref="QRCodeDialog"/>
+
     <pre>
         <code class="@Language">
             @Code
         </code>
     </pre>
-    <div class="clipboard" @onclick="CopyToClipboardAsync">
-        <img src="/images/clipboard.png" width="20" height="20" />
+    <div class="actions">
+        <div class="qrcode" @onclick="() => QRCodeDialog.Show()">
+            <img src="/images/qrcode.png" width="20" height="20" />
+        </div>
+        <div class="clipboard" @onclick="CopyToClipboardAsync">
+            <img src="/images/clipboard.png" width="20" height="20" />
+        </div>
     </div>
 </div>

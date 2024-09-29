@@ -5,15 +5,35 @@
     margin: 0;
 }
 
-.clipboard {
+.actions {
     display: flex;
     position: absolute;
+
+    gap: 0.5rem;
+
+    right: 10px;
+    top: 10px;
+}
+
+.clipboard {
+    display: flex;
 
     align-items: center;
     justify-content: center;
 
-    right: 10px;
-    top: 10px;
+    cursor: pointer;
+
+    background-color: #303030;
+
+    border: 1px solid #404040;
+    border-radius: 5px;
+}
+
+.qrcode {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
 
     cursor: pointer;
 

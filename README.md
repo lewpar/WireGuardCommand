@@ -16,3 +16,4 @@ This project uses the following dependencies:
 - **HighlightJS** - Used for syntax highlighting code blocks.
 - **IPNetwork2** - Easy handling of subnetting.
 - **SharpZipLib** - Used for outputting password protected archives.
+- **QRCoder** - For generating QR codes for configs.

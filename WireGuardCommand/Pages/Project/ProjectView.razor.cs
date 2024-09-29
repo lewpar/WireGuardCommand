@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
-
+using QRCoder;
 using System.Diagnostics;
 using System.Net;
 using System.Runtime.Versioning;
@@ -39,8 +39,8 @@ public partial class ProjectView
     [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
 
-    public Dictionary<string, string> PreviewConfigs { get; set; } = new Dictionary<string, string>();
-    public bool LoadingPreview;
+    private Dictionary<string, string> PreviewConfigs { get; set; } = new Dictionary<string, string>();
+    private bool LoadingPreview;
 
     public enum ProjectViewTab
     {
@@ -294,7 +294,8 @@ public partial class ProjectView
         {
             await writer.WriteAsync(server, ms);
 
-            PreviewConfigs.Add("Server", Encoding.UTF8.GetString(ms.ToArray()));
+            var config = Encoding.UTF8.GetString(ms.ToArray());
+            PreviewConfigs.Add("Server", config);
         }
 
         foreach(var peer in server.Peers)
@@ -303,7 +304,8 @@ public partial class ProjectView
             {
                 await writer.WriteAsync(peer, ms);
 
-                PreviewConfigs.Add($"Peer {peer.Id}", Encoding.UTF8.GetString(ms.ToArray()));
+                var config = Encoding.UTF8.GetString(ms.ToArray());
+                PreviewConfigs.Add($"Peer {peer.Id}", config);
             }
         }
 

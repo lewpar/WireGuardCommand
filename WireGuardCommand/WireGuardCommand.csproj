@@ -21,6 +21,7 @@
   <ItemGroup>
     <PackageReference Include="ElectronNET.API" Version="23.6.2" />
     <PackageReference Include="IPNetwork2" Version="3.0.667" />
+    <PackageReference Include="QRCoder" Version="1.6.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
   <ItemGroup>

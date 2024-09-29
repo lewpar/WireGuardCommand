@@ -4,6 +4,7 @@
 
 @using Microsoft.AspNetCore.Components.Sections
 @using WireGuardCommand.Components;
+@using WireGuardCommand.Extensions
 
 @{
     var project = Cache.CurrentProject;
@@ -192,9 +193,11 @@
                     <div style="display: @(LoadingPreview ? "none" : "flex"); flex-direction: column; gap: 1rem">
                         @foreach (var config in PreviewConfigs)
                         {
-                            <div style="display: flex; flex-direction: column;">
-                                <div style="font-size: 1.25rem; font-weight: bold">@config.Key</div>
-                                <CodeHighlighter Code="@config.Value" Language="language-ini" />
+                            <div style="display: flex; gap: 0.5rem">
+                                <div style="flex: 1; display: flex; flex-direction: column;">
+                                    <div style="font-size: 1.25rem; font-weight: bold">@config.Key</div>
+                                    <CodeHighlighter Code="@config.Value" Language="language-ini" />
+                                </div>
                             </div>
                         }
                     </div>
