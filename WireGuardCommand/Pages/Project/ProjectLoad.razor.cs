@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-
+using WireGuardCommand.Components;
 using WireGuardCommand.Services;
 using WireGuardCommand.Services.Models;
 
@@ -7,6 +7,9 @@ namespace WireGuardCommand.Pages.Project;
 
 public partial class ProjectLoad
 {
+    [Inject]
+    public AlertController AlertController { get; set; } = default!;
+
     [Inject]
     public NavigationManager NavigationManager { get; set; } = default!;
 
@@ -16,13 +19,11 @@ public partial class ProjectLoad
     [Inject]
     public ProjectCache Cache { get; set; } = default!;
 
-    public string? Error { get; set; }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if(Cache.CurrentProject.Metadata is null)
         {
-            Error = "Failed to load project metadata.";
+            AlertController.Push(AlertType.Error, "Failed to load project metadata.");
             return;
         }
 
@@ -40,7 +41,7 @@ public partial class ProjectLoad
         }
         catch(Exception ex)
         {
-            Error = $"Failed to load project: {ex.Message}";
+            AlertController.Push(AlertType.Error, $"Failed to load project: {ex.Message}");
             StateHasChanged();
             return;
         }
@@ -50,13 +51,13 @@ public partial class ProjectLoad
     {
         if (Cache.CurrentProject.Metadata is null)
         {
-            Error = "Failed to load project metadata.";
+            AlertController.Push(AlertType.Error, "Failed to load project metadata");
             return;
         }
 
         if(string.IsNullOrWhiteSpace(Cache.CurrentProject.Passphrase))
         {
-            Error = "You need to enter a passphrase to decrypt the project.";
+            AlertController.Push(AlertType.Error, "You need to enter a passphrase to decrypt the project.");
             return;
         }
 
@@ -70,7 +71,7 @@ public partial class ProjectLoad
         }
         catch(Exception ex)
         {
-            Error = $"Failed to decrypt project: {ex.Message}";
+            AlertController.Push(AlertType.Error, $"Failed to decrypt project: {ex.Message}");
             return;
         }
     }

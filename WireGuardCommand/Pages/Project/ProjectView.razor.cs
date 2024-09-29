@@ -22,6 +22,9 @@ namespace WireGuardCommand.Pages.Project;
 public partial class ProjectView
 {
     [Inject]
+    public AlertController AlertController { get; set; } = default!;
+
+    [Inject]
     public ProjectManager ProjectManager { get; set; } = default!;
 
     [Inject]
@@ -50,9 +53,6 @@ public partial class ProjectView
     }
 
     public ProjectViewTab CurrentTab { get; set; } = ProjectViewTab.Configuration;
-
-    public string? Status { get; set; }
-    public string? Error { get; set; }
 
     public bool HasUnsavedChanges
     {
@@ -105,8 +105,6 @@ public partial class ProjectView
 
     private void RegenerateSeed()
     {
-        Error = "";
-
         if (Dialog is null)
         {
             return;
@@ -121,7 +119,7 @@ public partial class ProjectView
             var project = Cache.CurrentProject;
             if (project.ProjectData is null)
             {
-                Error = "Failed to generate seed.";
+                AlertController.Push(AlertType.Error, "Failed to generate seed.");
                 return;
             }
 
@@ -133,12 +131,10 @@ public partial class ProjectView
 
     private bool HasChanges()
     {
-        Error = "";
-
         if(originalData is null || 
             Cache.CurrentProject.ProjectData is null)
         {
-            Error = "Unable to determine changes.";
+            AlertController.Push(AlertType.Error, "Unable to determine changes.");
             return false;
         }
 
@@ -147,9 +143,6 @@ public partial class ProjectView
 
     public async Task SaveChangesAsync()
     {
-        Error = "";
-        Status = "";
-
         if(Cache.CurrentProject.ProjectData is null)
         {
             return;
@@ -161,11 +154,11 @@ public partial class ProjectView
         {
             await ProjectManager.SaveProjectAsync(Cache.CurrentProject);
 
-            Status = "Saved changes.";
+            AlertController.Push(AlertType.Info, "Saved changes.");
         }
         catch (Exception ex)
         {
-            Error = $"Failed to save project: {ex.Message}";
+            AlertController.Push(AlertType.Error, $"Failed to save project: {ex.Message}");
             StateHasChanged();
             return;
         }
@@ -176,9 +169,6 @@ public partial class ProjectView
 
     public async Task GenerateConfigsAsync()
     {
-        Error = "";
-        Status = "";
-
         if (Cache.CurrentProject.ProjectData is null ||
             Cache.CurrentProject.Metadata is null)
         {
@@ -190,7 +180,7 @@ public partial class ProjectView
 
         if(string.IsNullOrWhiteSpace(metadata.Path))
         {
-            Error = "Failed to generate: Failed to find path to project.";
+            AlertController.Push(AlertType.Error, "Failed to generate: Failed to find path to project.");
             return;
         }
 
@@ -217,25 +207,23 @@ public partial class ProjectView
                 await writer.WriteAsync(peer, fsClient);
             }
 
-            Status = "Generated configuration.";
+            AlertController.Push(AlertType.Info, "Generated configuration.");
         }
         catch(Exception ex)
         {
-            Error = $"Failed to generate configs: {ex.Message}";
+            AlertController.Push(AlertType.Error, $"Failed to generate configs: {ex.Message}");
         }
     }
 
     [SupportedOSPlatform("Windows")]
     private void BrowseProject()
     {
-        Error = "";
-
         var metadata = Cache.CurrentProject.Metadata;
 
         if (metadata is null ||
             string.IsNullOrWhiteSpace(metadata.Path))
         {
-            Error = "Failed to open project path, no path was found.";
+            AlertController.Push(AlertType.Error, "Failed to open project path, no path was found.");
             return;
         }
 
@@ -329,12 +317,12 @@ public partial class ProjectView
         var template = Cache.CurrentProject.CreateTemplate();
         if(template is null)
         {
-            Error = "Failed to create template.";
+            AlertController.Push(AlertType.Error, "Failed to save template.");
             return;
         }
 
         await ProjectManager.SaveTemplateAsync(template);
 
-        Status = "Saved template";
+        AlertController.Push(AlertType.Info, "Saved Template");
     }
 }

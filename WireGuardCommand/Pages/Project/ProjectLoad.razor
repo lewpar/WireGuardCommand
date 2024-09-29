@@ -7,12 +7,11 @@
 }
 
 <div class="container">
-    <Alert Type="AlertType.Error" Content="@Error" OnDismiss="() => { Error = string.Empty; }" />
+    <Alert />
 
     <div class="dialog">
         @if (project is not null &&
-                project.Metadata is not null &&
-                string.IsNullOrWhiteSpace(Error))
+                project.Metadata is not null)
         {
             if (project.Metadata.IsEncrypted)
             {

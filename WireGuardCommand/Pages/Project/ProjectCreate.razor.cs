@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
-
+using WireGuardCommand.Components;
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Services;
 using WireGuardCommand.Services.Models;
@@ -9,6 +9,9 @@ namespace WireGuardCommand.Pages.Project;
 
 public partial class ProjectCreate
 {
+    [Inject]
+    public AlertController AlertController { get; set; } = default!;
+
     [Inject]
     public ProjectManager ProjectManager { get; set; } = default!;
 
@@ -28,7 +31,6 @@ public partial class ProjectCreate
     public List<ProjectTemplate> Templates { get; set; } = new List<ProjectTemplate>();
 
     public string? SelectedTemplateName { get; set; }
-    public string? Error { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -46,8 +48,6 @@ public partial class ProjectCreate
 
     private async Task CreateProjectAsync()
     {
-        Error = "";
-
         try
         {
             ProjectTemplate? template = null;
@@ -64,7 +64,7 @@ public partial class ProjectCreate
 
             if(template is null)
             {
-                Error = "Failed to load template";
+                AlertController.Push(AlertType.Error, "Failed to load template.");
                 return;
             }
 
@@ -75,7 +75,7 @@ public partial class ProjectCreate
         }
         catch(Exception ex)
         {
-            Error = $"Failed to create project: {ex.Message}";
+            AlertController.Push(AlertType.Error, $"Failed to create project: {ex.Message}");
         }
     }
 

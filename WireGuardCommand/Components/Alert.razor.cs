@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 
+using WireGuardCommand.Events;
+using WireGuardCommand.Services;
+
 namespace WireGuardCommand.Components;
 
 /// <summary>
@@ -7,22 +10,30 @@ namespace WireGuardCommand.Components;
 /// </summary>
 public partial class Alert
 {
-    [Parameter]
-    public AlertType Type { get; set; } = AlertType.Info;
+    [Inject]
+    public AlertController AlertController { get; set; } = default!;
 
-    [Parameter]
+    public AlertType Type { get; set; } = AlertType.Info;
     public string? Content { get; set; }
 
-    [Parameter]
-    public EventCallback OnDismiss { get; set; }
+    protected override void OnInitialized()
+    {
+        AlertController.AlertPushed += AlertController_AlertPushed;
+    }
+
+    private void AlertController_AlertPushed(object? sender, AlertPushedEventArgs e)
+    {
+        Type = e.Type;
+        Content = e.Message;
+
+        InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
 
     private void Dismiss()
     {
         this.Content = string.Empty;
-
-        if(OnDismiss.HasDelegate)
-        {
-            OnDismiss.InvokeAsync(null);
-        }
     }
 }

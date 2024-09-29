@@ -15,6 +15,9 @@ namespace WireGuardCommand.Pages;
 public partial class Index
 {
     [Inject]
+    public AlertController AlertController { get; set; } = default!;
+
+    [Inject]
     public ProjectManager ProjectManager { get; set; } = default!;
 
     [Inject]
@@ -25,8 +28,6 @@ public partial class Index
 
     [Inject]
     public IOptions<WGCConfig> Options { get; set; } = default!;
-
-    public string? Error { get; set; }
 
     public List<ProjectMetadata> Projects { get; set; } = new List<ProjectMetadata>();
 
@@ -54,7 +55,7 @@ public partial class Index
         }
         catch (Exception ex)
         {
-            Error = $"Failed to load projects: {ex.Message}";
+            AlertController.Push(AlertType.Error, $"Failed to load projects: {ex.Message}");
         }
 
         Loaded = true;
@@ -104,8 +105,6 @@ public partial class Index
 
     private void DeleteProject()
     {
-        Error = "";
-
         if(SelectedProject is null)
         {
             return;
@@ -119,7 +118,7 @@ public partial class Index
         }
         catch(Exception ex)
         {
-            Error = $"Failed to delete project: {ex.Message}";
+            AlertController.Push(AlertType.Error, $"Failed to delete project: {ex.Message}");
         }
     }
 }

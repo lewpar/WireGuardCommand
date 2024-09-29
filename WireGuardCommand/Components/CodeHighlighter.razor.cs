@@ -4,11 +4,15 @@ using Microsoft.JSInterop;
 using QRCoder;
 
 using WireGuardCommand.Extensions;
+using WireGuardCommand.Services;
 
 namespace WireGuardCommand.Components;
 
 public partial class CodeHighlighter
 {
+    [Inject]
+    public AlertController AlertController { get; set; } = default!;
+
     [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
 
@@ -49,6 +53,7 @@ public partial class CodeHighlighter
         }
 
         await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", Code);
+        AlertController.Push(AlertType.Info, "Copied to clipboard.");
     }
 
     private byte[] GetQRCode(string content)

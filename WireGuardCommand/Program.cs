@@ -48,6 +48,8 @@ public class Program
         services.AddSingleton<ProjectCache>();
         services.AddSingleton<ProjectManager>();
 
+        services.AddSingleton<AlertController>();
+
         services.AddRazorPages();
         services.AddServerSideBlazor();
     }

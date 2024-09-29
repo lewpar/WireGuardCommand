@@ -7,7 +7,7 @@
 
 <div class="container">
 
-    <Alert Type="AlertType.Error" Content="@Error" OnDismiss="() => { Error = string.Empty; }"/>
+    <Alert />
     <Dialog Title="@DialogTitle" Content="@DialogContent" Type="DialogType.YesNo" ClickYes="DialogYes" @ref="Dialog"/>
 
     <div class="project-list" @onclick="() => { SelectedProject = null; }">
