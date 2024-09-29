@@ -116,3 +116,30 @@
 .field.horizontal {
     flex-direction: row;
 }
+
+
+
+.toolbar {
+
+}
+.toolbar-item {
+    padding: 0.5rem;
+
+    cursor: pointer;
+}
+.toolbar-item:hover  {
+    background-color: #252525;
+}
+.toolbar-item:hover toolbar-menu {
+    display: flex;
+}
+
+.toolbar-menu {
+    display: none;
+    flex-direction: column;
+
+    background-color: #202020;
+}
+.toolbar-menuitem {
+    padding: 0.5rem;
+}

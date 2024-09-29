@@ -12,10 +12,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Components\Alert.razor.css" />
+    <None Remove="Components\Toolbar.razor.css" />
     <None Remove="Components\Tooltip.razor.css" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Components\Alert.razor.css" />
+    <Content Include="Components\Toolbar.razor.css" />
     <Content Include="Components\Tooltip.razor.css" />
   </ItemGroup>
   <ItemGroup>

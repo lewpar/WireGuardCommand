@@ -1,0 +1,31 @@
+﻿.toolbar-menu {
+    display: flex;
+    position: relative;
+
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    user-select: none;
+
+    padding: 0.5rem;
+
+    transition: background-color 0.25s;
+}
+.toolbar-menu:hover {
+    background-color: #303030;
+}
+
+.toolbar-menu-items {
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+
+    top: 100%;
+    left: 0;
+
+    min-width: 20ch;
+
+    background-color: #303030;
+}

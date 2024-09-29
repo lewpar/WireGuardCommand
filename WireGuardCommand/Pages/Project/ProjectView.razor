@@ -19,25 +19,26 @@
         <Alert Type="AlertType.Info" Content="@Status" OnDismiss="() => { Status = string.Empty; }" />
         <Dialog Type="DialogType.YesNo" Title="@DialogTitle" Content="@DialogContent" ClickYes="@DialogYes" @ref="Dialog"/>
 
-        <div class="project-view-header">
-            <div style="display: flex; flex-direction: column">
-                <div style="font-weight: bold; font-size: 1.25rem">@project.Metadata.Name</div>
+        <Toolbar>
+            <div style="display: flex; flex-direction: column; padding: 0.5rem">
+                <div style="font-weight: bold; font-size: 1rem">@project.Metadata.Name</div>
 
-                @if(HasUnsavedChanges)
+                @if (HasUnsavedChanges)
                 {
                     <div style="font-size: 0.75rem">Unsaved Changes</div>
                 }
             </div>
-            <button class="btn-primary" disabled="@(!HasUnsavedChanges)" @onclick="SaveChangesAsync">Save</button>
-            <div style="flex: 1"></div>
 
-            @if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                <button class="btn-primary" @onclick="BrowseProject">Open Folder</button>
-            }
+            <ToolbarMenu Title="File">
+                @if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    <ToolbarMenuItem Title="Open Folder" OnClick="BrowseProject"></ToolbarMenuItem>
+                }
 
-            <button class="btn-unsafe" @onclick="CloseProject">Close Project</button>
-        </div>
+                <ToolbarMenuItem Title="Save Project" OnClick="SaveChangesAsync"></ToolbarMenuItem>
+                <ToolbarMenuItem Title="Close Project" OnClick="CloseProject"></ToolbarMenuItem>
+            </ToolbarMenu>
+        </Toolbar>
 
         <div class="project-view-body">
             <div style="display: flex; flex-direction: row; gap: 0.5rem">
