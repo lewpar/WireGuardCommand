@@ -25,16 +25,21 @@ public partial class ProjectCreate
     public IOptions<WGCConfig> Options { get; set; } = default!;
 
     public ProjectCreateContext CreateContext { get; set; } = default!;
+    public List<ProjectTemplate> Templates { get; set; } = new List<ProjectTemplate>();
 
+    public string? SelectedTemplateName { get; set; }
     public string? Error { get; set; }
 
     protected override void OnParametersSet()
     {
         var config = Options.Value;
 
-        CreateContext = new ProjectCreateContext(name: "New Project", 
-            path: Path.Combine(config.ProjectsPath, "New Project"), 
-            isEncrypted: config.EncryptByDefault);
+        CreateContext = new ProjectCreateContext()
+        {
+            Name = "New Project",
+            Path = Path.Combine(config.ProjectsPath, "New Project"),
+            IsEncrypted = config.EncryptByDefault
+        };
 
         StateHasChanged();
     }
@@ -45,6 +50,26 @@ public partial class ProjectCreate
 
         try
         {
+            ProjectTemplate? template = null;
+            if(!string.IsNullOrWhiteSpace(SelectedTemplateName))
+            {
+                template = Templates.FirstOrDefault(t => t.Name == SelectedTemplateName);
+            }
+
+            if(string.IsNullOrWhiteSpace(SelectedTemplateName) ||
+                template is null)
+            {
+                template = new ProjectTemplate();
+            }
+
+            if(template is null)
+            {
+                Error = "Failed to load template";
+                return;
+            }
+
+            CreateContext.Template = template;
+
             await ProjectManager.CreateProjectAsync(CreateContext);
             NavigationManager.NavigateTo("/");
         }
@@ -76,5 +101,11 @@ public partial class ProjectCreate
 
         CreateContext.Name = name;
         CreateContext.Path = Path.Combine(config.ProjectsPath, name);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        Templates = await ProjectManager.GetProjectTemplatesAsync();
+        StateHasChanged();
     }
 }

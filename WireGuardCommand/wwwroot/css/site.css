@@ -53,15 +53,21 @@ body {
     background-color: #e13b3b;
 }
 
-input {
+select {
     padding: 0.5rem;
 
     color: white;
     background-color: #303030;
 
     border: 1px solid #505050;
+    transition: background-color 0.25s;
 }
-textarea {
+select:hover {
+    background-color: #404040;
+}
+
+textarea,
+input {
     padding: 0.5rem;
 
     color: white;

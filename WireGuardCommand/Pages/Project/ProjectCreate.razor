@@ -27,6 +27,18 @@
             <input type="text" @bind="CreateContext.Path" readonly />
         </div>
 
+        <div class="field">
+            <label>Template</label>
+            <select @bind="SelectedTemplateName">
+                @for(int i = 0; i < Templates.Count; i++)
+                {
+                    var template = Templates[i];
+
+                    <option value="@template.Name">@template.Name</option>
+                }
+            </select>
+        </div>
+
         <div>
             <label>Encrypted</label>
             <input type="checkbox" @bind="CreateContext.IsEncrypted" />

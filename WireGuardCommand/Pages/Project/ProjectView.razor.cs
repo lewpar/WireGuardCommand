@@ -323,4 +323,18 @@ public partial class ProjectView
             await GeneratePreviewAsync();
         }
     }
+
+    private async Task SaveAsTemplateAsync()
+    {
+        var template = Cache.CurrentProject.CreateTemplate();
+        if(template is null)
+        {
+            Error = "Failed to create template.";
+            return;
+        }
+
+        await ProjectManager.SaveTemplateAsync(template);
+
+        Status = "Saved template";
+    }
 }

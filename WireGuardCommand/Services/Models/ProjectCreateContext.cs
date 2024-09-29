@@ -8,11 +8,15 @@ public class ProjectCreateContext
     public bool IsEncrypted { get; set; }
     public string Passphrase { get; set; }
 
-    public ProjectCreateContext(string name = "", string path = "", bool isEncrypted = false, string passphrase = "")
+    public ProjectTemplate Template { get; set; }
+
+    public ProjectCreateContext()
     {
-        Name = name;
-        Path = path;
-        IsEncrypted = isEncrypted;
-        Passphrase = passphrase;
+        Name = "";
+        Path = "";
+        IsEncrypted = false;
+        Passphrase = "";
+
+        Template = new ProjectTemplate();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using ElectronNET.API.Entities;
+using Microsoft.Extensions.Options;
 
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -261,9 +262,17 @@ public class ProjectManager
             await JsonSerializer.SerializeAsync<ProjectMetadata>(fs, metadata);
         }
 
+        var template = createContext.Template;
+
         var dataPath = Path.Combine(createContext.Path, metadata.IsEncrypted ? "data.bin" : "data.json");
         var data = new ProjectData()
         {
+            ListenPort = template.ListenPort,
+            NumberOfClients = template.NumberOfClients,
+
+            Subnet = template.Subnet,
+            AllowedIPs = template.AllowedIPs,
+
             Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64()
         };
 
@@ -294,5 +303,64 @@ public class ProjectManager
         }
 
         Directory.Delete(metadata.Path, true);
+    }
+
+    public async Task<List<ProjectTemplate>> GetProjectTemplatesAsync()
+    {
+        var templates = new List<ProjectTemplate>();
+        using var scope = serviceProvider.CreateAsyncScope();
+
+        var options = scope.ServiceProvider.GetService<IOptions<WGCConfig>>();
+        if (options is null)
+        {
+            throw new Exception("Failed to get configuration service.");
+        }
+
+        var config = options.Value;
+
+        if (!Directory.Exists(config.TemplatesPath))
+        {
+            Directory.CreateDirectory(config.TemplatesPath);
+        }
+
+        // Default template does not exist on disk.
+        templates.Add(new ProjectTemplate());
+
+        var files = Directory.GetFiles(config.TemplatesPath);
+        foreach (var file in files)
+        {
+            using var fs = File.OpenRead(file);
+            var template = await JsonSerializer.DeserializeAsync<ProjectTemplate>(fs);
+
+            if (template is null || 
+                templates.Contains(template))
+            {
+                continue;
+            }
+
+            templates.Add(template);
+        }
+
+        return templates;
+    }
+
+    public async Task SaveTemplateAsync(ProjectTemplate template)
+    {
+        using var scope = serviceProvider.CreateAsyncScope();
+
+        var options = scope.ServiceProvider.GetService<IOptions<WGCConfig>>();
+        if (options is null)
+        {
+            throw new Exception("Failed to get configuration service.");
+        }
+
+        var config = options.Value;
+
+        var templatePath = Path.Combine(config.TemplatesPath, $"{template.Name.ToLower()}.json");
+
+        using var fs = File.OpenWrite(templatePath);
+        fs.SetLength(0);
+
+        await JsonSerializer.SerializeAsync(fs, template);
     }
 }
