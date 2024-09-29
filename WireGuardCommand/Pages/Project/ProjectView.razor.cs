@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
+
 using System.Diagnostics;
 using System.Net;
 using System.Runtime.Versioning;
@@ -39,6 +40,7 @@ public partial class ProjectView
     public IJSRuntime JSRuntime { get; set; } = default!;
 
     public Dictionary<string, string> PreviewConfigs { get; set; } = new Dictionary<string, string>();
+    public bool LoadingPreview;
 
     public enum ProjectViewTab
     {
@@ -281,6 +283,7 @@ public partial class ProjectView
 
     private async Task GeneratePreviewAsync()
     {
+        LoadingPreview = true;
         PreviewConfigs.Clear();
 
         var server = GenerateServerPeer();
@@ -303,6 +306,9 @@ public partial class ProjectView
                 PreviewConfigs.Add($"Peer {peer.Id}", Encoding.UTF8.GetString(ms.ToArray()));
             }
         }
+
+        await Task.Delay(500);
+        LoadingPreview = false;
     }
 
     private async Task UpdateTabAsync(ProjectViewTab tab)

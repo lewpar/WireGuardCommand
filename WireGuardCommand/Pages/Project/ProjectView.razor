@@ -182,7 +182,14 @@
                 }
                 else if(CurrentTab == ProjectViewTab.Preview)
                 {
-                    <div style="display: flex; flex-direction: column; gap: 1rem">
+                    @if(LoadingPreview)
+                    {
+                        <div style="display: flex; gap: 0.5rem; align-items: center; justify-content: center">
+                            <span>Generating..</span>
+                            <img src="/images/spinner.gif" style="filter: drop-shadow(0 0 5px dodgerblue);" width="40" height="40" />
+                        </div>
+                    }
+                    <div style="display: @(LoadingPreview ? "none" : "flex"); flex-direction: column; gap: 1rem">
                         @foreach (var config in PreviewConfigs)
                         {
                             <div style="display: flex; flex-direction: column;">
