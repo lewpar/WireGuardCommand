@@ -41,8 +41,8 @@ public class ProjectData
         IsZippedOutput = false;
         ZipPassphrase = "";
 
-        PostUp = "iptables -A FORWARD -i %i -j ACCEPT\niptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\r\n";
-        PostDown = "iptables -D FORWARD -i %i -j ACCEPT\niptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\r\n";
+        PostUp = "";
+        PostDown = "";
     }
 
     public ProjectData Clone()

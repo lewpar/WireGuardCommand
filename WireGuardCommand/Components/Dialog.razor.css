@@ -15,6 +15,8 @@
     height: 100%;
 
     backdrop-filter: blur(5px);
+
+    z-index: 99;
 }
 
 .dialog {
@@ -27,4 +29,6 @@
     color: white;
     border: 1px solid #3f3f3f;
     background-color: #202020;
+
+    max-width: 70ch;
 }

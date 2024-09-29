@@ -310,7 +310,7 @@ public partial class ProjectView
             }
         }
 
-        await Task.Delay(500);
+        //await Task.Delay(500);
         LoadingPreview = false;
     }
 

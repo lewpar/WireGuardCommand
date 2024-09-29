@@ -56,7 +56,7 @@
                             <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                                 <label>No. of Clients</label>
                                 <Tooltip Title="Number of Clients"
-                                         Content="Sets the number of generated client peers. <br/><br/>Limited by the transit subnet, but can be manually extended later if within subnet transit limits." />
+                                         Content="Sets the number of generated client peers. <br/><br/>Limited by the transit subnet, but can be manually extended later if within transit subnet limits." />
                             </div>
                             <div style="display: flex; gap: 0.5rem">
                                 <input @bind="project.ProjectData.NumberOfClients" />
@@ -115,7 +115,7 @@
                             <div style="display: flex; gap: 0.25rem; align-items: center">
                                 <label>Interface Name</label>
                                 <Tooltip Title="Interface Name"
-                                         Content="Sets the name of the interface that will be created by WireGuard on the peers." />
+                                         Content="Sets the name of the interface that will be created by WireGuard on both the server and client once configuration is imported." />
                             </div>
 
                             <div style="display: flex; gap: 0.5rem">
@@ -162,7 +162,7 @@
                             <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                                 <label>Post Up</label>
                                 <Tooltip Title="Post Up"
-                                         Content="The commands to be executed when the servers WireGuard interface is brought online.<br/><br/>Add a newline between each new command." />
+                                         Content="The commands to be executed when the servers WireGuard interface is brought online.<br/><br/>Add a newline between each new command.<br/><br/><b>Example</b><br/>iptables -A FORWARD -i %i -j ACCEPT" />
                             </div>
                             <div style="display: flex; gap: 0.5rem">
                                 <textarea style="flex: 1" rows="4" @bind="project.ProjectData.PostUp" />
@@ -173,7 +173,7 @@
                             <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                                 <label>Post Down</label>
                                 <Tooltip Title="Post Down"
-                                         Content="The commands to be executed when the servers WireGuard interface is brought offline.<br/><br/>Add a newline between each new command." />
+                                         Content="The commands to be executed when the servers WireGuard interface is brought offline.<br/><br/>Add a newline between each new command.<br/><br/><b>Example</b><br/>iptables -D FORWARD -i %i -j ACCEPT" />
                             </div>
                             <div style="display: flex; gap: 0.5rem">
                                 <textarea style="flex: 1" rows="4" @bind="project.ProjectData.PostDown" />

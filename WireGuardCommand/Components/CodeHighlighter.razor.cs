@@ -28,7 +28,15 @@ public partial class CodeHighlighter
             return;
         }
 
-        qrCode = $"<img src='data:image/png;base64, {GetQRCode(Code).ToBase64()}' width='256' height='256' alt='qr code'/>";
+        try
+        {
+            var qrCodeData = GetQRCode(Code);
+            qrCode = $"<img src='data:image/png;base64, {qrCodeData.ToBase64()}' width='256' height='256' alt='qr code'/>";
+        }
+        catch(Exception ex)
+        {
+            qrCode = $"Failed to generate QR Code: {ex.Message}";
+        }
 
         await JSRuntime.InvokeVoidAsync("hljs.highlightAll");
     }
@@ -46,7 +54,7 @@ public partial class CodeHighlighter
     private byte[] GetQRCode(string content)
     {
         using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
-        using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.Q))
+        using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.M))
         using (PngByteQRCode qrCode = new PngByteQRCode(qrCodeData))
         {
             return qrCode.GetGraphic(20);
