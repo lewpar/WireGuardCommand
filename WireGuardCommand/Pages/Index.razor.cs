@@ -115,4 +115,9 @@ public partial class Index
             AlertController.Push(AlertType.Error, $"Failed to delete project: {ex.Message}");
         }
     }
+
+    private void OpenSettings()
+    {
+        NavigationManager.NavigateTo("ProjectSettings");
+    }
 }

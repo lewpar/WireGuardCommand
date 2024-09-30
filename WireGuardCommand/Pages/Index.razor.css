@@ -64,3 +64,18 @@
 .project-card.selected {
     background-color: #303030;
 }
+
+.btn-settings {
+    width: 30px;
+    height: 30px;
+
+    background-image: url('/images/gear.png');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    transition: filter 0.25s;
+}
+.btn-settings:hover {
+    filter: brightness(150%);
+}
