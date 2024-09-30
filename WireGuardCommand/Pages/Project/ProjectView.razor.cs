@@ -371,10 +371,11 @@ public partial class ProjectView
             throw new Exception("Invalid transit subnet CIDR.");
         }
 
+        var ipSubnet = new IPNetwork2(IPAddress.Parse(subnet[0]), cidr);
         var builder = new WireGuardBuilder(new WireGuardBuilderOptions()
         {
             Seed = project.Seed.FromBase64(),
-            Subnet = new IPNetwork2(IPAddress.Parse(subnet[0]), cidr),
+            Subnet = ipSubnet,
             ListenPort = project.ListenPort,
             AllowedIPs = project.AllowedIPs,
             Endpoint = project.Endpoint,
@@ -383,6 +384,11 @@ public partial class ProjectView
             PostUp = project.PostUp,
             PostDown = project.PostDown
         });
+
+        if(ipSubnet.Usable < project.NumberOfClients)
+        {
+            throw new Exception("The number of clients exceeds the max usable hosts for the transit subnet.");
+        }
 
         for (int i = 0; i < project.NumberOfClients; i++)
         {
@@ -395,32 +401,41 @@ public partial class ProjectView
     private async Task GeneratePreviewAsync()
     {
         LoadingPreview = true;
+
         PreviewConfigs.Clear();
+        PreviewCode = "";
 
-        var server = GenerateServerPeer();
-
-        var writer = new WireGuardWriter();
-
-        using (var ms = new MemoryStream())
+        try
         {
-            await writer.WriteAsync(server, ms);
+            var server = GenerateServerPeer();
 
-            var config = Encoding.UTF8.GetString(ms.ToArray());
-            PreviewConfigs.Add("Server", config);
-        }
+            var writer = new WireGuardWriter();
 
-        foreach(var peer in server.Peers)
-        {
             using (var ms = new MemoryStream())
             {
-                await writer.WriteAsync(peer, ms);
+                await writer.WriteAsync(server, ms);
 
                 var config = Encoding.UTF8.GetString(ms.ToArray());
-                PreviewConfigs.Add($"Peer {peer.Id}", config);
+                PreviewConfigs.Add("Server", config);
             }
-        }
 
-        PreviewCode = GenerateCustomCommands() ?? "";
+            foreach (var peer in server.Peers)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    await writer.WriteAsync(peer, ms);
+
+                    var config = Encoding.UTF8.GetString(ms.ToArray());
+                    PreviewConfigs.Add($"Peer {peer.Id}", config);
+                }
+            }
+
+            PreviewCode = GenerateCustomCommands() ?? "";
+        }
+        catch(Exception ex)
+        {
+            AlertController.Push(AlertType.Error, $"Failed to generate preview: {ex.Message}");
+        }
 
         await Task.Delay(500);
         LoadingPreview = false;
