@@ -5,6 +5,7 @@ namespace WireGuardCommand.Events;
 public class AlertPushedEventArgs : EventArgs
 {
     public AlertType Type { get; set; }
+
     public string Message { get; }
     public int Lifetime { get; set; }
 

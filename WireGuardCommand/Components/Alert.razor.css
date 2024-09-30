@@ -2,24 +2,32 @@
     position: fixed;
     width: 100vw;
 
-    top: 0;
-
     z-index: 99;
+}
+.container.top {
+    top: 0;
+}
+.container.bottom {
+    bottom: 0;
+    transform: translateY(100%);
 }
 
 .alert {
     display: flex;
     position: sticky;
 
-    top: 0;
     width: calc(100vw - 2rem);
 
     padding: 1rem;
 
-    transform: translateY(-100%);
-
     animation-duration: 0.5s;
     animation-fill-mode: both;
+}
+.alert.top {
+    transform: translateY(-100%);
+}
+.alert.bottom {
+    transform: translateY(100%);
 }
 
 .alert.info {

@@ -4,8 +4,8 @@
 
 @if(showAlert)
 {
-    <div class="container">
-        <div class="alert @(this.Type.ToString().ToLower())" style="@(animationStyle)">
+    <div class="container @(this.Position.ToString().ToLower())">
+        <div class="alert @(this.Type.ToString().ToLower()) @(this.Position.ToString().ToLower())" style="@(animationStyle)">
             <span class="alert-content">@(this.Content)</span>
             <span class="alert-close" @onclick="Dismiss">✖</span>
         </div>

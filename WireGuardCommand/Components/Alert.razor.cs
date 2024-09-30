@@ -13,6 +13,9 @@ public partial class Alert
     [Inject]
     public AlertController AlertController { get; set; } = default!;
 
+    [Parameter]
+    public AlertPosition Position { get; set; } = AlertPosition.Bottom;
+
     public AlertType Type { get; set; } = AlertType.Info;
     public string? Content { get; set; }
 
@@ -36,7 +39,7 @@ public partial class Alert
 
         await InvokeAsync(() =>
         {
-            animationStyle = "animation-name: dropdown";
+            animationStyle = $"animation-name: {(Position == AlertPosition.Top ? "dropdown" : "dropup")}";
 
             Type = e.Type;
             Content = e.Message;
@@ -51,7 +54,7 @@ public partial class Alert
 
             await InvokeAsync(() =>
             {
-                animationStyle = "animation-name: dropup";
+                animationStyle = $"animation-name: {(Position == AlertPosition.Top ? "dropup" : "dropdown")}";
                 StateHasChanged();
             });
 
