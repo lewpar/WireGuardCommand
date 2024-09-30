@@ -146,7 +146,7 @@ public partial class ProjectView
         {
             await ProjectManager.SaveProjectAsync(Cache.CurrentProject);
 
-            AlertController.Push(AlertType.Info, "Saved changes.", 2000);
+            AlertController.Push(AlertType.Info, "Saved changes.", 4000);
         }
         catch (Exception ex)
         {
@@ -228,7 +228,7 @@ public partial class ProjectView
                 await File.WriteAllTextAsync(filePath, commands);
             }
 
-            AlertController.Push(AlertType.Info, "Generated configuration.", 2000);
+            AlertController.Push(AlertType.Info, "Generated configuration.", 4000);
         }
         catch(Exception ex)
         {
@@ -442,6 +442,6 @@ public partial class ProjectView
 
         await ProjectManager.SaveTemplateAsync(template);
 
-        AlertController.Push(AlertType.Info, "Saved Template.", 2000);
+        AlertController.Push(AlertType.Info, "Saved Template.", 4000);
     }
 }

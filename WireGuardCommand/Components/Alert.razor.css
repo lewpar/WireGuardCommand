@@ -15,7 +15,8 @@
 .alert-lifetime {
     height: 2px;
     width: 0;
-    background-color: greenyellow;
+
+    animation-timing-function: linear;
 }
 
 .alert {
