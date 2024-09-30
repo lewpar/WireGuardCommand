@@ -53,7 +53,7 @@ public partial class CodeHighlighter
         }
 
         await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", Code);
-        AlertController.Push(AlertType.Info, "Copied to clipboard.");
+        AlertController.Push(AlertType.Info, "Copied to clipboard.", 2000);
     }
 
     private byte[] GetQRCode(string content)

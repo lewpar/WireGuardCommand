@@ -16,7 +16,6 @@
 
     transform: translateY(-100%);
 
-    animation-name: dropdown;
     animation-duration: 0.5s;
     animation-fill-mode: both;
 }

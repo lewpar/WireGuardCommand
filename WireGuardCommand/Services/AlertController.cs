@@ -7,8 +7,8 @@ public class AlertController
 {
     public event EventHandler<AlertPushedEventArgs>? AlertPushed;
 
-    public void Push(AlertType type, string message)
+    public void Push(AlertType type, string message, int lifetime = 0)
     {
-        AlertPushed?.Invoke(this, new AlertPushedEventArgs(type, message));
+        AlertPushed?.Invoke(this, new AlertPushedEventArgs(type, message, lifetime));
     }
 }

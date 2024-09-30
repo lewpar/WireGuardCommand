@@ -16,27 +16,54 @@ public partial class Alert
     public AlertType Type { get; set; } = AlertType.Info;
     public string? Content { get; set; }
 
+    private int lifetime = 0;
+    private string animationStyle = "";
+
     protected override void OnInitialized()
     {
         AlertController.AlertPushed += AlertController_AlertPushed;
     }
 
-    private void AlertController_AlertPushed(object? sender, AlertPushedEventArgs e)
+    private async void AlertController_AlertPushed(object? sender, AlertPushedEventArgs e)
     {
         Dismiss();
 
-        InvokeAsync(() =>
+        // Repop the alert if the content has not changed.
+        await InvokeAsync(() =>
         {
             StateHasChanged();
         });
 
-        Type = e.Type;
-        Content = e.Message;
-
-        InvokeAsync(() =>
+        await InvokeAsync(() =>
         {
+            animationStyle = "animation-name: dropdown";
+
+            Type = e.Type;
+            Content = e.Message;
+            lifetime = e.Lifetime;
+
             StateHasChanged();
         });
+
+        if(lifetime != 0)
+        {
+            await Task.Delay(lifetime);
+
+            await InvokeAsync(() =>
+            {
+                animationStyle = "animation-name: dropup";
+                StateHasChanged();
+            });
+
+            // Delay before actually removing the alert, must match the animation duration in Alert.razor.css.
+            await Task.Delay(500);
+
+            await InvokeAsync(() =>
+            {
+                Content = "";
+                StateHasChanged();
+            });
+        }
     }
 
     private void Dismiss()

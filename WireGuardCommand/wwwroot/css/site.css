@@ -97,3 +97,13 @@ input {
         transform: translateY(0%);
     }
 }
+
+@keyframes dropup {
+    from {
+        transform: translateY(0%);
+    }
+
+    to {
+        transform: translateY(-100%);
+    }
+}

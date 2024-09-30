@@ -1,7 +1,11 @@
-﻿@if(!string.IsNullOrWhiteSpace(this.Content))
+﻿@{
+    var showAlert = !string.IsNullOrWhiteSpace(this.Content);
+}
+
+@if(showAlert)
 {
     <div class="container">
-        <div class="alert @(this.Type.ToString().ToLower())">
+        <div class="alert @(this.Type.ToString().ToLower())" style="@(animationStyle)">
             <span class="alert-content">@(this.Content)</span>
             <span class="alert-close" @onclick="Dismiss">✖</span>
         </div>
