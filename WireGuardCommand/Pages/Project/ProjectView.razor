@@ -33,10 +33,12 @@
                 @if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     <ToolbarMenuItem Title="Open Folder" OnClick="BrowseProject"></ToolbarMenuItem>
+                    <ToolbarMenuDivider></ToolbarMenuDivider>
                 }
 
                 <ToolbarMenuItem Title="Save as Template" OnClick="SaveAsTemplateAsync"></ToolbarMenuItem>
                 <ToolbarMenuItem Title="Save Project" OnClick="SaveChangesAsync"></ToolbarMenuItem>
+                <ToolbarMenuDivider></ToolbarMenuDivider>
                 <ToolbarMenuItem Title="Close Project" OnClick="CloseProject"></ToolbarMenuItem>
             </ToolbarMenu>
         </Toolbar>

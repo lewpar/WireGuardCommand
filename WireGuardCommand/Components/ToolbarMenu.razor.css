@@ -22,10 +22,16 @@
 
     position: absolute;
 
+    gap: 1px;
+
     top: 100%;
     left: 0;
 
     min-width: 20ch;
 
+    border: 1px solid #505050;
+    box-shadow: #202020 2px 2px;
     background-color: #303030;
+
+    padding: 0.5rem 0;
 }
