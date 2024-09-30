@@ -12,13 +12,19 @@
     transform: translateY(100%);
 }
 
+.alert-lifetime {
+    height: 2px;
+    width: 0;
+    background-color: greenyellow;
+}
+
 .alert {
     display: flex;
+    flex-direction: column;
+
     position: sticky;
 
-    width: calc(100vw - 2rem);
-
-    padding: 1rem;
+    width: calc(100vw);
 
     animation-duration: 0.5s;
     animation-fill-mode: both;

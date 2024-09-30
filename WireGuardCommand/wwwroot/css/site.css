@@ -108,3 +108,13 @@ input {
         transform: translateY(-100%);
     }
 }
+
+@keyframes expand {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
+}

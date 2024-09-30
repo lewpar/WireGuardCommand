@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-
+using System.Timers;
 using WireGuardCommand.Events;
 using WireGuardCommand.Services;
 
@@ -21,6 +21,7 @@ public partial class Alert
 
     private int lifetime = 0;
     private string animationStyle = "";
+    private string lifetimeAnimationStyle = "";
 
     protected override void OnInitialized()
     {
@@ -44,6 +45,9 @@ public partial class Alert
 
             if (lifetime != 0)
             {
+                lifetimeAnimationStyle = $"animation-name: expand; animation-duration: {lifetime / 1000}s";
+                StateHasChanged();
+
                 await Task.Delay(lifetime);
 
                 animationStyle = $"animation-name: {(Position == AlertPosition.Top ? "dropup" : "dropdown")}";
@@ -52,7 +56,7 @@ public partial class Alert
                 // Delay before actually removing the alert, must match the animation duration in Alert.razor.css.
                 await Task.Delay(500);
 
-                Content = "";
+                //Content = "";
                 StateHasChanged();
             }
         });
