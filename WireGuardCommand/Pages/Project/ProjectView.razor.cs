@@ -175,7 +175,6 @@ public partial class ProjectView
             return;
         }
 
-        var project = Cache.CurrentProject.ProjectData;
         var metadata = Cache.CurrentProject.Metadata;
 
         if(string.IsNullOrWhiteSpace(metadata.Path))
@@ -207,12 +206,121 @@ public partial class ProjectView
                 await writer.WriteAsync(peer, fsClient);
             }
 
+            await GenerateCustomCommandAsync(outputPath);
+
             AlertController.Push(AlertType.Info, "Generated configuration.");
         }
         catch(Exception ex)
         {
             AlertController.Push(AlertType.Error, $"Failed to generate configs: {ex.Message}");
         }
+    }
+
+    public async Task GenerateCustomCommandAsync(string outputPath)
+    {
+        var project = Cache.CurrentProject;
+        if(project is null)
+        {
+            return;
+        }
+
+        var data = project.ProjectData;
+        if(data is null)
+        {
+            return;
+        }
+
+        try
+        {
+            if(string.IsNullOrWhiteSpace(data.CommandFileName))
+            {
+                AlertController.Push(AlertType.Error, "You must set a file name for the evaluator output.");
+                return;
+            }
+
+            var filePath = Path.Combine(outputPath, data.CommandFileName);
+
+            if (string.IsNullOrWhiteSpace(data.CommandOnce) &&
+                string.IsNullOrWhiteSpace(data.CommandPerPeer))
+            {
+                if(File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
+
+            var server = GenerateServerPeer();
+            var sb = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(data.CommandOnce))
+            {
+                sb.AppendLine(ReplaceMacros(server, data.CommandOnce));
+            }
+
+            if(!string.IsNullOrWhiteSpace(data.CommandPerPeer))
+            {
+                foreach(var peer in server.Peers)
+                {
+                    sb.AppendLine(ReplaceMacros(server, data.CommandPerPeer, peer.Id));
+                }
+            }
+
+            await File.WriteAllTextAsync(filePath, sb.ToString());
+        }
+        catch(Exception ex)
+        {
+            AlertController.Push(AlertType.Error, $"Failed to generate custom commands: {ex.Message}");
+        }
+    }
+
+    private string ReplaceMacros(WireGuardPeer server, string content, int? peerId = null)
+    {
+        var project = Cache.CurrentProject;
+        if (project is null)
+        {
+            return content;
+        }
+
+        var data = project.ProjectData;
+        if (data is null)
+        {
+            return content;
+        }
+
+        // Generic macros
+        content = content.Replace("{interface}", data.Interface);
+
+        // Server macros
+        content = content.Replace("{server.address}", server.Address.ToString());
+        content = content.Replace("{server.port}", server.ListenPort.ToString());
+
+        content = content.Replace("{server.privatekey}", server.PrivateKey.ToString());
+        content = content.Replace("{server.publickey}", server.PublicKey.ToString());
+
+        // Peer macros
+        if (peerId is not null)
+        {
+            var peer = server.Peers.FirstOrDefault(p => p.Id == peerId);
+            if(peer is null)
+            {
+                return content;
+            }
+
+            content = content.Replace("{peer.id}", peerId.ToString());
+
+            content = content.Replace("{peer.address}", peer.Address.ToString());
+            content = content.Replace("{peer.port}", peer.ListenPort.ToString());
+
+            content = content.Replace("{peer.privatekey}", peer.PrivateKey.ToString());
+            content = content.Replace("{peer.publickey}", peer.PublicKey.ToString());
+
+            if (peer.PresharedKey is not null)
+            {
+                content = content.Replace("{peer.presharedkey}", peer.PresharedKey.ToString());
+            }
+        }
+
+        return content;
     }
 
     [SupportedOSPlatform("Windows")]

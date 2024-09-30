@@ -1,9 +1,16 @@
-﻿.alert {
+﻿.container {
+    position: fixed;
+    width: 100vw;
+
+    z-index: 99;
+}
+
+.alert {
     display: flex;
-    position: absolute;
+    position: sticky;
 
     top: 0;
-    width: calc(100% - 2rem);
+    width: calc(100vw - 2rem);
 
     padding: 1rem;
 
@@ -12,8 +19,6 @@
     animation-name: dropdown;
     animation-duration: 0.5s;
     animation-fill-mode: both;
-
-    z-index: 99;
 }
 
 .alert.info {

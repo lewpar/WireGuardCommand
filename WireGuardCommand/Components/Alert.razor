@@ -1,7 +1,9 @@
 ﻿@if(!string.IsNullOrWhiteSpace(this.Content))
 {
-    <div class="alert @(this.Type.ToString().ToLower())">
-        <span class="alert-content">@(this.Content)</span>
-        <span class="alert-close" @onclick="Dismiss">x</span>
+    <div class="container">
+        <div class="alert @(this.Type.ToString().ToLower())">
+            <span class="alert-content">@(this.Content)</span>
+            <span class="alert-close" @onclick="Dismiss">x</span>
+        </div>
     </div>
 }

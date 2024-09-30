@@ -158,6 +158,7 @@
                             </div>
                         </div>
                     </fieldset>
+
                     <fieldset class="field-group column">
                         <legend>Commands</legend>
                         <div class="field">
@@ -179,6 +180,47 @@
                             </div>
                             <div style="display: flex; gap: 0.5rem">
                                 <textarea style="flex: 1" rows="4" @bind="project.ProjectData.PostDown" />
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="field-group column">
+                        <legend style="display: flex; gap: 0.5rem">
+                            <span>Evaluator</span>
+                            <Tooltip Title="Evaluator"
+                                     Content="The evaluator takes your input and replaces any macros before outputting to a file.<br/><br/>This is useful if you need to generate commands for another system for the server or each peer."/>
+                        </legend>
+
+                        <div class="field">
+                            <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
+                                <label>File Name</label>
+                                <Tooltip Title="File Name"
+                                         Content="The name of the output file." />
+                            </div>
+                            <div style="display: flex; gap: 0.5rem">
+                                <textarea style="flex: 1" rows="4" @bind="project.ProjectData.CommandFileName"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
+                                <label>Once</label>
+                                <Tooltip Title="Once"
+                                         Content="This field is evaluated once. Macros are supported." />
+                            </div>
+                            <div style="display: flex; gap: 0.5rem">
+                                <textarea style="flex: 1" rows="4" @bind="project.ProjectData.CommandOnce"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
+                                <label>Per Peer</label>
+                                <Tooltip Title="Per Peer"
+                                         Content="This field is evaluated once for every peer. Macros are supported." />
+                            </div>
+                            <div style="display: flex; gap: 0.5rem">
+                                <textarea style="flex: 1" rows="4" @bind="project.ProjectData.CommandPerPeer"></textarea>
                             </div>
                         </div>
                     </fieldset>

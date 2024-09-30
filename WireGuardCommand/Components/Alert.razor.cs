@@ -23,6 +23,13 @@ public partial class Alert
 
     private void AlertController_AlertPushed(object? sender, AlertPushedEventArgs e)
     {
+        Dismiss();
+
+        InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+
         Type = e.Type;
         Content = e.Message;
 

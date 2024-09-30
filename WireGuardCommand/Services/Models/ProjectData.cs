@@ -24,6 +24,10 @@ public class ProjectData
     public string PostUp { get; set; }
     public string PostDown { get; set; }
 
+    public string CommandOnce { get; set; }
+    public string CommandPerPeer { get; set; }
+    public string CommandFileName { get; set; }
+
     public ProjectData()
     {
         Interface = "wg0";
@@ -43,6 +47,10 @@ public class ProjectData
 
         PostUp = "";
         PostDown = "";
+
+        CommandOnce = "The server is listening on: {server.address}:{server.port} with interface {interface}";
+        CommandPerPeer = "Peer {peer.id} is listening on {peer.address}:{peer.port} with interface {interface}";
+        CommandFileName = "output.wgc";
     }
 
     public ProjectData Clone()
@@ -62,7 +70,14 @@ public class ProjectData
             UseLastAddress = UseLastAddress,
 
             IsZippedOutput = IsZippedOutput,
-            ZipPassphrase = ZipPassphrase
+            ZipPassphrase = ZipPassphrase,
+
+            PostUp = PostUp,
+            PostDown = PostDown,
+
+            CommandFileName = CommandFileName,
+            CommandOnce = CommandOnce,
+            CommandPerPeer = CommandPerPeer,
         };
     }
 }
