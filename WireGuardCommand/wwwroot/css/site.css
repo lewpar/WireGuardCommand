@@ -22,18 +22,19 @@ body {
     border-radius: 5px;
 
     color: white;
-    background-color: dodgerblue;
+    background-image: linear-gradient(dodgerblue, #0f5daa);
 
     text-decoration: none;
 
-    transition: background-color 0.25s;
+    transition: filter 0.25s;
 }
 .btn-primary:hover {
-    background-color: #46a4ff;
+    filter: brightness(125%);
 }
+
 .btn-primary:disabled {
-    color: lightgray;
-    background-color: #145a9e;
+    color: #696969;
+    background-image: linear-gradient(#8b8b8b, #cacaca);
 }
 
 .btn-unsafe {
@@ -43,14 +44,14 @@ body {
     border-radius: 5px;
 
     color: white;
-    background-color: #d71717;
+    background-image: linear-gradient(#ff2020, #a71515);
 
     text-decoration: none;
 
-    transition: background-color 0.25s;
+    transition: filter 0.25s;
 }
 .btn-unsafe:hover {
-    background-color: #e13b3b;
+    filter: brightness(125%);
 }
 
 select {
