@@ -121,6 +121,11 @@ public partial class ProjectView
 
                 project.ProjectData.Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64();
             });
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
         });
     }
 
