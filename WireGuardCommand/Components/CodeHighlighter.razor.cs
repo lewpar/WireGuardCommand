@@ -22,6 +22,9 @@ public partial class CodeHighlighter
     [Parameter]
     public string Code { get; set; } = "";
 
+    [Parameter]
+    public string FileName { get; set; } = "wg.conf";
+
     private string qrCode = "";
     public Dialog QRCodeDialog { get; set; } = default!;
 
@@ -73,7 +76,7 @@ public partial class CodeHighlighter
             return;
         }
 
-        await JSRuntime.InvokeVoidAsync("SaveTextToFile", new[] { "wg.conf",  Code });
+        await JSRuntime.InvokeVoidAsync("SaveTextToFile", new[] { FileName,  Code });
     }
 
     private void ShowQRCode()

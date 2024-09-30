@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using ElectronNET.API.Entities;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 
@@ -43,6 +44,7 @@ public partial class ProjectView
     public IJSRuntime JSRuntime { get; set; } = default!;
 
     private Dictionary<string, string> PreviewConfigs { get; set; } = new Dictionary<string, string>();
+    private string PreviewCode { get; set; } = "";
     private bool LoadingPreview;
 
     public enum ProjectViewTab
@@ -183,6 +185,13 @@ public partial class ProjectView
             return;
         }
 
+        var data = Cache.CurrentProject.ProjectData;
+        if (data is null)
+        {
+            AlertController.Push(AlertType.Error, "Failed to get project data.");
+            return;
+        }
+
         try
         {
             var outputPath = Path.Combine(metadata.Path, "Output");
@@ -206,7 +215,28 @@ public partial class ProjectView
                 await writer.WriteAsync(peer, fsClient);
             }
 
-            await GenerateCustomCommandAsync(outputPath);
+            string? commands = GenerateCustomCommands();
+            if(!string.IsNullOrWhiteSpace(commands))
+            {
+                if (string.IsNullOrWhiteSpace(data.CommandFileName))
+                {
+                    AlertController.Push(AlertType.Error, "You must set a file name for the evaluator output.");
+                    return;
+                }
+
+                var filePath = Path.Combine(outputPath, data.CommandFileName);
+
+                if (string.IsNullOrWhiteSpace(data.CommandOnce) &&
+                    string.IsNullOrWhiteSpace(data.CommandPerPeer))
+                {
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+                }
+
+                await File.WriteAllTextAsync(filePath, commands);
+            }
 
             AlertController.Push(AlertType.Info, "Generated configuration.", 2000);
         }
@@ -216,39 +246,22 @@ public partial class ProjectView
         }
     }
 
-    public async Task GenerateCustomCommandAsync(string outputPath)
+    public string? GenerateCustomCommands()
     {
         var project = Cache.CurrentProject;
         if(project is null)
         {
-            return;
+            return null;
         }
 
         var data = project.ProjectData;
         if(data is null)
         {
-            return;
+            return null;
         }
 
         try
         {
-            if(string.IsNullOrWhiteSpace(data.CommandFileName))
-            {
-                AlertController.Push(AlertType.Error, "You must set a file name for the evaluator output.");
-                return;
-            }
-
-            var filePath = Path.Combine(outputPath, data.CommandFileName);
-
-            if (string.IsNullOrWhiteSpace(data.CommandOnce) &&
-                string.IsNullOrWhiteSpace(data.CommandPerPeer))
-            {
-                if(File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-            }
-
             var server = GenerateServerPeer();
             var sb = new StringBuilder();
 
@@ -265,11 +278,12 @@ public partial class ProjectView
                 }
             }
 
-            await File.WriteAllTextAsync(filePath, sb.ToString());
+            return sb.ToString();
         }
         catch(Exception ex)
         {
             AlertController.Push(AlertType.Error, $"Failed to generate custom commands: {ex.Message}");
+            return null;
         }
     }
 
@@ -405,6 +419,8 @@ public partial class ProjectView
                 PreviewConfigs.Add($"Peer {peer.Id}", config);
             }
         }
+
+        PreviewCode = GenerateCustomCommands() ?? "";
 
         await Task.Delay(500);
         LoadingPreview = false;
