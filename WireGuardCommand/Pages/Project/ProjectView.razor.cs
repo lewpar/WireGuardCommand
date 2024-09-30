@@ -1,5 +1,4 @@
-﻿using ElectronNET.API.Entities;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 
@@ -46,15 +45,6 @@ public partial class ProjectView
     private Dictionary<string, string> PreviewConfigs { get; set; } = new Dictionary<string, string>();
     private string PreviewCode { get; set; } = "";
     private bool LoadingPreview;
-
-    public enum ProjectViewTab
-    {
-        Configuration,
-        Preview,
-        Export
-    }
-
-    public ProjectViewTab CurrentTab { get; set; } = ProjectViewTab.Configuration;
 
     public bool HasUnsavedChanges
     {
@@ -439,16 +429,6 @@ public partial class ProjectView
 
         await Task.Delay(500);
         LoadingPreview = false;
-    }
-
-    private async Task UpdateTabAsync(ProjectViewTab tab)
-    {
-        CurrentTab = tab;
-
-        if (tab == ProjectViewTab.Preview)
-        {
-            await GeneratePreviewAsync();
-        }
     }
 
     private async Task SaveAsTemplateAsync()

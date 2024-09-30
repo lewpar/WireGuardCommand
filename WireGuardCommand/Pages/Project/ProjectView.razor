@@ -44,16 +44,8 @@
         </Toolbar>
 
         <div class="project-view-body">
-            <div style="display: flex; flex-direction: row; gap: 0.5rem">
-                @foreach (ProjectViewTab tab in Enum.GetValues(typeof(ProjectViewTab)))
-                {
-                    <button @onclick="async () => { await UpdateTabAsync(tab); }" class="tab-button @(CurrentTab == tab ? "active" : "")">@tab.ToString()</button>
-                }
-            </div>
-
-            <div class="project-view-tab">
-                @if(CurrentTab == ProjectViewTab.Configuration)
-                {
+            <TabMenu>
+                <TabPage Title="Configuration" Default="true">
                     <fieldset class="field-group row">
                         <legend>General</legend>
                         <div class="field">
@@ -190,7 +182,7 @@
                         <legend style="display: flex; gap: 0.5rem">
                             <span>Evaluator</span>
                             <Tooltip Title="Evaluator"
-                                     Content="The evaluator takes your input and replaces any macros before outputting to a file.<br/><br/>This is useful if you need to generate commands for another system for the server or each peer."/>
+                                     Content="The evaluator takes your input and replaces any macros before outputting to a file.<br/><br/>This is useful if you need to generate commands for another system for the server or each peer." />
                         </legend>
 
                         <div class="field">
@@ -226,10 +218,10 @@
                             </div>
                         </div>
                     </fieldset>
-                }
-                else if(CurrentTab == ProjectViewTab.Preview)
-                {
-                    @if(LoadingPreview)
+                </TabPage>
+
+                <TabPage Title="Preview" OnPageLoad="GeneratePreviewAsync">
+                    @if (LoadingPreview)
                     {
                         <div style="display: flex; gap: 0.5rem; align-items: center; justify-content: center">
                             <span>Generating..</span>
@@ -237,7 +229,7 @@
                         </div>
                     }
                     <div style="display: @(LoadingPreview ? "none" : "flex"); flex-direction: column; gap: 1rem">
-                        @if(!string.IsNullOrWhiteSpace(PreviewCode))
+                        @if (!string.IsNullOrWhiteSpace(PreviewCode))
                         {
                             <div style="display: flex; gap: 0.5rem">
                                 <div style="flex: 1; display: flex; flex-direction: column;">
@@ -257,9 +249,9 @@
                             </div>
                         }
                     </div>
-                }
-                else if(CurrentTab == ProjectViewTab.Export)
-                {
+                </TabPage>
+
+                <TabPage Title="Output">
                     <fieldset class="field-group">
                         <legend>General</legend>
                         <div class="field">
@@ -298,8 +290,8 @@
                     </fieldset>
 
                     <button class="btn-primary" @onclick="GenerateConfigsAsync">Export</button>
-                }
-            </div>
+                </TabPage>
+            </TabMenu>
         </div>
     }
     else

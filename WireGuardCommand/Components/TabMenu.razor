@@ -1,0 +1,14 @@
+﻿<div class="tabmenu">
+    <div class="tabmenu-headers">
+        @foreach(var p in Pages)
+        {
+            <div class="tab-button @(CurrentPage == p ? "active" : "")" @onclick="async () => await SetPageAsync(p)">@(p.Title)</div>
+        }
+    </div>
+
+    <div class="tabmenu-page">
+        <CascadingValue Value="this">
+            @ChildContent
+        </CascadingValue>
+    </div>
+</div>
