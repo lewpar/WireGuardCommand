@@ -99,7 +99,7 @@
                             <div style="display: flex; gap: 0.25rem; align-items: center">
                                 <label>Endpoint</label>
                                 <Tooltip Title="Endpoint"
-                                         Content="The endpoint is not mandatory.<br/><br/>However, it enforces the client to connect to the hosting endpoint and not to the endpoint that the public key routes to." />
+                                         Content="The endpoint is not mandatory.<br/><br/>However, it enforces the client to connect to the hosting endpoint and not to the endpoint that the public key routes to.<br/><br/><b>Example</b><br/>remote.endpoint.net:51820" />
                             </div>
 
                             <div style="display: flex; gap: 0.5rem">
@@ -200,7 +200,7 @@
                             <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                                 <label>Once</label>
                                 <Tooltip Title="Once"
-                                         Content="This field is evaluated once. Macros are supported." />
+                                         Content="This field is evaluated once. Macros are supported.<br/><br/><b>Example</b><br/>The server is listening on: {server.address}:{server.port} with interface {interface}" />
                             </div>
                             <div style="display: flex; gap: 0.5rem">
                                 <textarea style="flex: 1" rows="4" @bind="project.ProjectData.CommandOnce"></textarea>
@@ -211,7 +211,7 @@
                             <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                                 <label>Per Peer</label>
                                 <Tooltip Title="Per Peer"
-                                         Content="This field is evaluated once for every peer. Macros are supported." />
+                                         Content="This field is evaluated once for every peer. Macros are supported.<br/><br/><b>Example</b><br/>Peer {peer.id} is listening on {peer.address}:{peer.port} with interface {interface}" />
                             </div>
                             <div style="display: flex; gap: 0.5rem">
                                 <textarea style="flex: 1" rows="4" @bind="project.ProjectData.CommandPerPeer"></textarea>

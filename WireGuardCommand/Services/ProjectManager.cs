@@ -267,13 +267,26 @@ public class ProjectManager
         var dataPath = Path.Combine(createContext.Path, metadata.IsEncrypted ? "data.bin" : "data.json");
         var data = new ProjectData()
         {
+            Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64(),
+
+            DNS = template.DNS,
+            Endpoint = template.Endpoint,
+
             ListenPort = template.ListenPort,
             NumberOfClients = template.NumberOfClients,
 
             Subnet = template.Subnet,
             AllowedIPs = template.AllowedIPs,
 
-            Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64()
+            UseLastAddress = template.UseLastAddress,
+            UsePresharedKeys = template.UsePresharedKeys,
+
+            PostUp = template.PostUp,
+            PostDown = template.PostDown,
+
+            CommandFileName = template.CommandFileName,
+            CommandOnce = template.CommandOnce,
+            CommandPerPeer = template.CommandPerPeer,
         };
 
         using (var fs = File.OpenWrite(dataPath))

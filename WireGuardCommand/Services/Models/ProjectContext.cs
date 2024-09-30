@@ -19,11 +19,24 @@ public class ProjectContext
         {
             Name = Metadata.Name ?? $"template-{Guid.NewGuid()}",
 
+            DNS = ProjectData.DNS,
+            Endpoint = ProjectData.Endpoint,
+
             ListenPort = ProjectData.ListenPort,
             NumberOfClients = ProjectData.NumberOfClients,
 
             Subnet = ProjectData.Subnet,
             AllowedIPs = ProjectData.AllowedIPs,
+
+            UseLastAddress = ProjectData.UseLastAddress,
+            UsePresharedKeys = ProjectData.UsePresharedKeys,
+
+            PostUp = ProjectData.PostUp,
+            PostDown = ProjectData.PostDown,
+
+            CommandFileName = ProjectData.CommandFileName,
+            CommandOnce = ProjectData.CommandOnce,
+            CommandPerPeer = ProjectData.CommandPerPeer,
         };
     }
 }

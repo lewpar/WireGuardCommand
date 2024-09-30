@@ -9,14 +9,18 @@ public class ProjectData
     public string Interface { get; set; }
 
     public string Seed { get; set; }
+
     public int NumberOfClients { get; set; }
     public string Subnet { get; set; }
-    public bool UsePresharedKeys { get; set; }
+
     public string DNS { get; set; }
     public string Endpoint { get; set; }
+
     public int ListenPort { get; set; }
     public string AllowedIPs { get; set; }
+
     public bool UseLastAddress { get; set; }
+    public bool UsePresharedKeys { get; set; }
 
     public bool IsZippedOutput { get; set; }
     public string ZipPassphrase { get; set; }
@@ -48,8 +52,8 @@ public class ProjectData
         PostUp = "";
         PostDown = "";
 
-        CommandOnce = "The server is listening on: {server.address}:{server.port} with interface {interface}";
-        CommandPerPeer = "Peer {peer.id} is listening on {peer.address}:{peer.port} with interface {interface}";
+        CommandOnce = "";
+        CommandPerPeer = "";
         CommandFileName = "output.wgc";
     }
 
