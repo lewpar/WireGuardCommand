@@ -1,61 +1,36 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace WireGuardCommand.Components;
+﻿namespace WireGuardCommand.Components;
 
 public partial class Dialog
 {
-    [Parameter]
     public string Title { get; set; } = "";
-
-    [Parameter]
     public string Content { get; set; } = "";
-
-    [Parameter]
     public DialogType Type { get; set; } = DialogType.Ok;
-
-    [Parameter]
-    public EventCallback ClickOk { get; set; }
-
-    [Parameter]
-    public EventCallback ClickYes { get; set; }
-
-    [Parameter]
-    public EventCallback ClickNo { get; set; }
+    public Func<Task>? Action { get; set; }
 
     private bool isVisible;
 
-    private void OnClickOk()
+    private async Task OnClickYesAsync()
     {
         Hide();
 
-        if (ClickOk.HasDelegate)
+        if(Action is not null)
         {
-            ClickOk.InvokeAsync(null);
-        }
-    }
-
-    private void OnClickYes()
-    {
-        Hide();
-
-        if (ClickYes.HasDelegate)
-        {
-            ClickYes.InvokeAsync(null);
+            await Action.Invoke();
         }
     }
 
     private void OnClickNo()
     {
         Hide();
-
-        if (ClickNo.HasDelegate)
-        {
-            ClickNo.InvokeAsync(null);
-        }
     }
 
-    public void Show()
+    public void Show(DialogType type, string title, string content, Func<Task>? onClickYes = null)
     {
+        Type = type;
+        Title = title;
+        Content = content;
+        Action = onClickYes;
+
         isVisible = true;
         StateHasChanged();
     }

@@ -75,4 +75,9 @@ public partial class CodeHighlighter
 
         await JSRuntime.InvokeVoidAsync("SaveTextToFile", new[] { "wg.conf",  Code });
     }
+
+    private void ShowQRCode()
+    {
+        QRCodeDialog.Show(DialogType.Ok, "QR Code", qrCode);
+    }
 }

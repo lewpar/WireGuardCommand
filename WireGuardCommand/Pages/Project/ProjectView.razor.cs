@@ -62,9 +62,6 @@ public partial class ProjectView
     private ProjectData? originalData;
 
     public Dialog? Dialog { get; set; }
-    public string DialogTitle { get; set; } = "";
-    public string DialogContent { get; set; } = "";
-    public Action DialogYes { get; set; } = () => { };
 
     protected override void OnInitialized()
     {
@@ -86,15 +83,14 @@ public partial class ProjectView
                 return;
             }
 
-            DialogTitle = "Unsaved Changes";
-            DialogContent = "You have unsaved changes, are you sure you want to close the project?";
-            Dialog.Show();
-
-            DialogYes = () =>
+            Dialog.Show(DialogType.YesNo, "Unsaved Changes", "You have unsaved changes, are you sure you want to close the project?", async () =>
             {
-                NavigationManager.NavigateTo("/");
-                Cache.Clear();
-            };
+                await Task.Run(() =>
+                {
+                    NavigationManager.NavigateTo("/");
+                    Cache.Clear();
+                });
+            });
         }
         else
         {
@@ -110,23 +106,22 @@ public partial class ProjectView
             return;
         }
 
-        DialogTitle = "Regenerate Seed";
-        DialogContent = "Are you sure you want to regenerate the project seed?<br/>This is <b>irreversable</b> and will require you to redeploy all of your peers.";
-        Dialog.Show();
-
-        DialogYes = () =>
+        Dialog.Show(DialogType.YesNo, "Regenerate Seed", "Are you sure you want to regenerate the project seed?<br/>This is <b>irreversable</b> and will require you to redeploy all of your peers.", async () =>
         {
-            var project = Cache.CurrentProject;
-            if (project.ProjectData is null)
+            await Task.Run(() =>
             {
-                AlertController.Push(AlertType.Error, "Failed to generate seed.");
-                return;
-            }
+                var project = Cache.CurrentProject;
+                if (project.ProjectData is null)
+                {
+                    AlertController.Push(AlertType.Error, "Failed to generate seed.");
+                    return;
+                }
 
-            var config = Options.Value;
+                var config = Options.Value;
 
-            project.ProjectData.Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64();
-        };
+                project.ProjectData.Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64();
+            });
+        });
     }
 
     private bool HasChanges()

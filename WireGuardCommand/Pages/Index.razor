@@ -8,7 +8,7 @@
 <div class="container">
 
     <Alert />
-    <Dialog Title="@DialogTitle" Content="@DialogContent" Type="DialogType.YesNo" ClickYes="DialogYes" @ref="Dialog"/>
+    <Dialog @ref="Dialog"/>
 
     <div class="project-list" @onclick="() => { SelectedProject = null; }">
         <div class="project-list-header">

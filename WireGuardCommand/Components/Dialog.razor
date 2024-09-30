@@ -7,12 +7,12 @@
 
             @if (this.Type == DialogType.Ok)
             {
-                <button class="btn-primary" @onclick="OnClickOk">Ok</button>
+                <button class="btn-primary" @onclick="OnClickYesAsync">Ok</button>
             }
             else if (this.Type == DialogType.YesNo)
             {
                 <div style="display: flex; gap: 0.5rem">
-                    <button class="btn-unsafe" style="flex: 3" @onclick="OnClickYes">Yes</button>
+                    <button class="btn-unsafe" style="flex: 3" @onclick="OnClickYesAsync">Yes</button>
                     <button class="btn-primary" style="flex: 7" @onclick="OnClickNo">No</button>
                 </div>
             }

@@ -36,9 +36,6 @@ public partial class Index
     public bool Loaded { get; set; }
 
     public Dialog? Dialog { get; set; }
-    public Action DialogYes { get; set; } = () => { };
-    public string DialogTitle { get; set; } = "";
-    public string DialogContent { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -92,15 +89,12 @@ public partial class Index
             return;
         }
 
-        DialogTitle = "Delete Project";
-        DialogContent = $"Are you sure you want to delete <b>{SelectedProject?.Name}</b>?";
-        DialogYes = async () => 
+        Dialog.Show(DialogType.YesNo, "Delete Project", $"Are you sure you want to delete <b>{SelectedProject?.Name}</b>?", async () =>
         {
             DeleteProject();
             await LoadProjectsAsync();
-        };
-
-        Dialog.Show();
+            StateHasChanged();
+        });
     }
 
     private void DeleteProject()
