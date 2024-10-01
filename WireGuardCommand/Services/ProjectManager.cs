@@ -360,9 +360,12 @@ public class ProjectManager
 
         var templatePath = Path.Combine(config.TemplatesPath, $"{template.Name.ToLower()}.json");
 
-        using var fs = File.OpenWrite(templatePath);
-        fs.SetLength(0);
+        using (var fs = File.OpenWrite(templatePath))
+        {
+            // Clear contents
+            fs.SetLength(0);
 
-        await JsonSerializer.SerializeAsync(fs, template);
+            await JsonSerializer.SerializeAsync(fs, template);
+        }
     }
 }
