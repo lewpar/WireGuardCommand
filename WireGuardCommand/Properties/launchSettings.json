@@ -13,6 +13,12 @@
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5087"
+    },
+    "Rider": {
+      "commandName": "Executable",
+      "workingDirectory": "$(ProjectDir)",
+      "executablePath": "dotnet",
+      "commandLineArgs": "watch run debug --launch-profile http"
     }
   },
   "iisSettings": {

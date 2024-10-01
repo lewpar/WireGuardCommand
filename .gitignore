@@ -401,3 +401,6 @@ FodyWeavers.xsd
 Projects/
 Templates/
 Output/
+
+# JetBrains
+.idea/
