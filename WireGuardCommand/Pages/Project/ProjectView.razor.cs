@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Components;
 
 using System.Diagnostics;
 using System.Net;
@@ -107,7 +108,7 @@ public partial class ProjectView
 
     private bool HasChanges()
     {
-        if(originalData is null || 
+        if (originalData is null ||
             Cache.CurrentProject.ProjectData is null)
         {
             AlertController.Push(AlertType.Error, "Unable to determine changes.");
@@ -145,6 +146,12 @@ public partial class ProjectView
 
     private async Task GenerateConfigsAsync()
     {
+        if (HasValidationErrors())
+        {
+            AlertController.Push(AlertType.Error, "Failed to generate configs: This project has validation errors.");
+            return;
+        }
+        
         if (Cache.CurrentProject.ProjectData is null ||
             Cache.CurrentProject.Metadata is null)
         {
@@ -373,6 +380,13 @@ public partial class ProjectView
 
         PreviewConfigs.Clear();
         PreviewCode = "";
+        
+        if (HasValidationErrors())
+        {
+            AlertController.Push(AlertType.Error, "Failed to create preview: This project has validation errors.");
+            loadingPreview = false;
+            return;
+        }
 
         try
         {
@@ -412,6 +426,12 @@ public partial class ProjectView
 
     private async Task SaveAsTemplateAsync()
     {
+        if (HasValidationErrors())
+        {
+            AlertController.Push(AlertType.Error, "Failed to create template: This project has validation errors.");
+            return;
+        }
+        
         var template = Cache.CurrentProject.CreateTemplate();
         if(template is null)
         {
@@ -453,5 +473,29 @@ public partial class ProjectView
             <li>{peer.presharedkey} - The preshared key between the server and peer.</li>
             </ul>
             """);
+    }
+
+    private bool HasValidationErrors()
+    {
+        var project = Cache.CurrentProject;
+        var data = project.ProjectData;
+
+        if (data is null)
+        {
+            return true;
+        }
+
+        try
+        {
+            Validator.ValidateObject(data,
+                new ValidationContext(data, null, null),
+                true);
+
+            return false;
+        }
+        catch
+        {
+            return true;
+        }
     }
 }

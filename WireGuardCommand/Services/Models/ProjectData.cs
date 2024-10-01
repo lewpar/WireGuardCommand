@@ -1,5 +1,7 @@
-﻿using System.Security.Cryptography;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 using System.Text.Json;
+
 using WireGuardCommand.Extensions;
 
 namespace WireGuardCommand.Services.Models;
@@ -10,12 +12,17 @@ public class ProjectData
 
     public string Seed { get; set; } = RandomNumberGenerator.GetBytes(256).ToBase64();
 
+    [Required(ErrorMessage = "Please provide a number of clients.")]
+    [Range(1, int.MaxValue, ErrorMessage = "Please provide a valid number of clients.")]
     public int NumberOfClients { get; set; } = 3;
+    
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide a transit subnet.")]
     public string Subnet { get; set; } = "10.0.0.0/24";
 
     public string DNS { get; set; } = "";
     public string Endpoint { get; set; } = "remote.endpoint.net:51820";
 
+    [Range(1, 65535, ErrorMessage = "Please provide a valid listen port between 1 and 65535.")]
     public int ListenPort { get; set; } = 51820;
     public string AllowedIPs { get; set; } = "0.0.0.0/0, ::/0";
 
