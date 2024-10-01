@@ -41,7 +41,8 @@ public partial class ProjectView
     [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
 
-    private Dictionary<string, string> PreviewConfigs { get; set; } = new Dictionary<string, string>();
+    private record PreviewConfig(string Title, string Code, int? PeerId = null);
+    private List<PreviewConfig> PreviewConfigs { get; set; } = new List<PreviewConfig>();
     private string PreviewCode { get; set; } = "";
     private bool LoadingPreview;
 
@@ -405,7 +406,7 @@ public partial class ProjectView
                 await writer.WriteAsync(server, ms);
 
                 var config = Encoding.UTF8.GetString(ms.ToArray());
-                PreviewConfigs.Add("Server", config);
+                PreviewConfigs.Add(new PreviewConfig("Server", config));
             }
 
             foreach (var peer in server.Peers)
@@ -415,7 +416,7 @@ public partial class ProjectView
                     await writer.WriteAsync(peer, ms);
 
                     var config = Encoding.UTF8.GetString(ms.ToArray());
-                    PreviewConfigs.Add($"Peer {peer.Id}", config);
+                    PreviewConfigs.Add(new PreviewConfig($"Peer {peer.Id}", config, peer.Id));
                 }
             }
 
