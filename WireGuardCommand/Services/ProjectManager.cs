@@ -333,16 +333,18 @@ public class ProjectManager
         var files = Directory.GetFiles(config.TemplatesPath);
         foreach (var file in files)
         {
-            using var fs = File.OpenRead(file);
-            var template = await JsonSerializer.DeserializeAsync<ProjectTemplate>(fs);
-
-            if (template is null || 
-                templates.Contains(template))
+            using (var fs = File.OpenRead(file))
             {
-                continue;
-            }
+                var template = await JsonSerializer.DeserializeAsync<ProjectTemplate>(fs);
 
-            templates.Add(template);
+                if (template is null ||
+                    templates.Contains(template))
+                {
+                    continue;
+                }
+
+                templates.Add(template);
+            }
         }
 
         return templates;
