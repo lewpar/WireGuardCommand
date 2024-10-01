@@ -1,5 +1,5 @@
 ﻿using System.Security.Cryptography;
-
+using System.Text.Json;
 using WireGuardCommand.Extensions;
 
 namespace WireGuardCommand.Services.Models;
@@ -34,29 +34,12 @@ public class ProjectData
 
     public ProjectData Clone()
     {
-        return new ProjectData()
+        var clone = JsonSerializer.Deserialize<ProjectData>(JsonSerializer.Serialize(this));
+        if (clone is null)
         {
-            Interface = Interface,
+            throw new Exception("Failed to clone project data.");
+        }
 
-            Seed = Seed,
-            NumberOfClients = NumberOfClients,
-            Subnet = Subnet,
-            UsePresharedKeys = UsePresharedKeys,
-            DNS = DNS,
-            Endpoint = Endpoint,
-            ListenPort = ListenPort,
-            AllowedIPs = AllowedIPs,
-            UseLastAddress = UseLastAddress,
-
-            IsZippedOutput = IsZippedOutput,
-            ZipPassphrase = ZipPassphrase,
-
-            PostUp = PostUp,
-            PostDown = PostDown,
-
-            CommandFileName = CommandFileName,
-            CommandOnce = CommandOnce,
-            CommandPerPeer = CommandPerPeer,
-        };
+        return clone;
     }
 }
