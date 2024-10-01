@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+
 using WireGuardCommand.Components.Models;
 using WireGuardCommand.Events;
 using WireGuardCommand.Services;
@@ -16,8 +17,8 @@ public partial class Alert
     [Parameter]
     public AlertPosition Position { get; set; } = AlertPosition.Bottom;
 
-    public AlertType Type { get; set; } = AlertType.Info;
-    public string? Content { get; set; }
+    private AlertType type = AlertType.Info;
+    private string? content;
 
     private int lifetime = 0;
     private string animationStyle = "";
@@ -37,8 +38,8 @@ public partial class Alert
 
             animationStyle = $"animation-name: {(Position == AlertPosition.Top ? "dropdown" : "dropup")}";
 
-            Type = e.Type;
-            Content = e.Message;
+            type = e.Type;
+            content = e.Message;
             lifetime = e.Lifetime;
 
             StateHasChanged();
@@ -56,7 +57,7 @@ public partial class Alert
                 // Delay before actually removing the alert, must match the animation duration in Alert.razor.css.
                 await Task.Delay(500);
 
-                Content = "";
+                content = "";
                 StateHasChanged();
             }
         });
@@ -64,6 +65,6 @@ public partial class Alert
 
     private void Dismiss()
     {
-        this.Content = string.Empty;
+        content = string.Empty;
     }
 }

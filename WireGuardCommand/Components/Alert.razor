@@ -1,20 +1,20 @@
 ﻿@using WireGuardCommand.Components.Models
 @{
-    var showAlert = !string.IsNullOrWhiteSpace(this.Content);
+    var showAlert = !string.IsNullOrWhiteSpace(this.content);
 }
 
 @if(showAlert)
 {
     <div class="container @(this.Position.ToString().ToLower())">
-        <div class="alert @(this.Type.ToString().ToLower()) @(this.Position.ToString().ToLower())" style="@(animationStyle)">
+        <div class="alert @(this.type.ToString().ToLower()) @(this.Position.ToString().ToLower())" style="@(animationStyle)">
             <div style="display: flex; padding: 1rem;">
-                <span class="alert-content">@(this.Content)</span>
+                <span class="alert-content">@(this.content)</span>
                 <span class="alert-close" @onclick="Dismiss">✖</span>
             </div>
 
             @if(lifetime > 0)
             {
-                <div class="alert-lifetime" style="@(lifetimeAnimationStyle); background-color: @(Type == AlertType.Info ? "#26A4FF" : "#FF3838")"></div>
+                <div class="alert-lifetime" style="@(lifetimeAnimationStyle); background-color: @(type == AlertType.Info ? "#26A4FF" : "#FF3838")"></div>
             }
         </div>
     </div>
