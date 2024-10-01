@@ -56,7 +56,7 @@ public partial class Alert
                 // Delay before actually removing the alert, must match the animation duration in Alert.razor.css.
                 await Task.Delay(500);
 
-                //Content = "";
+                Content = "";
                 StateHasChanged();
             }
         });
