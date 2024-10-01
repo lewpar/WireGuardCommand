@@ -77,6 +77,11 @@ input {
     border: 1px solid #505050;
 }
 
+input:read-only {
+    color: #909090;
+    cursor: default;
+}
+
 .dialog {
     display: flex;
     flex-direction: column;
