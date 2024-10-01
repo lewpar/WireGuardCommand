@@ -8,10 +8,10 @@ public class WireGuardBuilder
 {
     private int currentPeerId;
 
-    private WireGuardPeer server;
-    private List<WireGuardPeer> peers;
+    private readonly WireGuardPeer server;
+    private readonly List<WireGuardPeer> peers;
 
-    private WireGuardBuilderOptions options;
+    private readonly WireGuardBuilderOptions options;
 
     public WireGuardBuilder(WireGuardBuilderOptions options)
     {

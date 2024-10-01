@@ -102,51 +102,53 @@ public class ProjectManager
 
         var dataPath = Path.Combine(projectPath, metadata.IsEncrypted ? "data.bin" : "data.json");
 
-        using var fs = File.OpenWrite(dataPath);
-        fs.SetLength(0);
-
-        if (metadata.IsEncrypted)
+        await using (var fs = File.OpenWrite(dataPath))
         {
-            if (string.IsNullOrWhiteSpace(context.Passphrase))
+            fs.SetLength(0);
+
+            if (metadata.IsEncrypted)
             {
-                throw new Exception("No passphrase found for current project.");
+                if (string.IsNullOrWhiteSpace(context.Passphrase))
+                {
+                    throw new Exception("No passphrase found for current project.");
+                }
+
+                if (string.IsNullOrEmpty(metadata.Salt))
+                {
+                    throw new Exception("Failed to retrieve Salt from metadata.");
+                }
+
+                if (string.IsNullOrEmpty(metadata.IV))
+                {
+                    throw new Exception("Failed to retrieve IV from metadata.");
+                }
+
+                var salt = metadata.Salt.FromBase64();
+                var iv = metadata.IV.FromBase64();
+
+                var key = AESProvider.GenerateKey(context.Passphrase, salt);
+
+                using var ms = new MemoryStream();
+                await JsonSerializer.SerializeAsync(ms, data);
+
+                var buffer = AESProvider.Encrypt(ms.ToArray(), key, iv);
+
+                await fs.WriteAsync(buffer, 0, buffer.Length);
             }
-
-            if (string.IsNullOrEmpty(metadata.Salt))
+            else
             {
-                throw new Exception("Failed to retrieve Salt from metadata.");
+                await JsonSerializer.SerializeAsync(fs, data, new JsonSerializerOptions()
+                {
+                    WriteIndented = true
+                });
             }
-
-            if (string.IsNullOrEmpty(metadata.IV))
-            {
-                throw new Exception("Failed to retrieve IV from metadata.");
-            }
-
-            var salt = metadata.Salt.FromBase64();
-            var iv = metadata.IV.FromBase64();
-
-            var key = AESProvider.GenerateKey(context.Passphrase, salt);
-
-            using var ms = new MemoryStream();
-            await JsonSerializer.SerializeAsync(ms, data);
-
-            var buffer = AESProvider.Encrypt(ms.ToArray(), key, iv);
-
-            await fs.WriteAsync(buffer, 0, buffer.Length);
-        }
-        else
-        {
-            await JsonSerializer.SerializeAsync(fs, data, new JsonSerializerOptions()
-            {
-                WriteIndented = true
-            });
         }
     }
 
     public async Task<List<ProjectMetadata>> GetProjectsAsync()
     {
         var projects = new List<ProjectMetadata>();
-        using var scope = serviceProvider.CreateAsyncScope();
+        await using var scope = serviceProvider.CreateAsyncScope();
 
         var config = scope.ServiceProvider.GetService<WGCConfig>();
         if(config is null)
@@ -198,7 +200,7 @@ public class ProjectManager
 
     private async Task<ProjectMetadata> GetMetadataAsync(string metadataPath)
     {
-        using var fs = File.OpenRead(metadataPath);
+        await using var fs = File.OpenRead(metadataPath);
 
         var metadata = await JsonSerializer.DeserializeAsync<ProjectMetadata>(fs);
         if(metadata is null)
@@ -363,7 +365,7 @@ public class ProjectManager
 
     public async Task SaveTemplateAsync(ProjectTemplate template)
     {
-        using var scope = serviceProvider.CreateAsyncScope();
+        await using var scope = serviceProvider.CreateAsyncScope();
 
         var config = scope.ServiceProvider.GetService<WGCConfig>();
         if (config is null)
@@ -373,7 +375,7 @@ public class ProjectManager
 
         var templatePath = Path.Combine(config.TemplatesPath, $"{template.Name.ToLower()}.json");
 
-        using (var fs = File.OpenWrite(templatePath))
+        await using (var fs = File.OpenWrite(templatePath))
         {
             // Clear contents
             fs.SetLength(0);

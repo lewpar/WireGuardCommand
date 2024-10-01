@@ -6,47 +6,25 @@ namespace WireGuardCommand.WireGuard;
 
 public class WireGuardPeer
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
 
-    public WireGuardPeerRole Role { get; set; }
+    public WireGuardPeerRole Role { get; init; } = WireGuardPeerRole.Client;
 
-    public IPNetwork2 Subnet { get; set; }
-    public IPAddress Address { get; set; }
-    public int ListenPort { get; set; }
+    public IPNetwork2 Subnet { get; init; } = new();
+    public IPAddress Address { get; init; } = new(0);
+    public int ListenPort { get; init; } = 51820;
 
-    public string AllowedIPs { get; set; }
+    public string AllowedIPs { get; init; } = "0.0.0.0/0, ::/0";
 
-    public CurveKey PublicKey { get; set; }
-    public CurveKey PrivateKey { get; set; }
-    public CurveKey? PresharedKey { get; set; }
+    public CurveKey PublicKey { get; init; } = new();
+    public CurveKey PrivateKey { get; init; } = new();
+    public CurveKey? PresharedKey { get; init; }
 
-    public string? DNS { get; set; }
-    public string? Endpoint { get; set; }
+    public string? DNS { get; init; }
+    public string? Endpoint { get; init; }
 
-    public string? PostUp { get; set; }
-    public string? PostDown { get; set; }
+    public string? PostUp { get; init; }
+    public string? PostDown { get; init; }
 
-    public List<WireGuardPeer> Peers { get; set; }
-
-    public WireGuardPeer()
-    {
-        Id = 0;
-
-        Role = WireGuardPeerRole.Client;
-
-        Subnet = new IPNetwork2();
-        Address = new IPAddress(0);
-        ListenPort = 51820;
-
-        AllowedIPs = "0.0.0.0/0, ::/0";
-
-        PublicKey = new CurveKey();
-        PrivateKey = new CurveKey();
-        PresharedKey = null;
-
-        DNS = "";
-        Endpoint = "";
-
-        Peers = new List<WireGuardPeer>();
-    }
+    public List<WireGuardPeer> Peers { get; set; } = new();
 }

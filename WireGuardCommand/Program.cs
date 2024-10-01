@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace WireGuardCommand;
 
-public class Program
+public static class Program
 {
     public static async Task Main(string[] args)
     {
@@ -68,7 +68,7 @@ public class Program
                 await config.SaveAsync();
             }
 
-            using (var fs = File.OpenRead(path))
+            await using (var fs = File.OpenRead(path))
             {
                 config = await JsonSerializer.DeserializeAsync<WGCConfig>(fs);
             }

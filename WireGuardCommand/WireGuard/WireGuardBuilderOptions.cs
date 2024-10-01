@@ -4,18 +4,18 @@ namespace WireGuardCommand.WireGuard;
 
 public class WireGuardBuilderOptions
 {
-    public required byte[] Seed { get; set; }
-    public required IPNetwork2 Subnet { get; set; }
+    public required byte[] Seed { get; init; }
+    public required IPNetwork2 Subnet { get; init; }
 
-    public required int ListenPort { get; set; }
-    public required string AllowedIPs { get; set; }
+    public required int ListenPort { get; init; }
+    public required string AllowedIPs { get; init; }
 
-    public string? Endpoint { get; set; }
-    public string? DNS { get; set; }
+    public string? Endpoint { get; init; }
+    public string? DNS { get; init; }
     
-    public string? PostUp { get; set; }
-    public string? PostDown { get; set; }
+    public string? PostUp { get; init; }
+    public string? PostDown { get; init; }
 
-    public bool UseLastAddress { get; set; }
-    public bool UsePresharedKeys { get; set; }
+    public bool UseLastAddress { get; init; }
+    public bool UsePresharedKeys { get; init; }
 }
