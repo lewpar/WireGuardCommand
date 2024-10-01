@@ -1,1 +1,6 @@
-{"ProjectsPath":"C:\\Lewis\\Projects\\C#\\WireGuardCommand\\WireGuardCommand\\Projects","TemplatesPath":"C:\\Lewis\\Projects\\C#\\WireGuardCommand\\WireGuardCommand\\Templates","EncryptByDefault":false,"SeedSize":2048}
+{
+  "ProjectsPath": ".\\Projects",
+  "TemplatesPath": ".\\Templates",
+  "EncryptByDefault": false,
+  "SeedSize": 2048
+}

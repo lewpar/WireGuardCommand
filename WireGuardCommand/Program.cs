@@ -65,10 +65,7 @@ public class Program
 
             if (!File.Exists(path))
             {
-                using (var fs = File.OpenWrite(path))
-                {
-                    await JsonSerializer.SerializeAsync<WGCConfig>(fs, config);
-                }
+                await config.SaveAsync();
             }
 
             using (var fs = File.OpenRead(path))

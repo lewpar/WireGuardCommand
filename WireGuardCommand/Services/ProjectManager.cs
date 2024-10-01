@@ -136,7 +136,10 @@ public class ProjectManager
         }
         else
         {
-            await JsonSerializer.SerializeAsync(fs, data);
+            await JsonSerializer.SerializeAsync(fs, data, new JsonSerializerOptions()
+            {
+                WriteIndented = true
+            });
         }
     }
 
@@ -252,7 +255,10 @@ public class ProjectManager
 
         using (var fs = File.OpenWrite(metadataPath))
         {
-            await JsonSerializer.SerializeAsync<ProjectMetadata>(fs, metadata);
+            await JsonSerializer.SerializeAsync<ProjectMetadata>(fs, metadata, new JsonSerializerOptions()
+            {
+                WriteIndented = true
+            });
         }
 
         var template = createContext.Template;
@@ -296,7 +302,10 @@ public class ProjectManager
             }
             else
             {
-                await JsonSerializer.SerializeAsync<ProjectData>(fs, data);
+                await JsonSerializer.SerializeAsync<ProjectData>(fs, data, new JsonSerializerOptions()
+                {
+                    WriteIndented = true 
+                });
             }
         }
     }
@@ -367,7 +376,10 @@ public class ProjectManager
             // Clear contents
             fs.SetLength(0);
 
-            await JsonSerializer.SerializeAsync(fs, template);
+            await JsonSerializer.SerializeAsync(fs, template, new JsonSerializerOptions() 
+            { 
+                WriteIndented = true 
+            });
         }
     }
 }

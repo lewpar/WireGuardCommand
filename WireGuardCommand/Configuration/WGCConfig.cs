@@ -48,7 +48,10 @@ public class WGCConfig
 
         using (var fs = File.OpenWrite(path))
         {
-            await JsonSerializer.SerializeAsync<WGCConfig>(fs, this);
+            await JsonSerializer.SerializeAsync<WGCConfig>(fs, this, new JsonSerializerOptions()
+            {
+                WriteIndented = true
+            });
         }
     }
 }
