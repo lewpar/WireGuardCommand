@@ -25,6 +25,8 @@ public class WGCConfig
 
         using (var fs = File.OpenWrite(path))
         {
+            fs.SetLength(0);
+
             await JsonSerializer.SerializeAsync<WGCConfig>(fs, this, new JsonSerializerOptions()
             {
                 WriteIndented = true
