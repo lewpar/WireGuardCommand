@@ -236,8 +236,7 @@
                         {
                             <div style="display: flex; gap: 0.5rem">
                                 <div style="flex: 1; display: flex; flex-direction: column;">
-                                    <div style="font-size: 1.25rem; font-weight: bold">Commands</div>
-                                    <CodeHighlighter Code="@PreviewCode" Language="language-ini" FileName="@project.ProjectData.CommandFileName" />
+                                    <CodeHighlighter Title="Commands" Code="@PreviewCode" Language="language-ini" FileName="@project.ProjectData.CommandFileName" />
                                 </div>
                             </div>
                         }
@@ -246,8 +245,7 @@
                         {
                             <div style="display: flex; gap: 0.5rem">
                                 <div style="flex: 1; display: flex; flex-direction: column;">
-                                    <div style="font-size: 1.25rem; font-weight: bold">@config.Key</div>
-                                    <CodeHighlighter Code="@config.Value" Language="language-ini" FileName="wg.conf" />
+                                    <CodeHighlighter Title="@config.Key" Code="@config.Value" Language="language-ini" FileName="wg.conf" />
                                 </div>
                             </div>
                         }

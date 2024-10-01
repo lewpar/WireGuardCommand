@@ -17,6 +17,9 @@ public partial class CodeHighlighter
     public IJSRuntime JSRuntime { get; set; } = default!;
 
     [Parameter]
+    public string Title { get; set; } = "";
+
+    [Parameter]
     public string Language { get; set; } = "language-ini";
 
     [Parameter]
@@ -81,6 +84,6 @@ public partial class CodeHighlighter
 
     private void ShowQRCode()
     {
-        QRCodeDialog.Show(DialogType.Ok, "QR Code", qrCode);
+        QRCodeDialog.Show(DialogType.Ok, $"QR Code - {Title}", qrCode);
     }
 }
