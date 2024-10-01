@@ -181,10 +181,11 @@
                     </fieldset>
 
                     <fieldset class="field-group column">
-                        <legend style="display: flex; gap: 0.5rem">
+                        <legend style="display: flex; gap: 0.5rem; align-items: center">
                             <span>Evaluator</span>
                             <Tooltip Title="Evaluator"
-                                     Content="The evaluator takes your input and replaces any macros before outputting to a file.<br/><br/>This is useful if you need to generate commands for another system for the server or each peer." />
+                                     Content="The evaluator takes your input and replaces any variables before outputting to a file.<br/><br/>This is useful if you need to generate commands for another system for the server or each peer." />
+                            <button class="btn-primary" @onclick="ShowVariables">Variables</button>
                         </legend>
 
                         <div class="field">
@@ -202,7 +203,7 @@
                             <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                                 <label>Once</label>
                                 <Tooltip Title="Once"
-                                         Content="This field is evaluated once. Macros are supported.<br/><br/><b>Example</b><br/>The server is listening on: {server.address}:{server.port} with interface {interface}" />
+                                         Content="This field is evaluated once. Variables are supported.<br/><br/><b>Example</b><br/>The server is listening on: {server.address}:{server.port} with interface {interface.name}" />
                             </div>
                             <div style="display: flex; gap: 0.5rem">
                                 <textarea style="flex: 1" rows="4" @bind="project.ProjectData.CommandOnce"></textarea>
@@ -213,7 +214,7 @@
                             <div style="display: flex; flex-direction: row; gap: 0.25rem; align-items: center">
                                 <label>Per Peer</label>
                                 <Tooltip Title="Per Peer"
-                                         Content="This field is evaluated once for every peer. Macros are supported.<br/><br/><b>Example</b><br/>Peer {peer.id} is listening on {peer.address}:{peer.port} with interface {interface}" />
+                                         Content="This field is evaluated once for every peer. Variables are supported.<br/><br/><b>Example</b><br/>Peer {peer.id} is listening on {peer.address}:{peer.port} with interface {interface.name}" />
                             </div>
                             <div style="display: flex; gap: 0.5rem">
                                 <textarea style="flex: 1" rows="4" @bind="project.ProjectData.CommandPerPeer"></textarea>

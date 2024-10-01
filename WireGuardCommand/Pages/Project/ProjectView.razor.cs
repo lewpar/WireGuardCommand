@@ -254,14 +254,14 @@ public partial class ProjectView
 
             if (!string.IsNullOrWhiteSpace(data.CommandOnce))
             {
-                sb.AppendLine(ReplaceMacros(server, data.CommandOnce));
+                sb.AppendLine(ReplaceVariables(server, data.CommandOnce));
             }
 
             if(!string.IsNullOrWhiteSpace(data.CommandPerPeer))
             {
                 foreach(var peer in server.Peers)
                 {
-                    sb.AppendLine(ReplaceMacros(server, data.CommandPerPeer, peer.Id));
+                    sb.AppendLine(ReplaceVariables(server, data.CommandPerPeer, peer.Id));
                 }
             }
 
@@ -274,7 +274,7 @@ public partial class ProjectView
         }
     }
 
-    private string ReplaceMacros(WireGuardPeer server, string content, int? peerId = null)
+    private string ReplaceVariables(WireGuardPeer server, string content, int? peerId = null)
     {
         var project = Cache.CurrentProject;
         if (project is null)
@@ -288,17 +288,19 @@ public partial class ProjectView
             return content;
         }
 
-        // Generic macros
-        content = content.Replace("{interface}", data.Interface);
+        // Generic vars
+        content = content.Replace("{interface.name}", data.Interface);
+        content = content.Replace("{allowed.ip}", data.AllowedIPs);
 
-        // Server macros
+        // Server vars
+        content = content.Replace("{server.endpoint}", data.Endpoint);
         content = content.Replace("{server.address}", server.Address.ToString());
         content = content.Replace("{server.port}", server.ListenPort.ToString());
 
         content = content.Replace("{server.privatekey}", server.PrivateKey.ToString());
         content = content.Replace("{server.publickey}", server.PublicKey.ToString());
 
-        // Peer macros
+        // Peer vars
         if (peerId is not null)
         {
             var peer = server.Peers.FirstOrDefault(p => p.Id == peerId);
@@ -440,5 +442,36 @@ public partial class ProjectView
         await ProjectManager.SaveTemplateAsync(template);
 
         AlertController.Push(AlertType.Info, "Saved Template.", 4000);
+    }
+
+    private void ShowVariables()
+    {
+        Dialog?.Show(DialogType.Ok, "Variables",
+            """
+            These variables are replaced when the configuration is generated.
+            <br/><br/>
+            <b>Generic</b>
+            <ul>
+            <li>{interface.name} - The name of the interface.</li>
+            <li>{allowed.ip} - The allowed IPs that can connect.</li>
+            </ul>
+            <b>Server</b>
+            <ul>
+            <li>{server.endpoint} - The server endpoint.</li>
+            <li>{server.address} - The address for the server.</li>
+            <li>{server.port} - The port the server is listening on.</li>
+            <li>{server.privatekey} - The servers private key.</li>
+            <li>{server.publickey} - The servers public key.</li>
+            </ul>
+            <b>Peer</b>
+            <ul>
+            <li>{peer.id} - The peer id.</li>
+            <li>{peer.address} - The address for the peer.</li>
+            <li>{peer.port} - The port the peer is listening on.</li>
+            <li>{peer.privatekey} - The peers private key.</li>
+            <li>{peer.publickey} - The peers public key.</li>
+            <li>{peer.presharedkey} - The preshared key between the server and peer.</li>
+            </ul>
+            """);
     }
 }
