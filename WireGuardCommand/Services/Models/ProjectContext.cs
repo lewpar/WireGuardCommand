@@ -19,6 +19,8 @@ public class ProjectContext
         {
             Name = Metadata.Name ?? $"template-{Guid.NewGuid()}",
 
+            Interface = ProjectData.Interface,
+
             DNS = ProjectData.DNS,
             Endpoint = ProjectData.Endpoint,
 

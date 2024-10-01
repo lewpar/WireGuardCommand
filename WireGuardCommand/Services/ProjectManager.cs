@@ -268,6 +268,8 @@ public class ProjectManager
         {
             Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64(),
 
+            Interface = template.Interface,
+
             DNS = template.DNS,
             Endpoint = template.Endpoint,
 

@@ -4,6 +4,8 @@ public class ProjectTemplate
 {
     public string Name { get; set; }
 
+    public string Interface { get; set; }
+
     public int ListenPort { get; set; }
     public int NumberOfClients { get; set; }
 
@@ -26,6 +28,8 @@ public class ProjectTemplate
     public ProjectTemplate()
     {
         Name = "Default";
+
+        Interface = "wg0";
 
         DNS = "";
         Endpoint = "";
