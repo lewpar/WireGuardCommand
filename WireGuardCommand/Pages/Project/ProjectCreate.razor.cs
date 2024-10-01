@@ -37,7 +37,7 @@ public partial class ProjectCreate
         CreateContext = new ProjectCreateContext()
         {
             Name = "New Project",
-            Path = Path.Combine(Config.ProjectsPath, "New Project"),
+            Path = Path.GetFullPath(Path.Combine(Config.ProjectsPath, "New Project")),
             IsEncrypted = Config.EncryptByDefault
         };
 
@@ -96,7 +96,7 @@ public partial class ProjectCreate
         }
 
         CreateContext.Name = name;
-        CreateContext.Path = Path.Combine(Config.ProjectsPath, name);
+        CreateContext.Path = Path.GetFullPath(Path.Combine(Config.ProjectsPath, name));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

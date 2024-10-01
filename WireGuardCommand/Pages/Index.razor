@@ -44,7 +44,15 @@
                         <img src="/images/lock.png" width="20" />
                     }
                 </div>
-                <div>@project.Path</div>
+
+                @if(!string.IsNullOrWhiteSpace(project.Path))
+                {
+                    <div>@Path.GetFullPath(project.Path)</div>
+                }
+                else
+                {
+                    <div style="color: red">No path found.</div>
+                }
             </button>
         }
 
@@ -69,7 +77,15 @@
                 {
                     <div style="color: dodgerblue; font-size: 0.75rem">Encrypted</div>
                 }
-                <div style="font-size: 0.75rem; word-wrap: anywhere">@SelectedProject.Path</div>
+
+                @if (!string.IsNullOrWhiteSpace(SelectedProject.Path))
+                {
+                    <div style="font-size: 0.75rem; word-wrap: anywhere">@Path.GetFullPath(SelectedProject.Path)</div>
+                }
+                else
+                {
+                    <div style="color: red">No path found.</div>
+                }
 
                 <div style="display: flex; gap: 0.5rem">
                     @if(!SelectedProject.IsCorrupted)
