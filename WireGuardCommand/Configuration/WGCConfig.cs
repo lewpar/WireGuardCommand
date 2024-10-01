@@ -1,9 +1,10 @@
-﻿namespace WireGuardCommand.Configuration;
+﻿using System.IO;
+using System.Text.Json;
+
+namespace WireGuardCommand.Configuration;
 
 public class WGCConfig
 {
-    public const string AppSettingsKey = "WireGuardCommand";
-
     private string? projectsPath;
     public string ProjectsPath
     {
@@ -39,5 +40,15 @@ public class WGCConfig
         TemplatesPath = Path.GetFullPath(".\\Templates");
         EncryptByDefault = false;
         SeedSize = 2048;
+    }
+
+    public async Task SaveAsync()
+    {
+        var path = Path.Combine("./", "wgc.json");
+
+        using (var fs = File.OpenWrite(path))
+        {
+            await JsonSerializer.SerializeAsync<WGCConfig>(fs, this);
+        }
     }
 }

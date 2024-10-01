@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Options;
+
 using WireGuardCommand.Components;
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Services;
@@ -25,7 +25,7 @@ public partial class ProjectCreate
     public IServiceProvider ServiceProvider { get; set; } = default!;
 
     [Inject]
-    public IOptions<WGCConfig> Options { get; set; } = default!;
+    public WGCConfig Config { get; set; } = default!;
 
     public ProjectCreateContext CreateContext { get; set; } = default!;
     public List<ProjectTemplate> Templates { get; set; } = new List<ProjectTemplate>();
@@ -34,13 +34,11 @@ public partial class ProjectCreate
 
     protected override void OnParametersSet()
     {
-        var config = Options.Value;
-
         CreateContext = new ProjectCreateContext()
         {
             Name = "New Project",
-            Path = Path.Combine(config.ProjectsPath, "New Project"),
-            IsEncrypted = config.EncryptByDefault
+            Path = Path.Combine(Config.ProjectsPath, "New Project"),
+            IsEncrypted = Config.EncryptByDefault
         };
 
         StateHasChanged();
@@ -97,10 +95,8 @@ public partial class ProjectCreate
             return;
         }
 
-        var config = Options.Value;
-
         CreateContext.Name = name;
-        CreateContext.Path = Path.Combine(config.ProjectsPath, name);
+        CreateContext.Path = Path.Combine(Config.ProjectsPath, name);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

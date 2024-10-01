@@ -1,6 +1,35 @@
 ﻿@page "/ProjectSettings"
+@using WireGuardCommand.Components
 
 <div class="container">
-    <button class="btn-primary" @onclick="GoBack">Back</button>
-    Settings
+    <Alert></Alert>
+
+    <div style="display: flex; flex-direction: row; gap: 0.5rem; align-items: center;">
+        <button class="btn-primary" @onclick="GoBack">Back</button>
+        <div style="font-size: 1.25rem; font-weight: bold">Configuration</div>
+    </div>
+
+    <div class="config">
+        <div style="display: flex; flex-direction: column">
+            <label>Projects Path</label>
+            <input type="text" @bind="Config.ProjectsPath" />
+        </div>
+
+        <div style="display: flex; flex-direction: column">
+            <label>Templates Path</label>
+            <input type="text" @bind="Config.TemplatesPath" />
+        </div>
+
+        <div style="display: flex; flex-direction: column">
+            <label>Seed Size</label>
+            <input type="number" @bind="Config.SeedSize" />
+        </div>
+
+        <div>
+            <input type="checkbox" @bind="Config.EncryptByDefault" />
+            <label>Encrypt by Default</label>
+        </div>
+
+        <button class="btn-primary" @onclick="SaveAsync">Save</button>
+    </div>
 </div>

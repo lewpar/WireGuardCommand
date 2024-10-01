@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 
 using System.Diagnostics;
@@ -37,7 +36,7 @@ public partial class ProjectView
     public ILogger<ProjectView> Logger { get; set; } = default!;
 
     [Inject]
-    public IOptions<WGCConfig> Options { get; set; } = default!;
+    public WGCConfig Config { get; set; } = default!;
 
     [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
@@ -109,9 +108,7 @@ public partial class ProjectView
                     return;
                 }
 
-                var config = Options.Value;
-
-                project.ProjectData.Seed = RandomNumberGenerator.GetBytes(config.SeedSize / 8).ToBase64();
+                project.ProjectData.Seed = RandomNumberGenerator.GetBytes(Config.SeedSize / 8).ToBase64();
             });
 
             await InvokeAsync(() =>

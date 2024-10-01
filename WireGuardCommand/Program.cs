@@ -3,6 +3,7 @@ using ElectronNET.API;
 
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Services;
+using System.Text.Json;
 
 namespace WireGuardCommand;
 
@@ -18,7 +19,7 @@ public class Program
             builder.WebHost.UseStaticWebAssets();
         }
 
-        ConfigureServices(builder);
+        await ConfigureServicesAsync(builder);
 
         var app = builder.Build();
 
@@ -39,11 +40,11 @@ public class Program
         await app.WaitForShutdownAsync();
     }
 
-    private static void ConfigureServices(WebApplicationBuilder builder)
+    private static async Task ConfigureServicesAsync(WebApplicationBuilder builder)
     {
         var services = builder.Services;
 
-        builder.Configuration.Bind(WGCConfig.AppSettingsKey, new WGCConfig());
+        await LoadConfigurationAsync(services);
 
         services.AddSingleton<ProjectCache>();
         services.AddSingleton<ProjectManager>();
@@ -52,6 +53,40 @@ public class Program
 
         services.AddRazorPages();
         services.AddServerSideBlazor();
+    }
+
+    private static async Task LoadConfigurationAsync(IServiceCollection services)
+    {
+        var config = new WGCConfig();
+        var path = Path.Combine("./", "wgc.json");
+
+        try
+        {
+
+            if (!File.Exists(path))
+            {
+                using (var fs = File.OpenWrite(path))
+                {
+                    await JsonSerializer.SerializeAsync<WGCConfig>(fs, config);
+                }
+            }
+
+            using (var fs = File.OpenRead(path))
+            {
+                config = await JsonSerializer.DeserializeAsync<WGCConfig>(fs);
+            }
+
+            if(config is null)
+            {
+                throw new Exception("Failed to load configuration.");
+            }
+
+            services.AddSingleton(config);
+        }
+        catch
+        {
+            services.AddSingleton(new WGCConfig());
+        }
     }
 
     private static void ConfigureMiddleware(WebApplication app)

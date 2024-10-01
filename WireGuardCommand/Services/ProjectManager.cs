@@ -1,7 +1,4 @@
-﻿using ElectronNET.API.Entities;
-using Microsoft.Extensions.Options;
-
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text.Json;
 
 using WireGuardCommand.Configuration;
@@ -148,13 +145,11 @@ public class ProjectManager
         var projects = new List<ProjectMetadata>();
         using var scope = serviceProvider.CreateAsyncScope();
 
-        var options = scope.ServiceProvider.GetService<IOptions<WGCConfig>>();
-        if(options is null)
+        var config = scope.ServiceProvider.GetService<WGCConfig>();
+        if(config is null)
         {
-            throw new Exception("Failed to get configuration service.");
+            throw new Exception("Failed to get configuration.");
         }
-
-        var config = options.Value;
 
         if(!Directory.Exists(config.ProjectsPath))
         {
@@ -215,13 +210,11 @@ public class ProjectManager
     {
         using var scope = serviceProvider.CreateAsyncScope();
 
-        var options = scope.ServiceProvider.GetService<IOptions<WGCConfig>>();
-        if (options is null)
+        var config = scope.ServiceProvider.GetService<WGCConfig>();
+        if (config is null)
         {
-            throw new Exception("Failed to get configuration service.");
+            throw new Exception("Failed to get configuration.");
         }
-
-        var config = options.Value;
 
         if (string.IsNullOrWhiteSpace(createContext.Path))
         {
@@ -323,13 +316,11 @@ public class ProjectManager
         var templates = new List<ProjectTemplate>();
         using var scope = serviceProvider.CreateAsyncScope();
 
-        var options = scope.ServiceProvider.GetService<IOptions<WGCConfig>>();
-        if (options is null)
+        var config = scope.ServiceProvider.GetService<WGCConfig>();
+        if (config is null)
         {
-            throw new Exception("Failed to get configuration service.");
+            throw new Exception("Failed to get configuration.");
         }
-
-        var config = options.Value;
 
         if (!Directory.Exists(config.TemplatesPath))
         {
@@ -361,13 +352,11 @@ public class ProjectManager
     {
         using var scope = serviceProvider.CreateAsyncScope();
 
-        var options = scope.ServiceProvider.GetService<IOptions<WGCConfig>>();
-        if (options is null)
+        var config = scope.ServiceProvider.GetService<WGCConfig>();
+        if (config is null)
         {
-            throw new Exception("Failed to get configuration service.");
+            throw new Exception("Failed to get configuration.");
         }
-
-        var config = options.Value;
 
         var templatePath = Path.Combine(config.TemplatesPath, $"{template.Name.ToLower()}.json");
 

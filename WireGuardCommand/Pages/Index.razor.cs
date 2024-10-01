@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 
+using WireGuardCommand.Components;
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Services.Models;
 using WireGuardCommand.Services;
 
 using System.Runtime.Versioning;
 using System.Diagnostics;
-
-using Microsoft.Extensions.Options;
-using WireGuardCommand.Components;
 
 namespace WireGuardCommand.Pages;
 
@@ -27,7 +25,7 @@ public partial class Index
     public NavigationManager NavigationManager { get; set; } = default!;
 
     [Inject]
-    public IOptions<WGCConfig> Options { get; set; } = default!;
+    public WGCConfig Config { get; set; } = default!;
 
     public List<ProjectMetadata> Projects { get; set; } = new List<ProjectMetadata>();
 
@@ -77,9 +75,7 @@ public partial class Index
     [SupportedOSPlatform("Windows")]
     private void BrowseProjects()
     {
-        var config = Options.Value;
-
-        Process.Start("explorer.exe", config.ProjectsPath);
+        Process.Start("explorer.exe", Config.ProjectsPath);
     }
 
     private void PromptDeleteProject()
