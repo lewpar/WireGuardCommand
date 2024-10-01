@@ -1,4 +1,4 @@
-﻿using WireGuardCommand.Components;
+﻿using WireGuardCommand.Components.Models;
 using WireGuardCommand.Events;
 
 namespace WireGuardCommand.Services;

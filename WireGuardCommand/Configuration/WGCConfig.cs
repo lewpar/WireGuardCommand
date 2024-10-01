@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace WireGuardCommand.Configuration;
 
@@ -27,7 +26,7 @@ public class WGCConfig
         {
             fs.SetLength(0);
 
-            await JsonSerializer.SerializeAsync<WGCConfig>(fs, this, new JsonSerializerOptions()
+            await JsonSerializer.SerializeAsync(fs, this, new JsonSerializerOptions()
             {
                 WriteIndented = true
             });

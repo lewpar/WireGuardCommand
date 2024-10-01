@@ -55,8 +55,7 @@
     background-color: rgb(40, 40, 40);
 
     border: 1px solid rgb(64, 64, 64);
-    border-radius: 5px;
-    border-top-left-radius: 0px;
+    border-radius: 0 5px 5px 5px;
 
     padding: 1rem;
 }
@@ -66,11 +65,9 @@
     background-color: rgb(50, 50, 50);
 
     border: 1px solid rgb(64, 64, 64);
-    border-bottom: 0px;
+    border-bottom: 0;
 
-    border-radius: 5px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    border-radius: 5px 5px 0 0;
 
     min-width: 4rem;
     padding: 0.5rem;
@@ -116,8 +113,6 @@
 .field.horizontal {
     flex-direction: row;
 }
-
-
 
 .toolbar {
 

@@ -2,12 +2,7 @@
 
 public class CurveKey
 {
-    public byte[]? Key { get; set; }
-
-    public CurveKey()
-    {
-        Key = null;
-    }
+    public byte[]? Key { get; init; }
 
     public override string ToString()
     {

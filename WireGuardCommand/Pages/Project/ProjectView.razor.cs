@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 
 using System.Diagnostics;
 using System.Net;
@@ -9,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 
 using WireGuardCommand.Components;
+using WireGuardCommand.Components.Models;
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Extensions;
 using WireGuardCommand.IO;
@@ -38,22 +38,16 @@ public partial class ProjectView
     [Inject]
     public WGCConfig Config { get; set; } = default!;
 
-    [Inject]
-    public IJSRuntime JSRuntime { get; set; } = default!;
-
     private record PreviewConfig(string Title, string Code, int? PeerId = null);
     private List<PreviewConfig> PreviewConfigs { get; set; } = new List<PreviewConfig>();
     private string PreviewCode { get; set; } = "";
-    private bool LoadingPreview;
+    private bool loadingPreview;
 
-    public bool HasUnsavedChanges
-    {
-        get => HasChanges();
-    }
+    private bool HasUnsavedChanges => HasChanges();
 
     private ProjectData? originalData;
 
-    public Dialog? Dialog { get; set; }
+    private Dialog? dialog;
 
     protected override void OnInitialized()
     {
@@ -70,12 +64,12 @@ public partial class ProjectView
     {
         if(HasUnsavedChanges)
         {
-            if(Dialog is null)
+            if(dialog is null)
             {
                 return;
             }
 
-            Dialog.Show(DialogType.YesNo, "Unsaved Changes", "You have unsaved changes, are you sure you want to close the project?", async () =>
+            dialog.Show(DialogType.YesNo, "Unsaved Changes", "You have unsaved changes, are you sure you want to close the project?", async () =>
             {
                 await Task.Run(() =>
                 {
@@ -93,12 +87,7 @@ public partial class ProjectView
 
     private void RegenerateSeed()
     {
-        if (Dialog is null)
-        {
-            return;
-        }
-
-        Dialog.Show(DialogType.YesNo, "Regenerate Seed", "Are you sure you want to regenerate the project seed?<br/>This is <b>irreversable</b> and will require you to redeploy all of your peers.", async () =>
+        dialog?.Show(DialogType.YesNo, "Regenerate Seed", "Are you sure you want to regenerate the project seed?<br/>This is <b>irreversible</b> and will require you to redeploy all of your peers.", async () =>
         {
             await Task.Run(() =>
             {
@@ -112,10 +101,7 @@ public partial class ProjectView
                 project.ProjectData.Seed = RandomNumberGenerator.GetBytes(Config.SeedSize / 8).ToBase64();
             });
 
-            await InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
+            await InvokeAsync(StateHasChanged);
         });
     }
 
@@ -157,7 +143,7 @@ public partial class ProjectView
         StateHasChanged();
     }
 
-    public async Task GenerateConfigsAsync()
+    private async Task GenerateConfigsAsync()
     {
         if (Cache.CurrentProject.ProjectData is null ||
             Cache.CurrentProject.Metadata is null)
@@ -188,7 +174,7 @@ public partial class ProjectView
                 Directory.CreateDirectory(outputPath);
             }
 
-            using var fsServer = File.OpenWrite(Path.Combine(outputPath, "server.conf"));
+            await using var fsServer = File.OpenWrite(Path.Combine(outputPath, "server.conf"));
 
             var server = GenerateServerPeer();
 
@@ -198,7 +184,7 @@ public partial class ProjectView
 
             foreach (var peer in server.Peers)
             {
-                using var fsClient = File.OpenWrite(Path.Combine(outputPath, $"peer-{peer.Id}.conf"));
+                await using var fsClient = File.OpenWrite(Path.Combine(outputPath, $"peer-{peer.Id}.conf"));
 
                 await writer.WriteAsync(peer, fsClient);
             }
@@ -237,10 +223,6 @@ public partial class ProjectView
     public string? GenerateCustomCommands()
     {
         var project = Cache.CurrentProject;
-        if(project is null)
-        {
-            return null;
-        }
 
         var data = project.ProjectData;
         if(data is null)
@@ -278,10 +260,6 @@ public partial class ProjectView
     private string ReplaceVariables(WireGuardPeer server, string content, int? peerId = null)
     {
         var project = Cache.CurrentProject;
-        if (project is null)
-        {
-            return content;
-        }
 
         var data = project.ProjectData;
         if (data is null)
@@ -369,6 +347,7 @@ public partial class ProjectView
             ListenPort = project.ListenPort,
             AllowedIPs = project.AllowedIPs,
             Endpoint = project.Endpoint,
+            DNS = project.DNS,
             UseLastAddress = project.UseLastAddress,
             UsePresharedKeys = project.UsePresharedKeys,
             PostUp = project.PostUp,
@@ -390,7 +369,7 @@ public partial class ProjectView
 
     private async Task GeneratePreviewAsync()
     {
-        LoadingPreview = true;
+        loadingPreview = true;
 
         PreviewConfigs.Clear();
         PreviewCode = "";
@@ -428,7 +407,7 @@ public partial class ProjectView
         }
 
         await Task.Delay(500);
-        LoadingPreview = false;
+        loadingPreview = false;
     }
 
     private async Task SaveAsTemplateAsync()
@@ -447,7 +426,7 @@ public partial class ProjectView
 
     private void ShowVariables()
     {
-        Dialog?.Show(DialogType.Ok, "Variables",
+        dialog?.Show(DialogType.Ok, "Variables",
             """
             These variables are replaced when the configuration is generated.
             <br/><br/>

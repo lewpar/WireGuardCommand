@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-using WireGuardCommand.Components;
+using WireGuardCommand.Components.Models;
 using WireGuardCommand.Services;
 using WireGuardCommand.Services.Models;
 
@@ -35,7 +35,7 @@ public partial class ProjectLoad
 
         try
         {
-            ProjectData data = await ProjectManager.LoadProjectAsync(Cache.CurrentProject.Metadata);
+            var data = await ProjectManager.LoadProjectAsync(Cache.CurrentProject.Metadata);
             Cache.CurrentProject.ProjectData = data;
 
             NavigationManager.NavigateTo("ProjectView");
@@ -44,7 +44,6 @@ public partial class ProjectLoad
         {
             AlertController.Push(AlertType.Error, $"Failed to load project: {ex.Message}");
             StateHasChanged();
-            return;
         }
     }
 
@@ -73,7 +72,6 @@ public partial class ProjectLoad
         catch(Exception ex)
         {
             AlertController.Push(AlertType.Error, $"Failed to decrypt project: {ex.Message}");
-            return;
         }
     }
 

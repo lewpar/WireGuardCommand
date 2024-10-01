@@ -4,8 +4,8 @@ namespace WireGuardCommand.Security;
 
 public class CurveKeypair
 {
-    public CurveKey PublicKey { get; set; }
-    public CurveKey PrivateKey { get; set; }
+    public CurveKey PublicKey { get; private set; }
+    public CurveKey PrivateKey { get; private set; }
 
     public CurveKeypair(byte[]? seed = null, int size = 32)
     {

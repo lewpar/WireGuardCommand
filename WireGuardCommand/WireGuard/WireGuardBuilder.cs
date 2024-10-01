@@ -6,7 +6,7 @@ namespace WireGuardCommand.WireGuard;
 
 public class WireGuardBuilder
 {
-    private int peerId;
+    private int currentPeerId;
 
     private WireGuardPeer server;
     private List<WireGuardPeer> peers;
@@ -17,7 +17,7 @@ public class WireGuardBuilder
     {
         this.options = options;
 
-        peerId = 1;
+        currentPeerId = 1;
 
         var keypair = new CurveKeypair(GetPeerSeed(options.Seed, 0));
         server = new WireGuardPeer()
@@ -55,21 +55,22 @@ public class WireGuardBuilder
         }
 
         var address = options.UseLastAddress ? 
-            subnet.ListIPAddress(FilterEnum.Usable).Skip(peerId - 1).First() : 
-            subnet.ListIPAddress(FilterEnum.Usable).Skip(peerId).First();
+            subnet.ListIPAddress(FilterEnum.Usable).Skip(currentPeerId - 1).First() : 
+            subnet.ListIPAddress(FilterEnum.Usable).Skip(currentPeerId).First();
 
-        var keypair = new CurveKeypair(GetPeerSeed(options.Seed, peerId));
-        var presharedKeypair = new CurveKeypair(GetPeerSeed(options.Seed, peerId).Reverse().ToArray());
+        var keypair = new CurveKeypair(GetPeerSeed(options.Seed, currentPeerId));
+        var presharedKeypair = new CurveKeypair(GetPeerSeed(options.Seed, currentPeerId).Reverse().ToArray());
 
         peers.Add(new WireGuardPeer()
         {
-            Id = peerId,
+            Id = currentPeerId,
 
             Role = WireGuardPeerRole.Client,
 
             Address = address,
             Subnet = options.Subnet,
             ListenPort = options.ListenPort,
+            DNS = options.DNS,
 
             PrivateKey = keypair.PrivateKey,
             PublicKey = keypair.PublicKey,
@@ -84,7 +85,7 @@ public class WireGuardBuilder
             }
         });
 
-        peerId++;
+        currentPeerId++;
     }
 
     private byte[] GetPeerSeed(byte[] seed, int peerId)

@@ -4,7 +4,7 @@ namespace WireGuardCommand.Services;
 
 public class ProjectCache
 {
-    public ProjectContext CurrentProject { get; set; } = new ProjectContext();
+    public ProjectContext CurrentProject { get; private set; } = new ProjectContext();
 
     public void Clear()
     {

@@ -1,4 +1,6 @@
-﻿namespace WireGuardCommand.Components;
+﻿using WireGuardCommand.Components.Models;
+
+namespace WireGuardCommand.Components;
 
 public partial class Dialog
 {

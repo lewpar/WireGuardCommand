@@ -25,6 +25,11 @@ public class WireGuardWriter
         sb.AppendLine($"ListenPort = {client.ListenPort}");
         sb.AppendLine($"PrivateKey = {client.PrivateKey}");
 
+        if (!isServer)
+        {
+            sb.AppendLine($"DNS = {client.DNS}");
+        }
+
         sb.AppendLine();
 
         if (isServer && !string.IsNullOrWhiteSpace(client.PostUp))

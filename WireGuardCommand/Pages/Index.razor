@@ -3,14 +3,13 @@
 @using System.Runtime.InteropServices
 
 @using WireGuardCommand.Components;
-@using WireGuardCommand.Pages.Project
 
 <div class="container">
 
-    <Alert />
-    <Dialog @ref="Dialog"/>
+    <Alert></Alert>
+    <Dialog @ref="dialog"></Dialog>
 
-    <div class="project-list" @onclick="() => { SelectedProject = null; }">
+    <div class="project-list" @onclick="() => { selectedProject = null; }">
         <div class="project-list-header">
             <div style="font-weight: bold; font-size: 1.25rem; padding: 1rem">Projects</div>
             <div style="flex: 1; display: flex; align-items: center; gap: 1rem; padding: 1rem;">
@@ -30,18 +29,18 @@
             </div>
         </div>
 
-        @foreach (var project in Projects)
+        @foreach (var project in projects)
         {
-            <button class="project-card @(project == SelectedProject ? "selected" : "")" @onclick="() => SelectProject(project)" @onclick:stopPropagation="true">
+            <button class="project-card @(project == selectedProject ? "selected" : "")" @onclick="() => SelectProject(project)" @onclick:stopPropagation="true">
                 <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: bold;">
                     <div>@project.Name</div>
                     @if (project.IsCorrupted)
                     {
-                        <img src="/images/warning.png" width="20"/>
+                        <img src="/images/warning.png" width="20" alt="warning"/>
                     }
                     else if (project.IsEncrypted)
                     {
-                        <img src="/images/lock.png" width="20" />
+                        <img src="/images/lock.png" width="20" alt="encrypted"/>
                     }
                 </div>
 
@@ -56,7 +55,7 @@
             </button>
         }
 
-        @if(Projects.Count < 1 && Loaded)
+        @if(projects.Count < 1 && loaded)
         {
             <div style="flex: 1; display: flex; align-items: center; justify-content: center">
                 No projects found.
@@ -64,23 +63,23 @@
         }
     </div>
 
-    @if (SelectedProject is not null)
+    @if (selectedProject is not null)
     {
         <div class="project-info">
             <div class="project-info-body">
-                <div style="font-weight: bold">@SelectedProject.Name</div>
-                @if(SelectedProject.IsCorrupted)
+                <div style="font-weight: bold">@selectedProject.Name</div>
+                @if(selectedProject.IsCorrupted)
                 {
                     <div style="color: orange; font-size: 0.75rem">This project is corrupted.</div>
                 }
-                else if (SelectedProject.IsEncrypted)
+                else if (selectedProject.IsEncrypted)
                 {
                     <div style="color: dodgerblue; font-size: 0.75rem">Encrypted</div>
                 }
 
-                @if (!string.IsNullOrWhiteSpace(SelectedProject.Path))
+                @if (!string.IsNullOrWhiteSpace(selectedProject.Path))
                 {
-                    <div style="font-size: 0.75rem; word-wrap: anywhere">@Path.GetFullPath(SelectedProject.Path)</div>
+                    <div style="font-size: 0.75rem; word-wrap: anywhere">@Path.GetFullPath(selectedProject.Path)</div>
                 }
                 else
                 {
@@ -88,7 +87,7 @@
                 }
 
                 <div style="display: flex; gap: 0.5rem">
-                    @if(!SelectedProject.IsCorrupted)
+                    @if(!selectedProject.IsCorrupted)
                     {
                         <button style="flex: 8" class="btn-primary" @onclick="OpenProject">Open</button>
                     }

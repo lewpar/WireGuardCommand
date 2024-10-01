@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 using WireGuardCommand.Components;
+using WireGuardCommand.Components.Models;
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Services;
 using WireGuardCommand.Services.Models;

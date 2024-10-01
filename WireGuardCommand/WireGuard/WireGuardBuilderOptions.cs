@@ -11,7 +11,8 @@ public class WireGuardBuilderOptions
     public required string AllowedIPs { get; set; }
 
     public string? Endpoint { get; set; }
-
+    public string? DNS { get; set; }
+    
     public string? PostUp { get; set; }
     public string? PostDown { get; set; }
 

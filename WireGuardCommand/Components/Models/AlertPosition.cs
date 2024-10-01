@@ -1,4 +1,4 @@
-﻿namespace WireGuardCommand.Components;
+﻿namespace WireGuardCommand.Components.Models;
 
 public enum AlertPosition
 {

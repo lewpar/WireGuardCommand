@@ -29,7 +29,7 @@ public class ProjectManager
 
         using (var fs = File.OpenRead(dataPath))
         {
-            ProjectData? data = null;
+            ProjectData? data;
 
             if (!metadata.IsEncrypted)
             {
@@ -168,7 +168,7 @@ public class ProjectManager
                 continue;
             }
 
-            ProjectMetadata? metadata = null;
+            ProjectMetadata? metadata;
 
             try
             {
@@ -255,7 +255,7 @@ public class ProjectManager
 
         using (var fs = File.OpenWrite(metadataPath))
         {
-            await JsonSerializer.SerializeAsync<ProjectMetadata>(fs, metadata, new JsonSerializerOptions()
+            await JsonSerializer.SerializeAsync(fs, metadata, new JsonSerializerOptions()
             {
                 WriteIndented = true
             });
@@ -297,14 +297,14 @@ public class ProjectManager
                 var key = AESProvider.GenerateKey(createContext.Passphrase, metadata.Salt.FromBase64());
                 using var ms = new MemoryStream();
 
-                await JsonSerializer.SerializeAsync<ProjectData>(ms, data);
+                await JsonSerializer.SerializeAsync(ms, data);
                 var encryptedData = AESProvider.Encrypt(ms.ToArray(), key, metadata.IV.FromBase64());
 
                 fs.Write(encryptedData, 0, encryptedData.Length);
             }
             else
             {
-                await JsonSerializer.SerializeAsync<ProjectData>(fs, data, new JsonSerializerOptions()
+                await JsonSerializer.SerializeAsync(fs, data, new JsonSerializerOptions()
                 {
                     WriteIndented = true 
                 });

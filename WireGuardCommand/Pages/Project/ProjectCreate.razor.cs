@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-using WireGuardCommand.Components;
+using WireGuardCommand.Components.Models;
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Services;
 using WireGuardCommand.Services.Models;
@@ -16,13 +16,7 @@ public partial class ProjectCreate
     public ProjectManager ProjectManager { get; set; } = default!;
 
     [Inject]
-    public ProjectCache Cache { get; set; } = default!;
-
-    [Inject]
     public NavigationManager NavigationManager { get; set; } = default!;
-
-    [Inject]
-    public IServiceProvider ServiceProvider { get; set; } = default!;
 
     [Inject]
     public WGCConfig Config { get; set; } = default!;
@@ -30,7 +24,7 @@ public partial class ProjectCreate
     public ProjectCreateContext CreateContext { get; set; } = default!;
     public List<ProjectTemplate> Templates { get; set; } = new List<ProjectTemplate>();
 
-    public string? SelectedTemplateName { get; set; }
+    private string? selectedTemplateName;
 
     protected override void OnParametersSet()
     {
@@ -49,21 +43,15 @@ public partial class ProjectCreate
         try
         {
             ProjectTemplate? template = null;
-            if(!string.IsNullOrWhiteSpace(SelectedTemplateName))
+            if(!string.IsNullOrWhiteSpace(selectedTemplateName))
             {
-                template = Templates.FirstOrDefault(t => t.Name == SelectedTemplateName);
+                template = Templates.FirstOrDefault(t => t.Name == selectedTemplateName);
             }
 
-            if(string.IsNullOrWhiteSpace(SelectedTemplateName) ||
+            if(string.IsNullOrWhiteSpace(selectedTemplateName) ||
                 template is null)
             {
                 template = new ProjectTemplate();
-            }
-
-            if(template is null)
-            {
-                AlertController.Push(AlertType.Error, "Failed to load template.");
-                return;
             }
 
             CreateContext.Template = template;

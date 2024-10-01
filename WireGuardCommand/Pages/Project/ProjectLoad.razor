@@ -10,8 +10,7 @@
     <Alert />
 
     <div class="dialog">
-        @if (project is not null &&
-                project.Metadata is not null)
+        @if (project.Metadata is not null)
         {
             if (project.Metadata.IsEncrypted)
             {

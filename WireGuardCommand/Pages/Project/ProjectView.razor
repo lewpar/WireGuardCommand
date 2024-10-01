@@ -2,22 +2,18 @@
 
 @using System.Runtime.InteropServices
 
-@using Microsoft.AspNetCore.Components.Sections
 @using WireGuardCommand.Components;
-@using WireGuardCommand.Extensions
 
 @{
     var project = Cache.CurrentProject;
 }
 
 <div class="container">
-    @if(project is not null && 
-        project.Metadata is not null &&
+    @if(project.Metadata is not null &&
         project.ProjectData is not null)
     {
-        <Alert />
-
-        <Dialog @ref="Dialog"/>
+        <Alert></Alert>
+        <Dialog @ref="dialog"></Dialog>
 
         <Toolbar>
             <div style="display: flex; flex-direction: column; padding: 0.5rem">
@@ -164,7 +160,7 @@
                                          Content="The commands to be executed when the servers WireGuard interface is brought online.<br/><br/>Add a newline between each new command.<br/><br/><b>Example</b><br/>iptables -A FORWARD -i %i -j ACCEPT" />
                             </div>
                             <div style="display: flex; gap: 0.5rem">
-                                <textarea style="flex: 1" rows="4" @bind="project.ProjectData.PostUp" />
+                                <textarea style="flex: 1" rows="4" @bind="project.ProjectData.PostUp"></textarea>
                             </div>
                         </div>
 
@@ -175,7 +171,7 @@
                                          Content="The commands to be executed when the servers WireGuard interface is brought offline.<br/><br/>Add a newline between each new command.<br/><br/><b>Example</b><br/>iptables -D FORWARD -i %i -j ACCEPT" />
                             </div>
                             <div style="display: flex; gap: 0.5rem">
-                                <textarea style="flex: 1" rows="4" @bind="project.ProjectData.PostDown" />
+                                <textarea style="flex: 1" rows="4" @bind="project.ProjectData.PostDown"></textarea>
                             </div>
                         </div>
                     </fieldset>
@@ -184,7 +180,7 @@
                         <legend style="display: flex; gap: 0.5rem; align-items: center">
                             <span>Evaluator</span>
                             <Tooltip Title="Evaluator"
-                                     Content="The evaluator takes your input and replaces any variables before outputting to a file.<br/><br/>This is useful if you need to generate commands for another system for the server or each peer." />
+                                     Content="The evaluator takes your input and replaces any variables before outputting to a file.<br/><br/>This is useful if you need to generate commands for another system for the server or each peer."></Tooltip>
                             <button class="btn-primary" @onclick="ShowVariables">Variables</button>
                         </legend>
 
@@ -195,7 +191,7 @@
                                          Content="The name of the output file." />
                             </div>
                             <div style="display: flex; gap: 0.5rem">
-                                <input style="flex: 1" rows="4" @bind="project.ProjectData.CommandFileName"></input>
+                                <input style="flex: 1" rows="4" @bind="project.ProjectData.CommandFileName" />
                             </div>
                         </div>
 
@@ -224,14 +220,14 @@
                 </TabPage>
 
                 <TabPage Title="Preview" OnPageLoad="GeneratePreviewAsync">
-                    @if (LoadingPreview)
+                    @if (loadingPreview)
                     {
                         <div style="display: flex; gap: 0.5rem; align-items: center; justify-content: center">
                             <span>Generating..</span>
-                            <img src="/images/spinner.gif" style="filter: drop-shadow(0 0 5px dodgerblue);" width="40" height="40" />
+                            <img src="/images/spinner.gif" style="filter: drop-shadow(0 0 5px dodgerblue);" width="40" height="40" alt="loading spinner" />
                         </div>
                     }
-                    <div style="display: @(LoadingPreview ? "none" : "flex"); flex-direction: column; gap: 1rem">
+                    <div style="display: @(loadingPreview ? "none" : "flex"); flex-direction: column; gap: 1rem">
                         @if (!string.IsNullOrWhiteSpace(PreviewCode))
                         {
                             <div style="display: flex; gap: 0.5rem">

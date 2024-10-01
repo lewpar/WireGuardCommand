@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System.Timers;
+using WireGuardCommand.Components.Models;
 using WireGuardCommand.Events;
 using WireGuardCommand.Services;
 

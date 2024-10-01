@@ -7,6 +7,7 @@ using WireGuardCommand.Services;
 
 using System.Runtime.Versioning;
 using System.Diagnostics;
+using WireGuardCommand.Components.Models;
 
 namespace WireGuardCommand.Pages;
 
@@ -27,13 +28,13 @@ public partial class Index
     [Inject]
     public WGCConfig Config { get; set; } = default!;
 
-    public List<ProjectMetadata> Projects { get; set; } = new List<ProjectMetadata>();
+    private List<ProjectMetadata> projects = new List<ProjectMetadata>();
 
-    public ProjectMetadata? SelectedProject { get; set; }
+    private ProjectMetadata? selectedProject;
 
-    public bool Loaded { get; set; }
+    private bool loaded;
 
-    public Dialog? Dialog { get; set; }
+    private Dialog? dialog;
 
     protected override async Task OnInitializedAsync()
     {
@@ -42,28 +43,28 @@ public partial class Index
 
     private async Task LoadProjectsAsync()
     {
-        Loaded = false;
+        loaded = false;
 
         try
         {
-            Projects = await ProjectManager.GetProjectsAsync();
+            projects = await ProjectManager.GetProjectsAsync();
         }
         catch (Exception ex)
         {
             AlertController.Push(AlertType.Error, $"Failed to load projects: {ex.Message}");
         }
 
-        Loaded = true;
+        loaded = true;
     }
 
     private void SelectProject(ProjectMetadata project)
     {
-        SelectedProject = project;
+        selectedProject = project;
     }
 
     private void OpenProject()
     {
-        Cache.CurrentProject.Metadata = SelectedProject;
+        Cache.CurrentProject.Metadata = selectedProject;
         NavigationManager.NavigateTo("ProjectLoad");
     }
 
@@ -80,12 +81,12 @@ public partial class Index
 
     private void PromptDeleteProject()
     {
-        if(Dialog is null)
+        if(dialog is null)
         {
             return;
         }
 
-        Dialog.Show(DialogType.YesNo, "Delete Project", $"Are you sure you want to delete <b>{SelectedProject?.Name}</b>?", async () =>
+        dialog.Show(DialogType.YesNo, "Delete Project", $"Are you sure you want to delete <b>{selectedProject?.Name}</b>?", async () =>
         {
             DeleteProject();
             await LoadProjectsAsync();
@@ -95,16 +96,16 @@ public partial class Index
 
     private void DeleteProject()
     {
-        if(SelectedProject is null)
+        if(selectedProject is null)
         {
             return;
         }
 
         try
         {
-            ProjectManager.DeleteProject(SelectedProject);
+            ProjectManager.DeleteProject(selectedProject);
             Cache.Clear();
-            SelectedProject = null;
+            selectedProject = null;
         }
         catch(Exception ex)
         {

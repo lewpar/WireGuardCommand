@@ -1,5 +1,5 @@
 ﻿<div class="code">
-    <Dialog @ref="QRCodeDialog"/>
+    <Dialog @ref="qrCodeDialog"></Dialog>
 
     <div style="font-size: 1.25rem; font-weight: bold">@Title</div>
     <pre>
@@ -9,13 +9,13 @@
     </pre>
     <div class="actions">
         <div class="save" @onclick="SaveConfigAsync">
-            <img src="/images/save.png" width="20" height="20" />
+            <img src="/images/save.png" width="20" height="20" alt="save"/>
         </div>
         <div class="qrcode" @onclick="ShowQRCode">
-            <img src="/images/qrcode.png" width="20" height="20" />
+            <img src="/images/qrcode.png" width="20" height="20" alt="qr code"/>
         </div>
         <div class="clipboard" @onclick="CopyToClipboardAsync">
-            <img src="/images/clipboard.png" width="20" height="20" />
+            <img src="/images/clipboard.png" width="20" height="20" alt="clipboard"/>
         </div>
     </div>
 </div>
