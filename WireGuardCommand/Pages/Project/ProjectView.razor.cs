@@ -7,7 +7,7 @@ using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-
+using ICSharpCode.SharpZipLib.Zip;
 using WireGuardCommand.Components;
 using WireGuardCommand.Components.Models;
 using WireGuardCommand.Configuration;
@@ -181,19 +181,20 @@ public partial class ProjectView
                 Directory.CreateDirectory(outputPath);
             }
 
-            await using var fsServer = File.OpenWrite(Path.Combine(outputPath, "server.conf"));
-
-            var server = GenerateServerPeer();
-
             var writer = new WireGuardWriter();
-
-            await writer.WriteAsync(server, fsServer);
+            var server = GenerateServerPeer();
+            
+            await using (var fsServer = File.OpenWrite(Path.Combine(outputPath, "server.conf")))
+            {
+                await writer.WriteAsync(server, fsServer);
+            }
 
             foreach (var peer in server.Peers)
             {
-                await using var fsClient = File.OpenWrite(Path.Combine(outputPath, $"peer-{peer.Id}.conf"));
-
-                await writer.WriteAsync(peer, fsClient);
+                await using (var fsClient = File.OpenWrite(Path.Combine(outputPath, $"peer-{peer.Id}.conf")))
+                {
+                    await writer.WriteAsync(peer, fsClient);   
+                }
             }
 
             string? commands = GenerateCustomCommands();
@@ -217,6 +218,11 @@ public partial class ProjectView
                 }
 
                 await File.WriteAllTextAsync(filePath, commands);
+            }
+
+            if (Cache.CurrentProject.ProjectData.IsZippedOutput)
+            {
+                await ZipOutputAsync(outputPath, Cache.CurrentProject.ProjectData.ZipPassphrase);
             }
 
             AlertController.Push(AlertType.Info, "Generated configuration.", 4000);
@@ -496,6 +502,40 @@ public partial class ProjectView
         catch
         {
             return true;
+        }
+    }
+
+
+    private async Task ZipOutputAsync(string path, string? passphrase = null)
+    {
+        using var fs = File.OpenWrite(Path.Combine(path, "output.zip"));
+        using var zipStream = new ZipOutputStream(fs);
+        
+        if (!string.IsNullOrWhiteSpace(passphrase))
+        {
+            zipStream.Password = passphrase;
+        }
+        
+        var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories)
+            .Where(f => !f.EndsWith(".zip"));
+        
+        foreach(var file in files)
+        {
+            var fileName = Path.GetFileName(file);
+            var newEntry = new ZipEntry(fileName)
+            {
+                DateTime = DateTime.Now
+            };
+            
+            zipStream.PutNextEntry(newEntry);
+            
+            using (var configStream = File.OpenRead(file))
+            {
+                await configStream.CopyToAsync(zipStream);
+                zipStream.CloseEntry();
+            }
+            
+            File.Delete(file);
         }
     }
 }
