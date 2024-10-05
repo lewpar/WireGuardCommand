@@ -52,8 +52,13 @@
 
     border: 0;
     background-color: transparent;
+    opacity: 0;
 
     transition: background-color 0.25s;
+    
+    animation-name: fade-in;
+    animation-duration: 1s;
+    animation-fill-mode: both;
 
     color: white;
     text-decoration: none;

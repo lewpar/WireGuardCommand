@@ -94,6 +94,11 @@ input:read-only {
     border-radius: 5px;
 }
 
+.link {
+    text-decoration: underline;
+    color: white;
+}
+
 @keyframes dropdown {
     from {
         transform: translateY(-100%);
@@ -121,5 +126,25 @@ input:read-only {
 
     to {
         width: 100%;
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    
+    to {
+        opacity: 100%;
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 100%;
     }
 }

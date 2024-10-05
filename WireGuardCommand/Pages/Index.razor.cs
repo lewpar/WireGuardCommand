@@ -45,6 +45,8 @@ public partial class Index
     {
         loaded = false;
 
+        await Task.Delay(500);
+
         try
         {
             projects = await ProjectManager.GetProjectsAsync();
