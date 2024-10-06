@@ -1,15 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Net;
-using System.Reflection;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+
 using ICSharpCode.SharpZipLib.Zip;
+
 using WireGuardCommand.Components;
+using WireGuardCommand.Components.Dialogs;
 using WireGuardCommand.Components.Models;
 using WireGuardCommand.Configuration;
 using WireGuardCommand.Extensions;
@@ -453,33 +455,7 @@ public partial class ProjectView
 
     private void ShowVariables()
     {
-        dialog?.Show(DialogType.Ok, "Variables",
-            """
-            These variables are replaced when the configuration is generated.
-            <br/><br/>
-            <b>Generic</b>
-            <ul>
-            <li>{interface.name} - The name of the interface.</li>
-            <li>{allowed.ip} - The allowed IPs that can connect.</li>
-            </ul>
-            <b>Server</b>
-            <ul>
-            <li>{server.endpoint} - The server endpoint.</li>
-            <li>{server.address} - The address for the server.</li>
-            <li>{server.port} - The port the server is listening on.</li>
-            <li>{server.privatekey} - The servers private key.</li>
-            <li>{server.publickey} - The servers public key.</li>
-            </ul>
-            <b>Peer</b>
-            <ul>
-            <li>{peer.id} - The peer id.</li>
-            <li>{peer.address} - The address for the peer.</li>
-            <li>{peer.port} - The port the peer is listening on.</li>
-            <li>{peer.privatekey} - The peers private key.</li>
-            <li>{peer.publickey} - The peers public key.</li>
-            <li>{peer.presharedkey} - The preshared key between the server and peer.</li>
-            </ul>
-            """);
+        dialog?.Show<EvalVariables>("Variables");
     }
 
     private bool HasValidationErrors()
@@ -542,6 +518,6 @@ public partial class ProjectView
 
     private void ShowAbout()
     {
-        dialog?.Show("About", typeof(About));
+        dialog?.Show<About>("About");
     }
 }

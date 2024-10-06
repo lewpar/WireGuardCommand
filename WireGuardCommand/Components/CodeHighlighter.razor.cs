@@ -69,6 +69,6 @@ public partial class CodeHighlighter
 
     private void ShowQRCode()
     {
-        qrCodeDialog?.Show(DialogType.Ok, $"QR Code - {Title}", qrCodeMarkup);
+        qrCodeDialog?.Show(DialogType.Basic, $"QR Code - {Title}", qrCodeMarkup);
     }
 }

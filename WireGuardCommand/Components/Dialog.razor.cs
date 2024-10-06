@@ -40,14 +40,14 @@ public partial class Dialog
         StateHasChanged();
     }
 
-    public void Show(string title, Type component)
+    public void Show<TComponent>(string title) where TComponent : ComponentBase
     {
         Type = DialogType.Component;
         Title = title;
         
         componentFragment = builder =>
         {
-            builder.OpenComponent(0, component);
+            builder.OpenComponent(0, typeof(TComponent));
             builder.CloseComponent();
         };
         
