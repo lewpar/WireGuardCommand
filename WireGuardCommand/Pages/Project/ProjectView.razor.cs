@@ -226,7 +226,7 @@ public partial class ProjectView
                     }
                 }
 
-                await File.WriteAllTextAsync(filePath, commands);
+                await File.WriteAllTextAsync(filePath, commands.Trim());
             }
 
             if (Cache.CurrentProject.ProjectData.IsZippedOutput)
