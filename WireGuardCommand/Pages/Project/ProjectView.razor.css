@@ -1,0 +1,176 @@
+﻿.container {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    opacity: 0;
+
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+.project-view-error {
+    display: flex;
+
+    padding: 0.5rem;
+
+    align-items: center;
+
+    background-color: darkred;
+}
+
+.project-view-status {
+    display: flex;
+
+    padding: 0.5rem;
+
+    align-items: center;
+
+    background-color: dodgerblue;
+}
+
+.project-view-header {
+    display: flex;
+    
+    gap: 1rem;
+    padding: 1rem;
+
+    align-items: center;
+
+    background-color: #151515;
+}
+
+.project-view-body {
+    display: flex;
+    flex-direction: column;
+
+    padding: 1rem;
+}
+
+.project-view-tab {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    background-color: rgb(40, 40, 40);
+
+    border: 1px solid rgb(64, 64, 64);
+    border-radius: 0 5px 5px 5px;
+
+    padding: 1rem;
+}
+
+.tab-button {
+    color: rgb(128, 128, 128);
+    background-color: rgb(50, 50, 50);
+
+    border: 1px solid rgb(64, 64, 64);
+    border-bottom: 0;
+
+    border-radius: 5px 5px 0 0;
+
+    min-width: 4rem;
+    padding: 0.5rem;
+
+    transition: background-color 0.5s;
+}
+.tab-button:hover {
+    color: rgb(200, 200, 200);
+    background-color: rgb(60, 60, 60);
+}
+.tab-button.active {
+    color: white;
+    background-color: rgb(64, 64, 64);
+}
+
+.field-group {
+    display: flex;
+
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    border: 1px solid #404040;
+    background-color: #202020;
+
+    padding: 1rem;
+
+    box-shadow: #101010 1px 1px inset;
+}
+.field-group.row {
+    flex-direction: row;
+}
+.field-group.column {
+    flex-direction: column;
+}
+
+.field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+}
+.field.horizontal {
+    flex-direction: row;
+}
+
+.toolbar {
+
+}
+.toolbar-item {
+    padding: 0.5rem;
+
+    cursor: pointer;
+}
+.toolbar-item:hover  {
+    background-color: #252525;
+}
+.toolbar-item:hover toolbar-menu {
+    display: flex;
+}
+
+.toolbar-menu {
+    display: none;
+    flex-direction: column;
+
+    background-color: #202020;
+}
+.toolbar-menuitem {
+    padding: 0.5rem;
+}
+
+.preview-commands {
+    flex: 1;
+    
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+
+    opacity: 0;
+
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+.preview-wireguard {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    
+    gap: 0.5rem;
+
+    opacity: 0;
+
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}

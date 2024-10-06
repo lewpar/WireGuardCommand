@@ -1,0 +1,20 @@
+name: Build & Test
+
+on: [push, workflow_dispatch]
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Prerequisites
+        run: sudo apt install dotnet-sdk-8.0 -y
+      
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Compile
+        run: dotnet build
+        
+      - name: Run Tests
+        run: dotnet test
+        

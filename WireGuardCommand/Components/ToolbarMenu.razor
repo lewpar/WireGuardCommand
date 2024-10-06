@@ -1,0 +1,10 @@
+﻿<div class="toolbar-menu" @onclick="ToggleMenu" @onmouseleave="CloseMenu">
+    @Title
+
+    @if(menuVisible)
+    {
+        <div class="toolbar-menu-items">
+            @ChildContent
+        </div>
+    }
+</div>

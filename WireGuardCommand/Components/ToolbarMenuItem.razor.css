@@ -1,0 +1,13 @@
+﻿.toolbar-menu-item {
+    font-size: 0.75rem;
+
+    padding: 0.5rem;
+    margin: 0 5px;
+
+    border-radius: 2px;
+
+    transition: background-color 0.25s;
+}
+.toolbar-menu-item:hover {
+    background-color: #404040;
+}

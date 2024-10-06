@@ -1,0 +1,36 @@
+﻿@page "/ProjectLoad"
+
+@using WireGuardCommand.Components;
+
+@{
+    var project = Cache.CurrentProject;
+}
+
+<div class="container">
+    <Alert />
+
+    <div class="dialog">
+        @if (project.Metadata is not null)
+        {
+            if (project.Metadata.IsEncrypted)
+            {
+                <div>This project is encrypted and requires a passphrase to access.</div>
+
+                <input type="password" @bind-value="project.Passphrase" />
+
+                <div style="display: flex; gap: 0.5rem;">
+                    <button style="flex: 1" class="btn-unsafe" @onclick="GoBack">Back</button>
+                    <button style="flex: 1" class="btn-primary" @onclick="DecryptProjectAsync">Decrypt</button>
+                </div>
+            }
+            else
+            {
+                <div>Loading..</div>
+            }
+        }
+        else
+        {
+            <button class="btn-primary" @onclick="GoBack">Back</button>
+        }
+    </div>
+</div>

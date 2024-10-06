@@ -1,0 +1,92 @@
+﻿.container {
+    flex: 1;
+    
+    display: flex;
+    flex-direction: row;
+
+    opacity: 0;
+
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+.project-list {
+    flex: 7;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow-y: hidden;
+}
+.project-list-header {
+    display: flex; 
+    
+    gap: 0.5rem;
+
+    background-color: #151515;
+}
+.project-info {
+    flex: 3;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: #303030;
+}
+.project-info-body {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+
+    position: sticky;
+    top: 0;
+
+    padding: 1rem;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.25rem;
+
+    padding: 1rem;
+
+    text-align: left;
+
+    border: 0;
+    background-color: transparent;
+    opacity: 0;
+
+    transition: background-color 0.25s;
+    
+    animation-name: fade-in;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+
+    color: white;
+    text-decoration: none;
+}
+.project-card:hover {
+    background-color: #303030;
+}
+.project-card.selected {
+    background-color: #303030;
+}
+
+.btn-settings {
+    width: 30px;
+    height: 30px;
+
+    background-image: url('/images/gear.png');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    transition: filter 0.25s;
+}
+.btn-settings:hover {
+    filter: brightness(150%);
+}

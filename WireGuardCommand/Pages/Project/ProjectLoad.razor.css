@@ -1,0 +1,14 @@
+﻿.container {
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}

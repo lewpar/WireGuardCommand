@@ -1,0 +1,33 @@
+﻿@using WireGuardCommand.Components.Models
+@if(isVisible)
+{
+    <div class="container">
+        <div class="dialog">
+            <div class="dialog-header">
+                <div class="dialog-title">@this.Title</div>
+                <div class="dialog-close" @onclick="Hide">x</div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(this.Content))
+            {
+                <div>@((MarkupString)this.Content)</div>
+            }
+
+            @if (this.Type == DialogType.Ok)
+            {
+                <button class="btn-primary" @onclick="OnClickYesAsync">Ok</button>
+            }
+            else if (this.Type == DialogType.YesNo)
+            {
+                <div style="display: flex; gap: 0.5rem">
+                    <button class="btn-unsafe" style="flex: 3" @onclick="OnClickYesAsync">Yes</button>
+                    <button class="btn-primary" style="flex: 7" @onclick="OnClickNo">No</button>
+                </div>
+            }
+            else if (this.Type == DialogType.Component)
+            {
+                @componentFragment
+            }
+        </div>
+    </div>
+}

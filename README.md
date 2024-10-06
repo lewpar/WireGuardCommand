@@ -1,22 +1,19 @@
-# <img src="https://cdn.discordapp.com/attachments/814444289181351968/1117035080771194991/256.png" width="32"> WireGuard Command
+> [!NOTE]  
+> This is the home of the WireGuard Command re-write under Blazor & Electron.NET. There may be issues/bugs in its current state.
 
-A tool to help deploy configuration files for WireGuard and commands for ROS systems.
+# WireGuard Command
+A tool designed for generating road-warrior style WireGuard configuration files. It also supports generating commands for each peer through the use of macros. 
+
+This project is not assocated with the WireGuard trademark in any way.
 
 ## Macros
-There are some macros available which you can use in the prefix, command and postfix text areas.
-The macros are case-sensitive.
+Coming soon..
 
-| Macro | Description | Supported |
-| - | - | - |
-| \{interface} | Prints the interface name. | Prefix, Command, Postfix |
-| \{server-address} | Prints server address (the first address in subnet). | Prefix, Command, Postfix |
-| \{server-private} | Prints server private key (base64). | Prefix, Command, Postfix |
-| \{server-port} | Prints server listen port. | Prefix, Command, Postfix |
-| \{client-address} | Prints client address. | Command |
-| \{client-id} | Prints client id (the client number). | Command |
-| \{client-preshared} | Prints client preshared key (base64). | Command |
-| \{client-public} | Prints client public key (base64). | Command |
-| \{endpoint-ip} | Prints the endpoint address/domain. | Command |
-| \{endpoint-port | Prints the endpoint port. | Command |
-
-This is a still growing list, if you would like a macro to be added you can open a PR or issue.
+## Dependencies
+This project uses the following dependencies:
+- **Blazor** - The web framework being used.
+- **Electron.NET** - The windowing suite which Blazor is embedded in.
+- **HighlightJS** - Used for syntax highlighting code blocks.
+- **IPNetwork2** - Easy handling of subnetting.
+- **SharpZipLib** - Used for outputting password protected archives.
+- **QRCoder** - For generating QR codes for configs.

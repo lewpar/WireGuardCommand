@@ -1,36 +1,39 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-	<PublishSingleFile>true</PublishSingleFile>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-	<UseWindowsForms>true</UseWindowsForms>
-	<ApplicationIcon>wgc_icon.ico</ApplicationIcon>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Version>2.1.0</Version>
   </PropertyGroup>
-
   <ItemGroup>
-    <None Remove="appsettings.json" />
-    <None Remove="Resources\Icons\icon-information.png" />
+    <Compile Remove="wwwroot\lib\highlightjs\es\**" />
+    <Content Remove="wwwroot\lib\highlightjs\es\**" />
+    <EmbeddedResource Remove="wwwroot\lib\highlightjs\es\**" />
+    <None Remove="wwwroot\lib\highlightjs\es\**" />
   </ItemGroup>
-
   <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Remove="Components\Alert.razor.css" />
+    <None Remove="Components\Toolbar.razor.css" />
+    <None Remove="Components\Tooltip.razor.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Components\Alert.razor.css" />
+    <Content Include="Components\Toolbar.razor.css" />
+    <Content Include="Components\Tooltip.razor.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ElectronNET.API" Version="23.6.2" />
+    <PackageReference Include="IPNetwork2" Version="3.0.667" />
+    <PackageReference Include="QRCoder" Version="1.6.0" />
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="electron.manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="wgc_icon.ico" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="IPNetwork2" Version="2.6.589" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <None Include="wwwroot\lib\highlightjs\languages\ini.js" />
+    <None Include="wwwroot\lib\highlightjs\languages\ini.min.js" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\Icons\icon-information.png" />
-  </ItemGroup>
-
 </Project>

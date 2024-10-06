@@ -1,0 +1,19 @@
+﻿<div class="tooltip" @onclick="() => { IsVisible = true; }">
+</div>
+
+@if(IsVisible)
+{
+    <div class="tooltip-container">
+        <div class="tooltip-content">
+            <div style="display: flex; gap: 0.5rem; align-items: center">
+                <img src="/images/info.png" width="24" alt="info"/>
+                <b>@(this.Title)</b>
+            </div>
+
+            <p>@((MarkupString)this.Content)</p>
+            <div class="tooltip-exit" @onclick="() => { IsVisible = false; }">
+                ✖
+            </div>
+        </div>
+    </div>
+}

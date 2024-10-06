@@ -1,0 +1,114 @@
+﻿@page "/"
+
+@using System.Runtime.InteropServices
+
+@using WireGuardCommand.Components;
+
+<div class="container">
+
+    <Alert></Alert>
+    <Dialog @ref="dialog"></Dialog>
+    
+    <div class="project-list" @onclick="() => { selectedProject = null; }">
+        <div class="project-list-header">
+            <Toolbar>
+                <div style="display: flex; align-items: center; font-weight: bold; font-size: 1.25rem; padding: 1rem">Projects</div>
+                
+                <ToolbarDivider></ToolbarDivider>
+                
+                <div style="flex: 1; display: flex; align-items: center; gap: 1rem; padding: 1rem;">
+                    <button class="btn-primary" @onclick="CreateProject">+ New Project</button>
+                    
+                    <div style="flex: 1"></div>
+
+                    @if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                    <button class="btn-primary" @onclick="BrowseProjects">Open Folder</button>
+                    }
+
+                    <button class="btn-primary" @onclick="LoadProjectsAsync">Refresh</button>
+
+                    <div class="btn-settings" @onclick="OpenSettings"></div>
+                </div>
+            </Toolbar>
+        </div>
+
+        @if (loaded)
+        {
+            @foreach (var project in projects)
+            {
+                <button class="project-card @(project == selectedProject ? "selected" : "")" @onclick="() => SelectProject(project)" @onclick:stopPropagation="true">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: bold;">
+                        <div>@project.Name</div>
+                        @if (project.IsCorrupted)
+                        {
+                            <img src="/images/warning.png" width="20" alt="warning"/>
+                        }
+                        else if (project.IsEncrypted)
+                        {
+                            <img src="/images/lock.png" width="20" alt="encrypted"/>
+                        }
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(project.Path))
+                    {
+                        <div>@Path.GetFullPath(project.Path)</div>
+                    }
+                    else
+                    {
+                        <div style="color: red">No path found.</div>
+                    }
+                </button>
+            }
+        }
+        else
+        {
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center">
+                <img src="/images/spinner.gif" width="32" height="32" alt="spinner"/>
+                Loading..
+            </div>
+        }
+
+        @if(projects.Count < 1 && loaded)
+        {
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center">
+                No projects found.
+            </div>
+        }
+    </div>
+
+    @if (selectedProject is not null && loaded)
+    {
+        <div class="project-info">
+            <div class="project-info-body">
+                <div style="font-weight: bold">@selectedProject.Name</div>
+                @if(selectedProject.IsCorrupted)
+                {
+                    <div style="color: orange; font-size: 0.75rem">This project is corrupted.</div>
+                }
+                else if (selectedProject.IsEncrypted)
+                {
+                    <div style="color: dodgerblue; font-size: 0.75rem">Encrypted</div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(selectedProject.Path))
+                {
+                    <div style="font-size: 0.75rem; word-wrap: anywhere">@Path.GetFullPath(selectedProject.Path)</div>
+                }
+                else
+                {
+                    <div style="color: red">No path found.</div>
+                }
+
+                <div style="display: flex; gap: 0.5rem">
+                    @if(!selectedProject.IsCorrupted)
+                    {
+                        <button style="flex: 8" class="btn-primary" @onclick="OpenProject">Open</button>
+                    }
+
+                    <button style="flex: 2" class="btn-unsafe" @onclick="PromptDeleteProject">Delete</button>
+                </div>
+            </div>
+        </div>
+    }   
+</div>
