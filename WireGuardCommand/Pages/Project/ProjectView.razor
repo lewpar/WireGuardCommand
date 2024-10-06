@@ -240,19 +240,15 @@
                     <div style="display: @(loadingPreview ? "none" : "flex"); flex-direction: column; gap: 1rem">
                         @if (!string.IsNullOrWhiteSpace(PreviewCode))
                         {
-                            <div style="display: flex; gap: 0.5rem">
-                                <div style="flex: 1; display: flex; flex-direction: column;">
-                                    <CodeHighlighter Title="Commands" Code="@PreviewCode" Language="language-ini" FileName="@project.ProjectData.CommandFileName" />
-                                </div>
+                            <div class="preview-commands">
+                                <CodeHighlighter Title="Commands" Code="@PreviewCode" Language="language-ini" FileName="@project.ProjectData.CommandFileName" />
                             </div>
                         }
 
                         @foreach (var config in PreviewConfigs)
                         {
-                            <div style="display: flex; gap: 0.5rem">
-                                <div style="flex: 1; display: flex; flex-direction: column;">
-                                    <CodeHighlighter Title="@config.Title" Code="@config.Code" Language="language-ini" FileName="@(config.PeerId is null ? "server.conf" : $"peer-{config.PeerId}.conf")" />
-                                </div>
+                            <div class="preview-wireguard">
+                                <CodeHighlighter Title="@config.Title" Code="@config.Code" Language="language-ini" FileName="@(config.PeerId is null ? "server.conf" : $"peer-{config.PeerId}.conf")" />
                             </div>
                         }
                     </div>
@@ -303,9 +299,12 @@
     }
     else
     {
-        <div style="display: flex; align-items: center;">
-            <button class="btn-primary" @onclick="CloseProject">Back</button>
-        </div>
-        <div>Project failed to load.</div>
+        @if (!isClosingProject)
+        {
+            <div style="display: flex; align-items: center;">
+                <button class="btn-primary" @onclick="CloseProject">Back</button>
+            </div>
+            <div>Project failed to load.</div>   
+        }
     }
 </div>

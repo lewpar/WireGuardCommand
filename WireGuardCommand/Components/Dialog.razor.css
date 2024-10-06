@@ -17,6 +17,12 @@
     backdrop-filter: blur(5px);
 
     z-index: 99;
+
+    opacity: 0;
+
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
 }
 
 .dialog {

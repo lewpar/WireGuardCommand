@@ -3,6 +3,12 @@
 
     display: flex;
     flex-direction: column;
+
+    opacity: 0;
+
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
 }
 
 .project-view-error {
@@ -137,4 +143,34 @@
 }
 .toolbar-menuitem {
     padding: 0.5rem;
+}
+
+.preview-commands {
+    flex: 1;
+    
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+
+    opacity: 0;
+
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+.preview-wireguard {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    
+    gap: 0.5rem;
+
+    opacity: 0;
+
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
 }

@@ -30,6 +30,12 @@
     height: 100%;
 
     backdrop-filter: blur(5px);
+
+    opacity: 0;
+
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
 }
 
 .tooltip-content {

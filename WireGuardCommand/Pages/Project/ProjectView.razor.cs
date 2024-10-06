@@ -46,6 +46,7 @@ public partial class ProjectView
     private List<PreviewConfig> PreviewConfigs { get; set; } = new List<PreviewConfig>();
     private string PreviewCode { get; set; } = "";
     private bool loadingPreview;
+    private bool isClosingProject;
 
     private bool HasUnsavedChanges => HasChanges();
 
@@ -77,16 +78,21 @@ public partial class ProjectView
             {
                 await Task.Run(() =>
                 {
-                    NavigationManager.NavigateTo("/");
-                    Cache.Clear();
+                    CloseProjectUnsafe();
                 });
             });
         }
         else
         {
-            NavigationManager.NavigateTo("/");
-            Cache.Clear();
+            CloseProjectUnsafe();
         }
+    }
+
+    private void CloseProjectUnsafe()
+    {
+        isClosingProject = true;
+        NavigationManager.NavigateTo("/");
+        Cache.Clear();
     }
 
     private void RegenerateSeed()
