@@ -542,14 +542,6 @@ public partial class ProjectView
 
     private void ShowAbout()
     {
-        dialog?.Show(DialogType.Ok, "WireGuard Command", $"v{GetVersion()}<br/><br/>Built on Blazor (ASP.NET + SignalR) and Electron.NET<br/><br/>Powered by <a class='link' href='https://github.com/lewpar/WireGuardCommand'>open-source</a>");
-    }
-
-    private string? GetVersion()
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-        var fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
-        
-        return fileVersion.ProductVersion;
+        dialog?.Show("About", typeof(About));
     }
 }

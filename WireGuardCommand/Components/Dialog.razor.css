@@ -32,3 +32,39 @@
 
     max-width: 70ch;
 }
+
+.dialog-header {
+    display: flex;
+    flex-direction: row;
+    
+    align-items: center;
+}
+
+.dialog-title {
+    flex: 1;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.dialog-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 16px;
+    height: 16px;
+    
+    padding: 0.25rem;
+    
+    border: 1px solid transparent;
+    border-radius: 5px;
+    
+    cursor: pointer;
+    
+    transition: background-color 0.25s, border 0.25s;
+}
+.dialog-close:hover {
+    background-color: #303030;
+    
+    border: 1px solid #404040;
+}

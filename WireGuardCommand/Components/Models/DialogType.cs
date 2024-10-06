@@ -3,5 +3,6 @@
 public enum DialogType
 {
     Ok,
-    YesNo
+    YesNo,
+    Component
 }

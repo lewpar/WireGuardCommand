@@ -1,0 +1,22 @@
+﻿@using System.Diagnostics
+@using System.Reflection
+
+<div style="display: flex; flex-direction: column; gap: 0.5rem">
+    <div>v@(GetVersion())</div>
+    <div>
+        Built on Blazor (ASP.NET + SignalR) and Electron.NET
+    </div>
+    <div>
+        Powered by <a class='link' href='https://github.com/lewpar/WireGuardCommand'>open-source</a>
+    </div>
+</div>
+
+@code {
+    private string? GetVersion()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
+        
+        return fileVersion.ProductVersion;
+    }
+}

@@ -1,4 +1,5 @@
-﻿using WireGuardCommand.Components.Models;
+﻿using Microsoft.AspNetCore.Components;
+using WireGuardCommand.Components.Models;
 
 namespace WireGuardCommand.Components;
 
@@ -10,6 +11,7 @@ public partial class Dialog
     public Func<Task>? Action { get; set; }
 
     private bool isVisible;
+    private RenderFragment? componentFragment;
 
     private async Task OnClickYesAsync()
     {
@@ -26,7 +28,7 @@ public partial class Dialog
         Hide();
     }
 
-    public void Show(DialogType type, string title, string content, Func<Task>? onClickYes = null)
+    public void Show(DialogType type, string title, string content, Func<Task>? onClickYes = null, Type? component = null)
     {
         Type = type;
         Title = title;
@@ -34,6 +36,23 @@ public partial class Dialog
         Action = onClickYes;
 
         isVisible = true;
+        
+        StateHasChanged();
+    }
+
+    public void Show(string title, Type component)
+    {
+        Type = DialogType.Component;
+        Title = title;
+        
+        componentFragment = builder =>
+        {
+            builder.OpenComponent(0, component);
+            builder.CloseComponent();
+        };
+        
+        isVisible = true;
+        
         StateHasChanged();
     }
 
