@@ -29,7 +29,9 @@
     gap: 1rem;
 
     background-color: #202020;
+    
     border: 1px solid #505050;
+    border-radius: 5px;
 
     padding: 0.5rem;
 }

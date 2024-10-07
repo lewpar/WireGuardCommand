@@ -5,12 +5,17 @@
 <div class="container">
     <Alert />
 
-    <div class="project-create-header">
-        <div style="font-weight: bold; font-size: 1.25rem; padding: 1rem">Create Project</div>
-        <div style="display: flex; align-items: center;">
+    <Toolbar>
+        <div style="display: flex; flex-direction: column; justify-content: center; padding: 0.5rem">
             <button class="btn-primary" @onclick="GoBack">Back</button>
         </div>
-    </div>
+
+        <ToolbarDivider></ToolbarDivider>
+        
+        <div style="display: flex; flex-direction: column; justify-content: center; font-weight:  bold; font-size: 1.25rem; padding:  0.5rem">
+            Create Project
+        </div>
+    </Toolbar>
 
     <div class="project-create-body">
         <div class="field">
