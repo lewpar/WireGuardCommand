@@ -381,10 +381,7 @@ public partial class ProjectView
             throw new Exception("The number of clients exceeds the max usable hosts for the transit subnet.");
         }
 
-        for (int i = 0; i < project.NumberOfClients; i++)
-        {
-            builder.AddPeer();
-        }
+        builder.AddPeers(project.NumberOfClients);
 
         return builder.Build();
     }

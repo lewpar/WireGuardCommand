@@ -44,7 +44,7 @@ public class WireGuardBuilder
         server.Peers = peers;
     }
 
-    public void AddPeer()
+    public WireGuardBuilder AddPeer()
     {
         var subnet = options.Subnet;
 
@@ -86,6 +86,18 @@ public class WireGuardBuilder
         });
 
         currentPeerId++;
+
+        return this;
+    }
+
+    public WireGuardBuilder AddPeers(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            AddPeer();
+        }
+
+        return this;
     }
 
     private byte[] GetPeerSeed(byte[] seed, int peerId)
