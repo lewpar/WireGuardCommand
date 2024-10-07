@@ -6,8 +6,13 @@ A tool designed for generating road-warrior style WireGuard configuration files.
 
 This project is not assocated with the WireGuard trademark in any way.
 
-## Macros
-Coming soon..
+## Build
+The project is built on top of [Electron.NET](https://github.com/ElectronNET/Electron.NET) so you will need the [ElectronNET.API](https://www.nuget.org/packages/ElectronNET.API/) installed.
+
+To create a build you must navigate to the `./WireGuardCommand/WireGuardCommand` directory and run the command:
+- `electronize build /target win`
+
+This will create a Windows build of the software. Other build targets like MacOS and Linux are supported.
 
 ## Dependencies
 This project uses the following dependencies:
