@@ -27,7 +27,7 @@ namespace WireGuardCommand.Tests
         {
             Assert.DoesNotThrow(() =>
             {
-                var builder = new WireGuardBuilder(
+                var server = new WireGuardBuilder(
                     new WireGuardBuilderOptions()
                     {
                         Seed = seed,
@@ -37,15 +37,7 @@ namespace WireGuardCommand.Tests
                         UseLastAddress = true,
                         UsePresharedKeys = true
                     }
-                );
-
-                int totalPeers = 3;
-                for(int i = 0; i < totalPeers; i++)
-                {
-                    builder.AddPeer();
-                }
-
-                var server = builder.Build();
+                ).AddPeers(3).Build();
 
                 Print(server);
 
