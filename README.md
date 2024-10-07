@@ -2,6 +2,8 @@
 > This is the home of the WireGuard Command re-write under Blazor & Electron.NET. There may be issues/bugs in its current state.
 
 # WireGuard Command
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Flewpar%2FWireGuardCommand.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Flewpar%2FWireGuardCommand?ref=badge_shield)
+
 A tool designed for generating road-warrior style WireGuard configuration files. It also supports generating commands for each peer through the use of macros. 
 
 This project is not assocated with the WireGuard trademark in any way.
@@ -22,3 +24,7 @@ This project uses the following dependencies:
 - **IPNetwork2** - Easy handling of subnetting.
 - **SharpZipLib** - Used for outputting password protected archives.
 - **QRCoder** - For generating QR codes for configs.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Flewpar%2FWireGuardCommand.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Flewpar%2FWireGuardCommand?ref=badge_large)
