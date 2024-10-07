@@ -1,6 +1,3 @@
-> [!NOTE]  
-> This is the home of the WireGuard Command re-write under Blazor & Electron.NET. There may be issues/bugs in its current state.
-
 # WireGuard Command
 A tool designed for generating road-warrior style WireGuard configuration files. It also supports generating commands for each peer through the use of macros. 
 
