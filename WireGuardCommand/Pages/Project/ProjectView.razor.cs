@@ -311,6 +311,7 @@ public partial class ProjectView
             }
 
             content = content.Replace("{peer.id}", peerId.ToString());
+            content = content.Replace("{peer.allowed.ip}", $"{peer.Address}/32");
 
             content = content.Replace("{peer.address}", peer.Address.ToString());
             content = content.Replace("{peer.port}", peer.ListenPort.ToString());
