@@ -3,6 +3,13 @@ A tool designed for generating road-warrior style WireGuard configuration files.
 
 This project is not assocated with the WireGuard trademark in any way.
 
+## Workflows
+
+| Workflow | Status |
+| - | - |
+| Build | ![Build Status](https://github.com/lewpar/WireGuardCommand/actions/workflows/build.yml/badge.svg) |
+| Test | ![Test Status](https://github.com/lewpar/WireGuardCommand/actions/workflows/test.yml/badge.svg) |
+
 ## Build
 The project is built on top of [Electron.NET](https://github.com/ElectronNET/Electron.NET) so you will need the [ElectronNET.API](https://www.nuget.org/packages/ElectronNET.API/) installed.
 

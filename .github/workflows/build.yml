@@ -1,4 +1,4 @@
-name: Build & Test
+name: Build
 
 on: [push, workflow_dispatch]
 
@@ -14,7 +14,4 @@ jobs:
         
       - name: Compile
         run: dotnet build
-        
-      - name: Run Tests
-        run: dotnet test
         
