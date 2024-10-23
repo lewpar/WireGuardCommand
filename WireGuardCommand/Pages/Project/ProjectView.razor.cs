@@ -292,6 +292,7 @@ public partial class ProjectView
         // Generic vars
         content = content.Replace("{interface.name}", data.Interface);
         content = content.Replace("{allowed.ip}", data.AllowedIPs);
+        content = content.Replace("{subnet.cidr}", server.Subnet.Cidr.ToString());
 
         // Server vars
         content = content.Replace("{server.endpoint}", data.Endpoint);
@@ -311,7 +312,7 @@ public partial class ProjectView
             }
 
             content = content.Replace("{peer.id}", peerId.ToString());
-            content = content.Replace("{peer.allowed.ip}", $"{peer.Address}/32");
+            content = content.Replace("{peer.allowed.ip}", $"{peer.Address}");
 
             content = content.Replace("{peer.address}", peer.Address.ToString());
             content = content.Replace("{peer.port}", peer.ListenPort.ToString());
