@@ -107,8 +107,6 @@ public partial class ProjectLoad
             return;
         }
 
-        Logger.LogInformation(newPassword);
-
         project.Passphrase = newPassword;
     }
 
